@@ -1,0 +1,80 @@
+/* Fonts */
+/* font-family: 'Comfortaa', cursive; 500 700
+font-family: 'Happy Monkey', cursive;
+font-family: 'Montserrat', sans-serif; 400 700 900 */
+
+/* Body */
+
+body {
+  margin: 0;
+  background-image: url(../images/large-triangles.svg);
+}
+
+/* Navigation */
+/* TODO(Bhargav) : Revisit Centering */
+
+.navbar {
+  position: absolute;
+  width: 100%;
+  height: 6rem;
+  left: 0;
+  top: 0;
+
+  background: #053742;
+  border-radius: 0 0 10rem 0;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.brand {
+  position: absolute;
+  width: 55%;
+  height: 3.7rem;
+  left: 0;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+
+  border-radius: 0 0 1.33rem 0;
+  background: #39a2db;
+}
+
+.brand-img {
+  position: absolute;
+  width: 8rem;
+  height: 8rem;
+  left: 2rem;
+  top: -1.15rem;
+
+  background: #e8f0f2;
+  border-radius: 4rem;
+  box-shadow: 0 4px 5px 3px rgba(0, 0, 0, 0.25);
+}
+
+.brand-name {
+  color: #053742;
+  font-family: 'Comfortaa', cursive;
+  font-weight: 700;
+  font-size: 2.5rem;
+  margin: 0;
+
+  position: absolute;
+  left: 17rem;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.nav-links {
+  position: absolute;
+
+  left: 49rem;
+  top: 2rem;
+}
+
+.nav-link {
+  color: #e8f0f2;
+  font-family: 'Happy Monkey', cursive;
+  font-size: 1.5rem;
+  margin-right: 4rem;
+  text-decoration: none;
+}
