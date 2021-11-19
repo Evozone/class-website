@@ -14,47 +14,52 @@ body {
 /* TODO(Bhargav) : Revisit Centering */
 
 .navbar {
-  position: absolute;
-  width: 100%;
-  height: 6rem;
-  left: 0;
-  top: 0;
-
   background: #053742;
   border-radius: 0 0 10rem 0;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  height: 6rem;
+  width: 100%;
+
+  /* Position */
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 
 .brand {
-  position: absolute;
+  background-image: url(../images/large-triangles.svg);
+  border-radius: 0 0 1.33rem 0;
   width: 55%;
   height: 3.7rem;
+
+  /* Position */
+  position: absolute;
   left: 0;
   top: 50%;
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
-
-  border-radius: 0 0 1.33rem 0;
-  background: #39a2db;
 }
 
 .brand-img {
-  position: absolute;
-  width: 8rem;
-  height: 8rem;
-  left: 2rem;
-  top: -1.15rem;
-
   background: #e8f0f2;
   border-radius: 4rem;
   box-shadow: 0 4px 5px 3px rgba(0, 0, 0, 0.25);
+  height: 8rem;
+  width: 8rem;
+
+  /* Position */
+  position: absolute;
+  left: 2.5rem;
+  top: -1.15rem;
+}
+
+.brand-logo{
+  width:100%;
 }
 
 .brand-name {
   color: #053742;
-  font-family: 'Comfortaa', cursive;
-  font-weight: 700;
-  font-size: 2.5rem;
+  font : 700 2.3rem 'Comfortaa', cursive;
   margin: 0;
 
   position: absolute;
@@ -64,17 +69,63 @@ body {
   transform: translateY(-50%);
 }
 
+/* Navigation links */
 .nav-links {
+  display: table;
+  list-style: none;
+  margin: 0;
+  text-align: center;
+  /* Position */
   position: absolute;
+  right: 5.2rem;
+  top: 2.2rem;
+}
 
-  left: 49rem;
-  top: 2rem;
+.nav-links li {
+  display: table-cell;
+  padding: 0 2rem 0.3rem 2rem ;
+  position: relative;
 }
 
 .nav-link {
   color: #e8f0f2;
-  font-family: 'Happy Monkey', cursive;
-  font-size: 1.5rem;
-  margin-right: 4rem;
+  font: 1.5rem 'Happy Monkey', cursive;
+  transition: 0.3s ease 0s, left 0.3s ease 0s;
   text-decoration: none;
+}
+
+.nav-link:hover{
+  color: #a2dbfa;
+}
+
+.nav-link:after {
+  background: none repeat scroll 0 0 transparent;
+  background: #fff;
+  bottom: 0;
+  content: "";
+  display: block;
+  height: 2px;
+  left: 50%;
+  position: absolute;
+  transition: width 0.3s ease 0s, left 0.3s ease 0s;
+  width: 0;
+}
+
+.nav-link:hover:after {
+  background: #a2dbfa;
+  width: 70%;
+  left: 15%;
+}
+
+/* Hero Carousel */
+
+.hero {
+  width: 100vw;
+}
+
+.hero-img {
+  width: 100vw;
+  height: 100%;
+  max-width: 100%;
+  object-fit: contain;
 }
