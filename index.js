@@ -12,8 +12,6 @@ setVw();
 window.addEventListener('resize', setVw);
 // Used for making sure 100vw doesn't overflow horizontally
 
-
-
 // API
 async function getQuote() {
   const apiUrl = 'https://api.quotable.io/random';
@@ -40,3 +38,11 @@ async function getQuote() {
 }
 
 getQuote();
+
+function expandAnn() {
+  if (document.querySelector(".festival-container").style.display === "none") {
+    document.querySelector(".ann-container").style.height = "50rem";
+  }
+}
+
+expandAnn();
