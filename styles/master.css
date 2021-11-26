@@ -1,12 +1,16 @@
 /* Fonts */
-/* font-family: 'Comfortaa', cursive; 500 700
-font-family: 'Happy Monkey', cursive;
-font-family: 'Montserrat', sans-serif; 400 700 900 */
+/*
+*    font-family: 'Comfortaa', cursive; 500 700
+*    font-family: 'Happy Monkey', cursive;
+*    font-family: 'Montserrat', sans-serif; 400 700 800
+*    font-family: 'Work Sans', sans-serif; 300 - 800
+*/
 
 /* Body */
 
 body {
   margin: 0;
+  font: 400 1rem 'Work Sans', sans-serif;
 }
 
 /* Large Triangle Background */
@@ -132,10 +136,99 @@ body {
   max-width: 100%;
 }
 
+/* Content */
+
+.content {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+}
+
+.left-side {
+  flex-basis: 60%;
+  flex-flow: column wrap;
+  justify-content: center;
+}
+
+.festival {
+  flex-basis: 6rem;
+  
+}
+
+.right-side {
+  flex-basis: 40%;
+  flex-flow: column wrap;
+  justify-content: center;
+}
+
 /* Footer */
 
-.foot-sepr {
-  border: 2px #e8f0f2;
-  border-style: solid none none;
-  width: 80%;
+.footer {
+  background: #053742;
+}
+
+/* Footer above the line */
+.foot-abt {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+}
+
+.abt-cntnt {
+  color: #cee7ed;
+  margin: 2rem;
+  flex-basis: 40%;
+}
+
+/*
+*  This construct of inline block + CSS in abt-desc is for non overflow of
+*  description compared to the title.
+*/
+.abt-clg {
+  display: inline-block;
+}
+
+.abt-titles {
+  font: 700 1.5rem 'Montserrat', sans-serif;
+  display: block;
+}
+
+.abt-desc {
+  width:0;
+  min-width:100%;
+  line-height: 1.3rem;
+}
+
+/* The Social Handles :  */
+
+.abt-handles {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+}
+
+.social-panel{
+  padding: 0.5rem;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+}
+
+.sp-images {
+  width: 4rem;
+  display: inline-block;
+}
+
+.sp-links {
+  display: inline;
+  padding: 1.5rem;
+}
+
+.sp-links > a {
+  color: #e8f0f2;
+  text-decoration: none;
+}
+
+.sp-links > a:hover {
+  color: #a2dbfa;
 }
