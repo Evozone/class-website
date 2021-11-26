@@ -121,7 +121,7 @@ body::-webkit-scrollbar {
   height: 2px;
   left: 50%;
   position: absolute;
-  transition: width 0.3s ease 0s, left 0.3s ease 0s;
+  transition: 0.3s ease 0s, left 0.3s ease 0s;
   width: 0;
 }
 
@@ -359,19 +359,26 @@ body::-webkit-scrollbar {
 
 /* Tools */
 
+.tool-top {
+  margin-top: 5rem;
+}
+
 .tool-panel {
   background-color: #39a2db;
-  margin:1rem;
-  padding:1rem;
+  width: 20rem;
+  margin: 1rem;
+  padding: 1.5rem 1rem;
   flex-basis: auto;
+  text-align: center;
+  transition: 0.3s ease 0s, left 0.3s ease 0s;
+}
+
+.tool-panel:hover {
+  background-color: #a2dbfa;
 }
 
 .tool-img {
-  width: 2rem;
-}
-
-.tool-content {
-  padding: 0.5rem;
+  width: 10rem;
 }
 
 .tool-title {
