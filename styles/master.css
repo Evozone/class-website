@@ -142,7 +142,7 @@ body {
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
-  padding: 4rem;
+  padding: 3.5rem;
 }
 
 .left-side {
@@ -153,16 +153,26 @@ body {
 
 .festival {
   width: 45rem;
+  height: 26rem;
   border-radius: 1rem;
   flex-basis: auto;
   color: #fff;
 }
 
 .festival > img {
+  visibility: hidden;
   border-radius: 1rem;
   height: auto;
   width: 100%;
   object-fit: contain;
+}
+
+.fest-txt {
+  margin: 0;
+  display: inline-block;
+  position: absolute;
+  left: 20rem;
+  top: 50rem;
 }
 
 .announcements {
