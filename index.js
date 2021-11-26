@@ -1,5 +1,7 @@
 const quoteText = document.getElementById('quote');
 const authorText = document.getElementById('author');
+const festCon = document.getElementById('festival-container');
+const annCon = document.getElementById('ann-container');
 
 // Used for making sure 100vw doesn't overflow horizontally
 // Keywords : Horizontal Overflow
@@ -16,33 +18,30 @@ window.addEventListener('resize', setVw);
 async function getQuote() {
   const apiUrl = 'https://api.quotable.io/random';
   try {
-      const response = await fetch(apiUrl);
-      const data = await response.json();
+    const response = await fetch(apiUrl);
+    const data = await response.json();
 
-      if (data.author === '') {
-          authorText.innerText = 'Unknown';
-      } else {
-          authorText.innerText = '- ' + data.author;
-      }
-      //Reduce font size for long quotes
-      if (data.length > 120) {
-          quoteText.classList.add('long-quote');
-      } else {
-          quoteText.classList.remove('long-quote');
-      }
-      quoteText.innerText = data.content;
+    if (data.author === '') {
+      authorText.innerText = 'Unknown';
+    } else {
+      authorText.innerText = '- ' + data.author;
+    }
+    //Reduce font size for long quotes
+    if (data.length > 120) {
+      quoteText.classList.add('long-quote');
+    } else {
+      quoteText.classList.remove('long-quote');
+    }
+    quoteText.innerText = data.content;
   } catch (error) {
-      getQuote();
+    getQuote();
 
   }
+}
+
+festCon.hidden = false;
+if(festCon.hidden){
+  annCon.classList.add('annConCoverup');
 }
 
 getQuote();
-
-function expandAnn() {
-  if (document.querySelector(".festival-container").style.display === "none") {
-    document.querySelector(".ann-container").style.height = "50rem";
-  }
-}
-
-expandAnn();

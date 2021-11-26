@@ -219,6 +219,10 @@ body::-webkit-scrollbar {
   background: #282c34;
 }
 
+.annConCoverup{
+  height: 50rem;
+}
+
 .ann-header {
   font-size: 1.5em;
   letter-spacing: 0.04em;
