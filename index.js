@@ -16,7 +16,6 @@ window.addEventListener('resize', setVw);
 
 // API
 async function getQuote() {
-
   const apiUrl = 'https://api.quotable.io/random';
   try {
       const response = await fetch(apiUrl);
@@ -28,15 +27,16 @@ async function getQuote() {
           authorText.innerText = '- ' + data.author;
       }
       //Reduce font size for long quotes
-      // if (data.length > 120) {
-      //     quoteText.classList.add('long-quote');
-      // } else {
-      //     quoteText.classList.remove('long-quote');
-      // }
+      if (data.length > 120) {
+          quoteText.classList.add('long-quote');
+      } else {
+          quoteText.classList.remove('long-quote');
+      }
       quoteText.innerText = data.content;
   } catch (error) {
       getQuote();
 
   }
 }
+
 getQuote();
