@@ -141,24 +141,42 @@ body {
 .content {
   display: flex;
   flex-flow: row wrap;
-  justify-content: space-around;
+  justify-content: space-between;
+  padding: 4rem;
 }
 
 .left-side {
-  flex-basis: 60%;
+  flex-basis: auto;
   flex-flow: column wrap;
   justify-content: center;
 }
 
 .festival {
-  flex-basis: 6rem;
-  
+  width: 45rem;
+  border-radius: 1rem;
+  flex-basis: auto;
+  color: #fff;
+}
+
+.festival > img {
+  border-radius: 1rem;
+  height: auto;
+  width: 100%;
+  object-fit: contain;
+}
+
+.announcements {
+  flex-basis: auto;
 }
 
 .right-side {
-  flex-basis: 40%;
+  flex-basis: auto;
   flex-flow: column wrap;
   justify-content: center;
+}
+
+.discord > iframe {
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.72);
 }
 
 /* Footer */
