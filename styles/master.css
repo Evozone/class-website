@@ -127,7 +127,6 @@ body {
 
 .hero {
   width: calc(var(--vw, 1vw) * 100);
-
 }
 
 .hero-img {
@@ -152,6 +151,7 @@ body {
 }
 
 .festival {
+  position: relative;
   width: 45rem;
   height: 26rem;
   border-radius: 1rem;
@@ -160,7 +160,6 @@ body {
 }
 
 .festival > img {
-  visibility: hidden;
   border-radius: 1rem;
   height: auto;
   width: 100%;
@@ -171,8 +170,8 @@ body {
   margin: 0;
   display: inline-block;
   position: absolute;
-  left: 20rem;
-  top: 50rem;
+  left: 16.5rem;
+  top: 13rem;
 }
 
 .announcements {
@@ -183,6 +182,11 @@ body {
   flex-basis: auto;
   flex-flow: column wrap;
   justify-content: center;
+}
+
+.tweets {
+  width: 100rem;
+  margin: 3.5rem 0;
 }
 
 .discord > iframe {
