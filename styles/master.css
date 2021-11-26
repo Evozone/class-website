@@ -17,14 +17,18 @@ body::-webkit-scrollbar {
   width: 0;
 }
 
-body::-webkit-scrollbar-track {
-
+/* Large Triangle Background */
+.lgtr-dark {
+  background-image: url(../images/large-triangles.svg);
 }
 
-
-/* Large Triangle Background */
 .lgtr {
-  background-image: url(../images/large-triangles.svg);
+  background-image: url(../images/large-triangles-light.svg);
+}
+
+/* Reusable stuff */
+.round-edges {
+  border-radius: 5px;
 }
 
 /* Navigation */
@@ -170,7 +174,7 @@ body::-webkit-scrollbar-track {
 }
 
 .festival-container > img {
-  border-radius: 1rem;
+  border-radius: 5px;
   height: auto;
   width: 100%;
 }
@@ -194,7 +198,6 @@ body::-webkit-scrollbar-track {
   position: relative;
   width: 45rem;
   height: 26rem;
-  border-radius: 1rem 0 0 1rem;
   flex-basis: auto;
   margin-right: 3.5rem;
   margin-bottom: 3.5rem;
@@ -255,7 +258,6 @@ body::-webkit-scrollbar-track {
   margin-bottom: 3.5rem;
   background-color: whitesmoke;
   box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.72);
-  border-radius: 1rem;
 }
 
 .quote-text {
@@ -273,10 +275,6 @@ body::-webkit-scrollbar-track {
   text-align: left;
 }
 
-.discord {
-  border-radius: 1rem;
-}
-
 .discord > iframe {
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.72);
 }
@@ -290,7 +288,7 @@ body::-webkit-scrollbar-track {
 /* Footer */
 
 .footer {
-  background: #053742;
+  background: #202225;
 }
 
 /* Footer above the line */
@@ -357,4 +355,29 @@ body::-webkit-scrollbar-track {
 
 .sp-links > a:hover {
   color: #a2dbfa;
+}
+
+/* Tools */
+
+.tool-panel {
+  background-color: #39a2db;
+  margin:1rem;
+  padding:1rem;
+  flex-basis: auto;
+}
+
+.tool-img {
+  width: 2rem;
+}
+
+.tool-content {
+  padding: 0.5rem;
+}
+
+.tool-title {
+  font: 400 2rem 'Montserrat', sans-serif;
+}
+
+.tool-description {
+  padding: 0.5rem;
 }
