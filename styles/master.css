@@ -29,6 +29,12 @@ body::-webkit-scrollbar {
 /* Reusable stuff */
 .round-edges {
   border-radius: 5px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.72)
+}
+
+.dark-mode {
+  background-color: #202225;
+  color: #a2dbfa;
 }
 
 /* Navigation */
@@ -41,22 +47,21 @@ body::-webkit-scrollbar {
   height: 6rem;
   width: 100%;
 
+  /* Flexbox */
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+
   /* Position */
   position: absolute;
-  left: 0;
-  top: 0;
+  z-index: 1;
 }
 
 .brand {
   border-radius: 0 0 1.33rem 0;
   width: 55%;
-  height: 3.7rem;
-
-  /* Position */
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
+  height: 3.8rem;
+  margin: 1.1rem 0 1.1rem 0;
 }
 
 .brand-img {
@@ -78,25 +83,16 @@ body::-webkit-scrollbar {
 
 .brand-name {
   color: #053742;
-  font : 700 2.3rem 'Comfortaa', cursive;
-  margin: 0;
-
-  position: absolute;
-  left: 17rem;
-  top: 50%;
-  transform: translateY(-50%);
+  font : 700 2.4rem 'Comfortaa', cursive;
+  margin: .7rem 0 .7rem 20rem;
 }
 
 /* Navigation links */
 .nav-links {
   display: table;
   list-style: none;
-  margin: 0;
+  margin: 2rem;
   text-align: center;
-  /* Position */
-  position: absolute;
-  right: 5.2rem;
-  top: 2.2rem;
 }
 
 .nav-links li {
@@ -152,14 +148,15 @@ body::-webkit-scrollbar {
 .content {
   display: flex;
   flex-flow: row wrap;
-  justify-content: center;
+  justify-content: space-around;
   padding: 3.5rem;
 }
 
 .left-side {
   flex-basis: auto;
   flex-flow: column wrap;
-  justify-content: center;
+  justify-content: space-around;
+  padding: 0 3.5rem 0 0;
 }
 
 /* Festival Box */
@@ -167,9 +164,8 @@ body::-webkit-scrollbar {
   position: relative;
   width: 45rem;
   height: 20rem;
-  border-radius: 1rem;
+  border-radius: 5px;
   flex-basis: auto;
-  margin-right: 3.5rem;
   margin-bottom: 3.5rem;
 }
 
@@ -193,30 +189,35 @@ body::-webkit-scrollbar {
   margin: 0;
 }
 
+/* Announcement Box */
 .ann-container {
-  background-color: #e8f0f2;
   position: relative;
   width: 45rem;
   height: 26rem;
   flex-basis: auto;
-  margin-right: 3.5rem;
   margin-bottom: 3.5rem;
   overflow-y: scroll;
 }
 
 .ann-container::-webkit-scrollbar {
   width: 7px;
-  background: #e8f0f2;
+  border-radius: 5px;
+  background: #202225;
+}
+
+.ann-container::-webkit-scrollbar-track {
+  border-radius: 5px;
+  background: #202225;
 }
 
 .ann-container::-webkit-scrollbar-thumb {
-  background: #616466;
+  background: #282c34;
   border-radius: 3px;
-  border: solid 1.5px #e8f0f2;
+  border: solid 1.5px #202225;
 }
 
 .ann-container::-webkit-scrollbar-thumb:hover {
-  background: #282c34;
+  background: #616466;
 }
 
 .annConCoverup{
@@ -228,14 +229,15 @@ body::-webkit-scrollbar {
   letter-spacing: 0.04em;
   margin: 0;
   font-weight: normal;
-  color: #ff5252;
+  color: #39a2db;
 }
 
 .announcement {
+  line-height: 1.5;
   margin: 1rem;
   padding: 0.8rem 1rem ;
-  border: 1px solid #e1e1e1;
-  background-color: #f9f9f9;
+  border: 1px solid #2C394B;
+  background-color: #24272a;
   border-radius: 4px;
 }
 
@@ -247,17 +249,11 @@ body::-webkit-scrollbar {
 
 /* Quote */
 
-.quote-text {
-  font-size: 1rem;
-}
-
 .quote-container {
   width: auto;
   max-width: 285px;
   padding: 2rem;
   margin-bottom: 3.5rem;
-  background-color: whitesmoke;
-  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.72);
 }
 
 .quote-text {
@@ -269,14 +265,10 @@ body::-webkit-scrollbar {
 }
 
 .quote-author {
-  margin-top: 15px;
+  margin-top: 2rem;
   font: 500 0.8rem 'Comfortaa', cursive;
   color: darkgrey;
   text-align: left;
-}
-
-.discord > iframe {
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.72);
 }
 
 .tweets {
@@ -360,7 +352,7 @@ body::-webkit-scrollbar {
 /* Tools */
 
 .tool-top {
-  margin-top: 5rem;
+  padding-top: 8rem;
 }
 
 .tool-panel {

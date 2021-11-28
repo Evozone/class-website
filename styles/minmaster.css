@@ -1,0 +1,33 @@
+@media only screen and (max-width: 1237px) {
+  /* Left side */
+  .left-side {
+    flex-basis: auto;
+    flex-flow: column wrap;
+    justify-content: space-around;
+    padding: 0;
+  }
+
+  /* Festival Panel */
+  .festival-container {
+    width: 50rem;
+    height: 15rem;
+    overflow: hidden;
+  }
+
+  .fest-content {
+    left: 14rem;
+    top: 3rem;
+    text-align: center;
+  }
+
+  /* Announcements Panel */
+  .ann-container {
+    width: 50rem;
+    height: 26rem;
+  }
+}
+
+/* For less than 600px */
+@media only screen and (max-width: 600px) {
+
+}
