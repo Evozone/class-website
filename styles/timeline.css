@@ -15,6 +15,7 @@
   position: absolute;
   width: 10px;
   background-color: #39a2db;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.72);
   top: 0;
   bottom: 0;
   left: 50%;
@@ -38,6 +39,7 @@
   right: -2.6rem;
   background-color: #61d4e8;
   border: 0.4rem solid #2da1e7;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.72);
   top: 15px;
   border-radius: 50%;
   z-index: 1;

@@ -29,7 +29,7 @@ body::-webkit-scrollbar {
 /* Reusable stuff */
 .round-edges {
   border-radius: 5px;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.72)
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.72);
 }
 
 .dark-mode {
