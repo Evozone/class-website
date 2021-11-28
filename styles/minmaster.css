@@ -1,4 +1,8 @@
 @media only screen and (max-width: 1237px) {
+  body {
+    font-size: 2rem;
+  }
+
   /* Navbar */
   .navbar {
     visibility: hidden;
@@ -14,16 +18,24 @@
     border-radius: 0 0 3.8rem 0;
     box-shadow: 0 4px 5px 3px rgba(0, 0, 0, 0.25);
     margin-bottom: 0;
-    width: 50rem;
-    height: 3.8rem;
+    width: 60rem;
+    height: 5rem;
+  }
+
+  .brand-name {
+    margin: 1.3rem 0 1.3rem 20rem;
   }
 
   .brand-img {
+    height: 8rem;
+    width: 8rem;
+    border-radius: 4rem;
     visibility: visible;
   }
 
   .brand-img {
     left: .5rem;
+    top: .5rem;
   }
 
   .nav-links {
@@ -33,8 +45,9 @@
   .nav-link-container {
     background-color: #053742;
     border-radius: 0 0 1rem 1rem;
+    width: 40rem;
     box-shadow: 0 4px 5px 3px rgba(0, 0, 0, 0.25);
-    margin-left: 12rem;
+    margin-left: 10rem;
   }
 
   /* Left side */
@@ -101,5 +114,30 @@
     margin: 2rem;
     flex-basis: 50rem;
     font-size: 1.7rem;
+  }
+
+  /* Tool Panel */
+  .tool-panel {
+    font: 1rem;
+    background-color: #39a2db;
+    width: 25rem;
+    margin: 1rem;
+    padding: 3rem;
+    flex-basis: auto;
+    text-align: center;
+    transition: 0.3s ease 0s, left 0.3s ease 0s;
+  }
+}
+
+@media only screen and (max-width: 1024px) {
+  /* Tool Panel */
+  .tool-panel {
+    background-color: #39a2db;
+    width: 90rem;
+    margin: 1.5rem;
+    padding: 3rem;
+    flex-basis: auto;
+    text-align: center;
+    transition: 0.3s ease 0s, left 0.3s ease 0s;
   }
 }
