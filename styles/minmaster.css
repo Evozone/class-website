@@ -1,4 +1,42 @@
 @media only screen and (max-width: 1237px) {
+  /* Navbar */
+  .navbar {
+    visibility: hidden;
+    /* Position */
+    position: fixed;
+  }
+
+  .visible {
+    visibility: visible;
+  }
+
+  .brand {
+    border-radius: 0 0 3.8rem 0;
+    box-shadow: 0 4px 5px 3px rgba(0, 0, 0, 0.25);
+    margin-bottom: 0;
+    width: 50rem;
+    height: 3.8rem;
+  }
+
+  .brand-img {
+    visibility: visible;
+  }
+
+  .brand-img {
+    left: .5rem;
+  }
+
+  .nav-links {
+    margin: .5rem .5rem .5rem 0;
+  }
+
+  .nav-link-container {
+    background-color: #053742;
+    border-radius: 0 0 1rem 1rem;
+    box-shadow: 0 4px 5px 3px rgba(0, 0, 0, 0.25);
+    margin-left: 12rem;
+  }
+
   /* Left side */
   .left-side {
     flex-basis: auto;
@@ -24,10 +62,44 @@
   .ann-container {
     width: 50rem;
     height: 26rem;
+    font-size: 0.7rem;
   }
-}
 
-/* For less than 600px */
-@media only screen and (max-width: 600px) {
+  .ann-header {
+    font-size: 1rem;
+  }
 
+  /* Quotes Panel */
+  .quote-container {
+    width: 46rem;
+    max-width: 46rem;
+    margin-bottom: 3.5rem;
+  }
+
+  .quote-text {
+    font: 500 0.75rem 'Work Sans', sans-serif;
+  }
+
+  .long-quote {
+    font: 500 0.5rem 'Work Sans', sans-serif;
+  }
+
+  .quote-author {
+    margin-top: 2rem;
+    font: 500 0.45rem 'Comfortaa', cursive;
+    color: darkgrey;
+    text-align: left;
+  }
+
+  /* Discord Panel */
+  .resizer{
+    width: 50rem;
+  }
+
+  .abt-cntnt {
+    color: #cee7ed;
+    margin: 2rem;
+    flex-basis: 50rem;
+    font-size: 1.7rem;
+  }
 }

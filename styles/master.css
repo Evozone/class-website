@@ -37,6 +37,10 @@ body::-webkit-scrollbar {
   color: #a2dbfa;
 }
 
+.visible {
+  visibility: visible;
+}
+
 /* Navigation */
 /* TODO(Bhargav) : Revisit Centering */
 
@@ -59,7 +63,7 @@ body::-webkit-scrollbar {
 
 .brand {
   border-radius: 0 0 1.33rem 0;
-  width: 55%;
+  width: 40rem;
   height: 3.8rem;
   margin: 1.1rem 0 1.1rem 0;
 }
@@ -84,7 +88,7 @@ body::-webkit-scrollbar {
 .brand-name {
   color: #053742;
   font : 700 2.4rem 'Comfortaa', cursive;
-  margin: .7rem 0 .7rem 20rem;
+  margin: .7rem 0 .7rem 15rem;
 }
 
 /* Navigation links */
@@ -225,7 +229,7 @@ body::-webkit-scrollbar {
 }
 
 .ann-header {
-  font-size: 1.5em;
+  font-size: 1.5rem;
   letter-spacing: 0.04em;
   margin: 0;
   font-weight: normal;
@@ -293,7 +297,7 @@ body::-webkit-scrollbar {
 .abt-cntnt {
   color: #cee7ed;
   margin: 2rem;
-  flex-basis: 40%;
+  flex-basis: 30rem;
 }
 
 /*
@@ -305,14 +309,14 @@ body::-webkit-scrollbar {
 }
 
 .abt-titles {
-  font: 700 1.5rem 'Montserrat', sans-serif;
+  font: 700 1.5em 'Montserrat', sans-serif;
   display: block;
 }
 
 .abt-desc {
   width:0;
   min-width:100%;
-  line-height: 1.3rem;
+  line-height: 1.3em;
 }
 
 /* The Social Handles :  */

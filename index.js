@@ -2,6 +2,10 @@ const quoteText = document.getElementById('quote');
 const authorText = document.getElementById('author');
 const festCon = document.getElementById('festival-container');
 const annCon = document.getElementById('ann-container');
+const navTitle = document.getElementById('brand-con');
+const navOptionCon = document.getElementById('nav-link-con');
+const navButton = document.getElementById('nav-btn');
+const navOptions = document.querySelector('.nav-links');
 
 // Used for making sure 100vw doesn't overflow horizontally
 // Keywords : Horizontal Overflow
@@ -40,8 +44,27 @@ async function getQuote() {
 }
 
 festCon.hidden = false;
-if(festCon.hidden){
+if (festCon.hidden) {
   annCon.classList.add('annConCoverup');
 }
 
 getQuote();
+
+// Navbar toggler
+function isHidden(el) {
+    return (el.offsetParent === null);
+}
+
+function loadNavBar() {
+  if (navTitle.classList.contains('visible')) {
+    navTitle.classList.remove('visible');
+    navOptions.classList.remove('visible');
+    navOptionCon.classList.remove('visible');
+  } else {
+    navTitle.classList.add('visible');
+    navOptions.classList.add('visible');
+    navOptionCon.classList.add('visible');
+  }
+}
+
+navButton.addEventListener("click", loadNavBar);

@@ -4,7 +4,9 @@
 <head>
   <meta charset="utf-8">
 
+  <!-- Stylesheets -->
   <link rel="stylesheet" href="styles/master.css">
+  <link rel="stylesheet" href="styles/minmaster.css">
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,19 +23,22 @@
 
   <!-- The navigation pane -->
   <nav class="navbar">
+    <!-- Memegineers Logo -->
+    <div class="brand-img" id="nav-btn">
+      <img class="brand-logo" src="images/brand-logo.svg" alt="Brand"></a>
+    </div>
 
-    <div class="brand lgtr">
-      <div class="brand-img">
-        <img class="brand-logo" src="images/brand-logo.svg" alt="Brand">
-      </div>
+    <div class="brand lgtr visible" id="brand-con">
       <h1 class="brand-name">Memegineers</h1>
     </div>
 
-    <ul class="nav-links">
-      <li><a class="nav-link" href="index.html">Home</a>
-      <li><a class="nav-link" href="tools.html">Tools</a>
-      <li><a class="nav-link" href="timeline.html">Timeline</a>
-    </ul>
+    <div class="nav-link-container visible" id="nav-link-con">
+      <ul class="nav-links visible">
+        <li><a class="nav-link" href="index.html">Home</a>
+        <li><a class="nav-link" href="tools.html">Tools</a>
+        <li><a class="nav-link" href="timeline.html">Timeline</a>
+      </ul>
+    </div>
 
   </nav>
   <!-- The Navigation pane -->
@@ -97,7 +102,6 @@
                 <a href="https://discord.gg//ZSGjsDYy5n">PlaceHolder</a>
               </div>
             </div>
-
 
           </div>
 

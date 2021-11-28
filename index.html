@@ -23,19 +23,22 @@
 
   <!-- The navigation pane -->
   <nav class="navbar">
+    <!-- Memegineers Logo -->
+    <div class="brand-img" id="nav-btn">
+      <img class="brand-logo" src="images/brand-logo.svg" alt="Brand"></a>
+    </div>
 
-    <div class="brand lgtr">
-      <div class="brand-img">
-        <img class="brand-logo" src="images/brand-logo.svg" alt="Brand">
-      </div>
+    <div class="brand lgtr visible" id="brand-con">
       <h1 class="brand-name">Memegineers</h1>
     </div>
 
-    <ul class="nav-links">
-      <li><a class="nav-link" href="index.html">Home</a>
-      <li><a class="nav-link" href="tools.html">Tools</a>
-      <li><a class="nav-link" href="timeline.html">Timeline</a>
-    </ul>
+    <div class="nav-link-container visible" id="nav-link-con">
+      <ul class="nav-links visible">
+        <li><a class="nav-link" href="index.html">Home</a>
+        <li><a class="nav-link" href="tools.html">Tools</a>
+        <li><a class="nav-link" href="timeline.html">Timeline</a>
+      </ul>
+    </div>
 
   </nav>
   <!-- The Navigation pane -->
@@ -125,7 +128,7 @@
       <!-- Quote container -->
       <div class="quote-container round-edges dark-mode" id="quote-container">
         <div class="quote-text">
-          <i class="fas fa-quote-left"> </i>
+          <i class="fas fa-quote-left quote-icon"> </i>
           <span id="quote"></span>
         </div>
         <div class="quote-author">
@@ -133,8 +136,8 @@
         </div>
       </div>
       <!-- Discord Container -->
-      <div class="discord-container">
-        <iframe class="round-edges" src="https://discord.com/widget?id=804986812425699339&theme=dark" width="350" height="500" style="border-radius: 5px;" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+      <div class="discord-container resizer">
+        <iframe class="round-edges resizer" src="https://discord.com/widget?id=804986812425699339&theme=dark" width="350" height="500" style="border-radius: 5px;" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
       </div>
     </div>
 
