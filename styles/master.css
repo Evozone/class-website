@@ -17,20 +17,6 @@ body::-webkit-scrollbar {
   width: 0;
 }
 
-span {
-  position:absolute;
-  width:100%;
-  height:100%;
-  top:0;
-  left: 0;
-
-  z-index: 1;
-
-  /* fixes overlap error in IE7/8,
-     make sure you have an empty gif */
-  background-image: url('empty.gif');
-}
-
 /* Large Triangle Background */
 .lgtr-dark {
   background-image: url(../images/large-triangles.svg);
@@ -61,6 +47,20 @@ span {
 
 .page-panel-mobile {
   display: none;
+}
+
+.clickable-div {
+  position:absolute;
+  width:100%;
+  height:100%;
+  top:0;
+  left: 0;
+
+  z-index: 1;
+
+  /* fixes overlap error in IE7/8,
+     make sure you have an empty gif */
+  background-image: url('empty.gif');
 }
 
 /* Navigation */
