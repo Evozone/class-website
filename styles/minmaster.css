@@ -141,24 +141,33 @@
 
   /* Festival Box */
   .festival-container {
-    width: 22.5rem;
-    height: 10rem;
+    width: 20rem;
+    height: 8.89rem;
     margin-bottom: 2rem;
+  }
+
+  .fest-txt {
+    /* Size */
+    width: 100%;
+    height: 100%;
+
+    font: 200% 'Happy Monkey', cursive;
+    color: #e5c06f;
+    margin: 0;
   }
 
   /* Announcement Box */
   .ann-container {
-    width: 22rem;
-    height: 20rem;
+    width: 20rem;
+    height: 25rem;
     margin-bottom: 2rem;
   }
 
   /* Quote */
   .quote-container {
     width: auto;
-    max-width: 285px;
-    padding: 2rem;
-    margin-bottom: 2rem;
+    max-width: 16rem;
+    margin-left: 1rem;
   }
 
   /* Tools */
