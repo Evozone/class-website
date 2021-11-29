@@ -78,8 +78,12 @@ body::-webkit-scrollbar {
   justify-content: flex-start;
 
   /* Position */
-  position: absolute;
+  position: fixed;
   z-index: 2;
+  top: 0;
+
+  /* Animation */
+  transition: top 0.3s;
 }
 
 .brand {
