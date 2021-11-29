@@ -1,141 +1,173 @@
 @media only screen and (max-width: 1237px) {
-  body {
+
+  /* The blue bar at the top */
+  .brand {
+    margin-bottom: 0;
+    margin-top: 0;
+    width: 40rem;
+    height: 3rem;
+  }
+
+  /* The name inside it */
+  .brand-name {
+    margin: 0.5rem 0 1.3rem 17rem;
     font-size: 2rem;
   }
 
-  /* Navbar */
-  .navbar {
-    visibility: hidden;
-    /* Position */
-    position: fixed;
-  }
-
-  .visible {
-    visibility: visible;
-  }
-
-  .brand {
-    border-radius: 0 0 3.8rem 0;
-    box-shadow: 0 4px 5px 3px rgba(0, 0, 0, 0.25);
-    margin-bottom: 0;
-    width: 60rem;
-    height: 5rem;
-  }
-
-  .brand-name {
-    margin: 1.3rem 0 1.3rem 20rem;
-  }
-
-  .brand-img {
-    height: 8rem;
-    width: 8rem;
-    border-radius: 4rem;
-    visibility: visible;
-  }
-
-  .brand-img {
-    left: .5rem;
-    top: .5rem;
-  }
-
   .nav-links {
-    margin: .5rem .5rem .5rem 0;
-  }
-
-  .nav-link-container {
-    background-color: #053742;
-    border-radius: 0 0 1rem 1rem;
-    width: 40rem;
-    box-shadow: 0 4px 5px 3px rgba(0, 0, 0, 0.25);
-    margin-left: 10rem;
-  }
-
-  /* Left side */
-  .left-side {
-    flex-basis: auto;
-    flex-flow: column wrap;
-    justify-content: space-around;
+    border-spacing: 0.7rem;
+    margin: 0 0 0 12rem;
     padding: 0;
   }
 
-  /* Festival Panel */
-  .festival-container {
-    width: 50rem;
-    height: 15rem;
-    overflow: hidden;
-  }
-
-  .fest-content {
-    left: 14rem;
-    top: 3rem;
+  /* Left Side */
+  .left-side {
+    padding: 0;
     text-align: center;
   }
 
-  /* Announcements Panel */
-  .ann-container {
-    width: 50rem;
-    height: 26rem;
-    font-size: 0.7rem;
-  }
-
-  .ann-header {
-    font-size: 1rem;
-  }
-
-  /* Quotes Panel */
-  .quote-container {
-    width: 46rem;
-    max-width: 46rem;
-    margin-bottom: 3.5rem;
-  }
-
-  .quote-text {
-    font: 500 0.75rem 'Work Sans', sans-serif;
-  }
-
-  .long-quote {
-    font: 500 0.5rem 'Work Sans', sans-serif;
-  }
-
-  .quote-author {
-    margin-top: 2rem;
-    font: 500 0.45rem 'Comfortaa', cursive;
-    color: darkgrey;
-    text-align: left;
-  }
-
-  /* Discord Panel */
-  .resizer{
-    width: 50rem;
-  }
+  /* Festival */
 
   .abt-cntnt {
-    color: #cee7ed;
-    margin: 2rem;
-    flex-basis: 50rem;
-    font-size: 1.7rem;
+    flex-basis: auto;
+    font-size: 1rem;
   }
 
   /* Tool Panel */
   .tool-panel {
     font: 1rem;
     background-color: #39a2db;
-    width: 25rem;
+    width: 16rem;
     margin: 1rem;
-    padding: 3rem;
     flex-basis: auto;
     text-align: center;
     transition: 0.3s ease 0s, left 0.3s ease 0s;
   }
 }
 
-@media only screen and (max-width: 1024px) {
+@media only screen and (max-width: 1071px) {
+  /* Tools */
   /* Tool Panel */
   .tool-panel {
+    font: 1rem;
     background-color: #39a2db;
-    width: 90rem;
-    margin: 1.5rem;
-    padding: 3rem;
+    width: 25rem;
+    margin: 1rem;
+    flex-basis: auto;
+    text-align: center;
+    transition: 0.3s ease 0s, left 0.3s ease 0s;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+
+  /* Floating Navbar */
+  .navbar {
+    visibility: hidden;
+    /* Position */
+    position: fixed;
+  }
+
+  /* Toggleable class */
+  .visible {
+    visibility: visible;
+  }
+
+  .page-panel-mobile {
+    color: #39a2db;
+    display: inline;
+    background-color: #202225;
+    width: 25rem;
+    margin: 1rem;
+    flex-basis: auto;
+    text-align: center;
+    padding: 1.5rem 1rem;
+  }
+
+  /* The blue bar at the top */
+  .brand {
+    border-radius: 0 0 3.8rem 0;
+    box-shadow: 0 4px 5px 3px rgba(0, 0, 0, 0.25);
+    margin-bottom: 0;
+    width: 22rem;
+    height: 4rem;
+  }
+
+  .brand-img {
+    border-radius: 2.5rem;
+    height: 5rem;
+    width: 5rem;
+  }
+
+  /* The name inside it */
+  .brand-name {
+    margin: 1.3rem 0 1.3rem 7rem;
+    font-size: 1.7rem;
+  }
+
+  /* The logo is always visible */
+  .brand-img {
+    left: .5rem;
+    top: .5rem;
+    visibility: visible;
+  }
+
+  /* The blue box below the cyan bar */
+  .nav-link-container {
+    background-color: #17454f;
+    border-radius: 0 0 5px 5px;
+    box-shadow: 0 4px 5px 3px rgba(0, 0, 0, 0.25);
+  }
+
+  .nav-links {
+    border-spacing: 0.7rem;
+    margin: 0;
+    padding: 0 4rem;
+  }
+
+  /* Arrange them vertically */
+  .nav-links li {
+    display: table-row;
+    padding: 0;
+  }
+
+  .nav-link {
+    margin: .5rem 0;
+  }
+
+  .content {
+    padding: 1.5rem;
+  }
+
+  /* Festival Box */
+  .festival-container {
+    width: 22.5rem;
+    height: 10rem;
+    margin-bottom: 2rem;
+  }
+
+  /* Announcement Box */
+  .ann-container {
+    width: 22rem;
+    height: 20rem;
+    margin-bottom: 2rem;
+  }
+
+  /* Quote */
+  .quote-container {
+    width: auto;
+    max-width: 285px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  /* Tools */
+  /* Tool Panel */
+  .tool-panel {
+    font: 1rem;
+    background-color: #39a2db;
+    width: 25rem;
+    margin: 1rem;
     flex-basis: auto;
     text-align: center;
     transition: 0.3s ease 0s, left 0.3s ease 0s;
