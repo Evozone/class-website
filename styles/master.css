@@ -370,19 +370,27 @@ body::-webkit-scrollbar {
 
 .sp-images {
   width: 4rem;
+  font-size: 4.5rem;
   display: inline-block;
 }
 
 .sp-links {
   display: inline;
+  padding: 2rem 1rem 1rem 1rem;
+}
+
+.sp-links-img-var {
+  display: inline;
   padding: 1.5rem;
 }
 
+.sp-links-img-var > a,
 .sp-links > a {
   color: #e8f0f2;
   text-decoration: none;
 }
 
+.sp-links-img-var > a:hover,
 .sp-links > a:hover {
   color: #a2dbfa;
 }
@@ -409,7 +417,8 @@ body::-webkit-scrollbar {
 }
 
 .tool-img {
-  width: 10rem;
+  height: 10rem;
+  width: auto;
 }
 
 .tool-title {
