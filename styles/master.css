@@ -63,6 +63,11 @@ body::-webkit-scrollbar {
   background-image: url('empty.gif');
 }
 
+.strong-header {
+  font: 600 2rem 'Work Sans', sans-serif;
+  margin: 0;
+}
+
 /* Navigation */
 
 .navbar {
