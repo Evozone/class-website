@@ -9,6 +9,24 @@
   margin: 0 auto;
 }
 
+/* Dates */
+
+.timeline-dates {
+  color: #b3d7ea;
+  font: 400 1.5rem 'Work Sans', sans-serif;
+  margin: .5rem 0 0 0;
+}
+
+.timeline-heads {
+  font: 500 2rem 'Work Sans', sans-serif;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.timeline-text {
+  display: inline;
+}
+
 /* The actual timeline (the vertical ruler) */
 .timeline::after {
   content: '';
@@ -91,7 +109,7 @@
 /* The actual content */
 .content-wrapper {
   background-color: #3597cc;
-  color: #b3d7ea;
+  color: #053742;
   padding: 20px 30px;
   position: relative;
 }
