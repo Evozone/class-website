@@ -23,7 +23,6 @@
   /* Left Side */
   .left-side {
     padding: 0;
-    text-align: center;
   }
 
   /* Festival */
@@ -75,7 +74,7 @@
 
   .page-panel-mobile {
     color: #39a2db;
-    display: inline;
+    display: inline-block;
     background-color: #202225;
     width: 25rem;
     margin: 1rem;
@@ -133,6 +132,23 @@
 
   .nav-link {
     margin: .5rem 0;
+  }
+
+  /* Hero */
+
+  .hero {
+    width: calc(var(--vw, 1vw) * 100);
+    position: static;
+    text-align: center;
+  }
+
+  .hero-text {
+    position: static;
+  }
+
+  .hero-title {
+    font: 800 3.5rem 'Montserrat', sans-serif;
+    color: #a2dbfa ;
   }
 
   .content {
