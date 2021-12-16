@@ -402,19 +402,21 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 .sp-images {
-  width: 4rem;
-  font-size: 4.5rem;
+  width: 3.5rem;
+  height: 3.5rem;
+  font-size: 3.5rem;
   display: inline-block;
+  overflow: hidden;
 }
 
 .sp-links {
   display: inline;
-  padding: 2rem 1rem 1rem 1rem;
+  padding: 1rem 1rem 1rem 1rem;
 }
 
 .sp-links-img-var {
   display: inline;
-  padding: 1.5rem;
+  padding: 1rem;
 }
 
 .sp-links-img-var > a,
