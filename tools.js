@@ -1,3 +1,4 @@
+// For the navbar
 const navTitle = document.getElementById('brand-con');
 const navOptionCon = document.getElementById('nav-link-con');
 const navButton = document.getElementById('nav-btn');
@@ -15,22 +16,19 @@ window.addEventListener('resize', setVw);
 // Used for making sure 100vw doesn't overflow horizontally
 
 // Navbar toggler
-function isHidden(el) {
-    return (el.offsetParent === null);
-}
-
 function loadNavBar() {
   if (navTitle.classList.contains('visible')) {
+    navOptions.classList.add('hide');
     navTitle.classList.remove('visible');
-    navOptions.classList.remove('visible');
     navOptionCon.classList.remove('visible');
   } else {
     navTitle.classList.add('visible');
-    navOptions.classList.add('visible');
+    navOptions.classList.remove('hide');
     navOptionCon.classList.add('visible');
   }
 }
 
+navOptions.classList.remove('hide');
 navButton.addEventListener("click", loadNavBar);
 
 // Hide navbar on scroll
@@ -43,7 +41,7 @@ window.onscroll = function() {
   } else {
     document.getElementById("navbar").style.top = "-6.9rem";
     navTitle.classList.remove('visible');
-    navOptions.classList.remove('visible');
+    navOptions.classList.add('hide');
     navOptionCon.classList.remove('visible');
   }
   prevScrollpos = currentScrollPos;

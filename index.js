@@ -1,7 +1,10 @@
+// For quote API
 const quoteText = document.getElementById('quote');
 const authorText = document.getElementById('author');
+// For Hiding/Diplaying Festival stuff
 const festCon = document.getElementById('festival-container');
 const annCon = document.getElementById('ann-container');
+// For the navbar
 const navTitle = document.getElementById('brand-con');
 const navOptionCon = document.getElementById('nav-link-con');
 const navButton = document.getElementById('nav-btn');
@@ -18,23 +21,7 @@ setVw();
 window.addEventListener('resize', setVw);
 // Used for making sure 100vw doesn't overflow horizontally
 
-// Hide navbar on scroll
-var prevScrollpos = window.pageYOffset;
-
-window.onscroll = function() {
-  var currentScrollPos = window.pageYOffset;
-  if (prevScrollpos > currentScrollPos) {
-    document.getElementById("navbar").style.top = "0";
-  } else {
-    document.getElementById("navbar").style.top = "-6.9rem";
-    navTitle.classList.remove('visible');
-    navOptions.classList.remove('visible');
-    navOptionCon.classList.remove('visible');
-  }
-  prevScrollpos = currentScrollPos;
-}
-
-// API
+// Quotale API
 async function getQuote() {
   const apiUrl = 'https://api.quotable.io/random';
   try {
@@ -46,6 +33,7 @@ async function getQuote() {
     } else {
       authorText.innerText = '- ' + data.author;
     }
+
     //Reduce font size for long quotes
     if (data.length > 120) {
       quoteText.classList.add('long-quote');
@@ -59,28 +47,42 @@ async function getQuote() {
   }
 }
 
+getQuote();
+
+// For when non festival
 festCon.hidden = false;
 if (festCon.hidden) {
   annCon.classList.add('annConCoverup');
 }
 
-getQuote();
-
 // Navbar toggler
-function isHidden(el) {
-    return (el.offsetParent === null);
-}
-
 function loadNavBar() {
   if (navTitle.classList.contains('visible')) {
+    navOptions.classList.add('hide');
     navTitle.classList.remove('visible');
-    navOptions.classList.remove('visible');
     navOptionCon.classList.remove('visible');
   } else {
     navTitle.classList.add('visible');
-    navOptions.classList.add('visible');
+    navOptions.classList.remove('hide');
     navOptionCon.classList.add('visible');
   }
 }
 
+navOptions.classList.remove('hide');
 navButton.addEventListener("click", loadNavBar);
+
+// Hide navbar on scroll
+var prevScrollpos = window.pageYOffset;
+
+window.onscroll = function() {
+  var currentScrollPos = window.pageYOffset;
+  if (prevScrollpos > currentScrollPos) {
+    document.getElementById("navbar").style.top = "0";
+  } else {
+    document.getElementById("navbar").style.top = "-6.9rem";
+    navTitle.classList.remove('visible');
+    navOptions.classList.add('hide');
+    navOptionCon.classList.remove('visible');
+  }
+  prevScrollpos = currentScrollPos;
+}

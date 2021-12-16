@@ -67,9 +67,13 @@
     position: fixed;
   }
 
-  /* Toggleable class */
+  /* Toggleable classes */
   .visible {
     visibility: visible;
+  }
+
+  .hide {
+    display: none;
   }
 
   .page-panel-mobile {
@@ -132,6 +136,12 @@
 
   .nav-link {
     margin: .5rem 0;
+  }
+
+  .nav-link:hover:after {
+    background: #a2dbfa;
+    width: 100%;
+    left: 0;
   }
 
   /* Hero */
