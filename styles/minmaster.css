@@ -196,6 +196,44 @@
     margin-left: 1rem;
   }
 
+  /* Footer */
+
+  .foot-abt {
+    justify-content: flex-start;
+    padding: 1rem;
+  }
+
+  /* About College */
+
+  .abt-titles {
+    font: 700 0.7rem 'Montserrat', sans-serif;
+  }
+
+  .abt-desc {
+    font-size: 0.5rem;
+    line-height: 1.3em;
+    margin: 0;
+  }
+
+  .abt-cntnt {
+    color: #cee7ed;
+    flex-basis: 50rem;
+  }
+
+  /* Socials Panel */
+  .sp-images {
+    width: 1rem;
+    height: 1rem;
+    font-size: 1rem;
+  }
+
+  .sp-links,
+  .sp-links-img-var {
+    font-size: 0.5rem;
+    display: inline;
+    padding: 0.2rem;
+  }
+
   /* Tools */
   /* Tool Panel */
   .tool-panel {
