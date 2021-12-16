@@ -25,7 +25,7 @@
     padding: 0;
   }
 
-  /* Festival */
+  /* About */
 
   .abt-cntnt {
     flex-basis: auto;
@@ -58,7 +58,7 @@
   }
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 650px) {
 
   /* Floating Navbar */
   .navbar {
