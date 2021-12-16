@@ -14,8 +14,23 @@ body {
 }
 
 body::-webkit-scrollbar {
-  width: 0;
+  width: 10px;
 }
+
+body::-webkit-scrollbar-track {
+  background: #202225;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: #a2dbfa;
+  border-radius: 5px;
+  border: solid 3px #202225;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+  background: #3597cc;
+}
+
 
 /* Large Triangle Background */
 .lgtr-dark {
@@ -387,19 +402,21 @@ body::-webkit-scrollbar {
 }
 
 .sp-images {
-  width: 4rem;
-  font-size: 4.5rem;
+  width: 3.5rem;
+  height: 3.5rem;
+  font-size: 3.5rem;
   display: inline-block;
+  overflow: hidden;
 }
 
 .sp-links {
   display: inline;
-  padding: 2rem 1rem 1rem 1rem;
+  padding: 1rem 1rem 1rem 1rem;
 }
 
 .sp-links-img-var {
   display: inline;
-  padding: 1.5rem;
+  padding: 1rem;
 }
 
 .sp-links-img-var > a,

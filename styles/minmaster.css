@@ -25,7 +25,7 @@
     padding: 0;
   }
 
-  /* Festival */
+  /* About */
 
   .abt-cntnt {
     flex-basis: auto;
@@ -58,7 +58,7 @@
   }
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 650px) {
 
   /* Floating Navbar */
   .navbar {
@@ -67,9 +67,13 @@
     position: fixed;
   }
 
-  /* Toggleable class */
+  /* Toggleable classes */
   .visible {
     visibility: visible;
+  }
+
+  .hide {
+    display: none;
   }
 
   .page-panel-mobile {
@@ -134,6 +138,12 @@
     margin: .5rem 0;
   }
 
+  .nav-link:hover:after {
+    background: #a2dbfa;
+    width: 100%;
+    left: 0;
+  }
+
   /* Hero */
 
   .hero {
@@ -184,6 +194,44 @@
     width: auto;
     max-width: 16rem;
     margin-left: 1rem;
+  }
+
+  /* Footer */
+
+  .foot-abt {
+    justify-content: flex-start;
+    padding: 1rem;
+  }
+
+  /* About College */
+
+  .abt-titles {
+    font: 700 0.7rem 'Montserrat', sans-serif;
+  }
+
+  .abt-desc {
+    font-size: 0.5rem;
+    line-height: 1.3em;
+    margin: 0;
+  }
+
+  .abt-cntnt {
+    color: #cee7ed;
+    flex-basis: 50rem;
+  }
+
+  /* Socials Panel */
+  .sp-images {
+    width: 1rem;
+    height: 1rem;
+    font-size: 1rem;
+  }
+
+  .sp-links,
+  .sp-links-img-var {
+    font-size: 0.5rem;
+    display: inline;
+    padding: 0.2rem;
   }
 
   /* Tools */
