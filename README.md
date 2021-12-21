@@ -6,7 +6,7 @@ This is our Mini Project for Semester 3 of Year 2 of Computer Engineering. The b
 
 The COVID-19 pandemic had hindered effective flow of information, since each user in the institution was using their own favored way of communication. This created much chaos and it was difficult for an individual to keep track of all the events happening in the college/ in the tech world. 
 
-The goal of this project is to eliminate the manual task of fetching and organizing the relevant information, and also add more useful niche tools to make our time at college much more bearable.
+The goal of this project is to eliminate the manual task of fetching and organizing the relevant information, and also add more useful niche tools to make our time at college much more bearable. [You can check the current release here](https://evozone.github.io/ClassBWebSite/).
  
 ## Technologies used
 
