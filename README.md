@@ -27,7 +27,7 @@ The goal of this project is to eliminate the manual task of fetching and organiz
 
 ## Contributing to this Project
 
-Please follow the steps given in [CONTRIBUTING.md](), if you want to contribute to this project.
+Please follow the steps given in [CONTRIBUTING.md](https://github.com/Evozone/ClassBWebSite/blob/master/CONTRIBUTING.md), if you want to contribute to this project.
 
 __If you run into issues__ then you may contact a maintainer or other members for help. 
 
