@@ -7,7 +7,7 @@ Before moving ahead with making contributions please make sure that you have rea
 Make sure you have git installed on your machine.<br>
 If you haven't then [this article](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) will help you in the installation of git.
 
-If you are going to be using a shell (and Not a GUI based application that directly connects to Github), we recommend you also learn about [git commands](https://www.atlassian.com/git/tutorials/setting-up-a-repository)
+If you are going to be using a shell (and Not a GUI based application that directly connects to Github), we recommend you also learn about [git commands](https://www.atlassian.com/git/tutorials/setting-up-a-repository).
 
 ## Forking a project
 
@@ -26,19 +26,19 @@ It will look like ```YOUR_GitHub_USERNAME/ClassBWebSite``` in your Repositories 
 
 1. Clone your forked version by entering  ```git clone "https://github.com/YOUR_GITHUB_UserName/ClassBWebSite"``` __in the directory you want to put the project folder__.
     - Learn more about cloning repositories at [About remote repositories](https://docs.github.com/en/get-started/getting-started-with-git/about-remote-repositories).
-2. Change the directory from current to the project directory by entering ``` cd ClassBWebSite/```
+2. Change the directory from current to the project directory by entering ``` cd ClassBWebSite/```.
 3. Run the command ```start index.html``` to view the Homepage.
     - One could also simple double-click the file in a GUI based interface for file viewing.
    
 #### Branching 
-1. Open a new window of your terminal and change the directory into the project folder
+1. Open a new window of your terminal and change the directory into the project folder.
 2. Now create a new branch using `git checkout -b <add-your-new-branch-name>` <br>For example `git checkout-b checklist-system`
 3. Now make the required changes in the project which will resolve or add a feature as per mentioned in the respective issue.
 
 #### Commiting changes
-1. Add the changes to the branch you just created using the `git add .` command
-2. Now commit those changes using `git commit -m <"a short description about changes u made">` <br>For example `git commit -m "Removed unnatural borders around checkboxes"`
-3. Push the changes using `git push origin <add-your-branch-name>` <br>For example `git push origin checklist-system`
+1. Add the changes to the branch you just created using the `git add .` command.
+2. Now commit those changes using `git commit -m <"a short description about changes u made">`. <br>For example `git commit -m "Removed unnatural borders around checkboxes"`
+3. Push the changes using `git push origin <add-your-branch-name>`. <br>For example `git push origin checklist-system`
 
 ### ⚛️ Using Atom
 
