@@ -1,7 +1,7 @@
 // For quote API
 const quoteText = document.getElementById('quote');
 const authorText = document.getElementById('author');
-// For Hiding/Diplaying Festival stuff
+// For Hiding/Displaying Festival stuff
 const festCon = document.getElementById('festival-container');
 const annCon = document.getElementById('ann-container');
 // For the navbar
@@ -21,7 +21,7 @@ setVw();
 window.addEventListener('resize', setVw);
 // Used for making sure 100vw doesn't overflow horizontally
 
-// Quotale API
+// Quotable API
 async function getQuote() {
   const apiUrl = 'https://api.quotable.io/random';
   try {
@@ -74,7 +74,7 @@ navButton.addEventListener("click", loadNavBar);
 // Hide navbar on scroll
 var prevScrollpos = window.pageYOffset;
 
-window.onscroll = function() {
+window.onscroll = function () {
   var currentScrollPos = window.pageYOffset;
   if (prevScrollpos > currentScrollPos) {
     document.getElementById("navbar").style.top = "0";

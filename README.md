@@ -20,7 +20,7 @@ This is our Mini Project for Semester 3 of Year 2 of Computer Engineering.
 
 - Random Quote Panel
 
-- Annoucements about College / Class / Events in Tech Community
+- Announcements about College / Class / Events in Tech Community
 
 - Discord Widget for Voice Chat
 
