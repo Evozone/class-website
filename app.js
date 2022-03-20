@@ -1,5 +1,7 @@
 //Importing Express Module
 const express = require("express");
+const bodyParser = require('body-parser');
+const https = require('https');
 
 //Importing Database
 const admin = require("firebase-admin");
@@ -10,23 +12,25 @@ const app = express();
 
 // Configuring Express
 app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 //Creating APIs
+const url = 'https://ptb.discord.com/api/guilds/804986812425699339/widget.json';
+https.get(url, (response) => {
+    console.log(response);
+})
 
-//GET request to display our todo list
 app.get("/", (req, res) => {
     res.sendFile(__dirname + "/index.html");
 });
 
-//POST request to create a new task in todo list
-app.post("/tools", (req, res) => {
-    //Code to add a new data to the database will go here
+app.get("/tools", (req, res) => {
+    res.sendFile(__dirname + "/tools.html");
 });
 
-//POST request to delete a task in todo list
-app.post("/timeline", (req, res) => {
-    //Code to delete a data from the database will go here
+app.get("/timeline", (req, res) => {
+    res.sendFile(__dirname + "/timeline.html");
 });
 
 // Detect port number from the Node Server or use 5000
