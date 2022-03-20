@@ -1,0 +1,465 @@
+/* Fonts */
+/*
+*    font-family: 'Comfortaa', cursive; 500 700
+*    font-family: 'Happy Monkey', cursive;
+*    font-family: 'Montserrat', sans-serif; 400 700 800
+*    font-family: 'Work Sans', sans-serif; 300 - 800
+*/
+
+/* Body */
+
+body {
+  margin: 0;
+  font: 400 1rem 'Work Sans', sans-serif;
+}
+
+body::-webkit-scrollbar {
+  width: 10px;
+}
+
+body::-webkit-scrollbar-track {
+  background: #202225;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: #a2dbfa;
+  border-radius: 5px;
+  border: solid 3px #202225;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+  background: #3597cc;
+}
+
+
+/* Large Triangle Background */
+.lgtr-dark {
+  background-image: url(../images/large-triangles.svg);
+}
+
+.lgtr {
+  background-image: url(../images/large-triangles-light.svg);
+}
+
+/* Reusable stuff */
+.round-edges {
+  border-radius: 5px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.72);
+}
+
+.dark-mode {
+  background-color: #202225;
+  color: #a2dbfa;
+}
+
+.visible {
+  visibility: visible;
+}
+
+.page-title {
+  font: 700 3rem 'Montserrat', sans-serif;
+}
+
+.page-panel-mobile {
+  display: none;
+}
+
+.clickable-div {
+  position:absolute;
+  width:100%;
+  height:100%;
+  top:0;
+  left: 0;
+
+  z-index: 1;
+
+  /* fixes overlap error in IE7/8,
+     make sure you have an empty gif */
+  background-image: url('empty.gif');
+}
+
+.strong-header {
+  font: 600 2rem 'Work Sans', sans-serif;
+  margin: 0;
+}
+
+/* Navigation */
+
+.navbar {
+  background: #053742;
+  border-radius: 0 0 10rem 0;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  height: 6rem;
+  width: 100%;
+
+  /* Flexbox */
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+
+  /* Position */
+  position: fixed;
+  z-index: 2;
+  top: 0;
+
+  /* Animation */
+  transition: top 0.3s;
+}
+
+.brand {
+  border-radius: 0 0 1.33rem 0;
+  width: 40rem;
+  height: 3.8rem;
+  margin: 1.1rem 0 1.1rem 0;
+}
+
+.brand-img {
+  background: #e8f0f2;
+  border-radius: 4rem;
+  box-shadow: 0 4px 5px 3px rgba(0, 0, 0, 0.25);
+  height: 8rem;
+  width: 8rem;
+
+  /* Position */
+  position: absolute;
+  left: 2.5rem;
+  top: -1.15rem;
+}
+
+.brand-logo{
+  width:100%;
+}
+
+.brand-name {
+  color: #053742;
+  font : 700 2.4rem 'Comfortaa', cursive;
+  margin: .7rem 0 .7rem 15rem;
+}
+
+/* Navigation links */
+.nav-links {
+  display: table;
+  list-style: none;
+  margin: 2rem;
+}
+
+.nav-links li {
+  display: table-cell;
+  padding: 0 2rem 0.3rem 2rem ;
+  position: relative;
+}
+
+.nav-link {
+  color: #e8f0f2;
+  font: 1.5rem 'Happy Monkey', cursive;
+  transition: 0.3s ease 0s, left 0.3s ease 0s;
+  text-decoration: none;
+}
+
+.nav-link:after {
+  background: none repeat scroll 0 0 transparent;
+  background: #e8f0f2;
+  bottom: 0;
+  content: "";
+  display: block;
+  height: 2px;
+  left: 50%;
+  position: absolute;
+  transition: 0.3s ease 0s, left 0.3s ease 0s;
+  width: 0;
+}
+
+.nav-link:hover{
+  color: #a2dbfa;
+}
+
+.nav-link:hover:after {
+  background: #a2dbfa;
+  width: 70%;
+  left: 15%;
+}
+
+/* Hero Carousel */
+
+.hero {
+  width: calc(var(--vw, 1vw) * 100);
+  position: relative;
+}
+
+.hero-text {
+  position: absolute;
+  bottom: 5rem;
+  left: 4rem;
+}
+
+.hero-title {
+  font: 800 5rem 'Montserrat', sans-serif;
+  color: #a2dbfa ;
+}
+
+.hero-img {
+  width: calc(var(--vw, 1vw) * 100);
+  height: 100%;
+  max-width: 100%;
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,255) 0%,rgba(0,0,0,0) 100%);
+}
+
+/* Content */
+
+.content {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+  padding: 3.5rem;
+}
+
+.left-side {
+  flex-basis: auto;
+  flex-flow: column wrap;
+  justify-content: space-around;
+  padding: 0 3.5rem 0 0;
+}
+
+/* Festival Box */
+.festival-container {
+  position: relative;
+  display: inline-block;
+  width: 45rem;
+  height: 20rem;
+  flex-basis: auto;
+  margin-bottom: 3.5rem;
+  overflow: hidden;
+}
+
+.festival-container > img {
+  width: 100%;
+  height: 100%;
+}
+
+.fest-content {
+  /* Size */
+  width: 60%;
+  height: 60%;
+  /* Position */
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.fest-txt {
+  /* Size */
+  width: 100%;
+  height: 100%;
+
+  font: 300% 'Happy Monkey', cursive;
+  color: #e5c06f;
+  margin: 0;
+}
+
+/* Announcement Box */
+.ann-container {
+  position: relative;
+  width: 45rem;
+  height: 26rem;
+  flex-basis: auto;
+  margin-bottom: 3.5rem;
+  overflow-y: scroll;
+}
+
+.ann-container::-webkit-scrollbar {
+  width: 7px;
+  border-radius: 5px;
+  background: #202225;
+}
+
+.ann-container::-webkit-scrollbar-track {
+  border-radius: 5px;
+  background: #202225;
+}
+
+.ann-container::-webkit-scrollbar-thumb {
+  background: #282c34;
+  border-radius: 3px;
+  border: solid 1.5px #202225;
+}
+
+.ann-container::-webkit-scrollbar-thumb:hover {
+  background: #616466;
+}
+
+.annConCoverup{
+  height: 50rem;
+}
+
+.ann-header {
+  font-size: 1.5rem;
+  letter-spacing: 0.04em;
+  margin: 0;
+  font-weight: normal;
+  color: #39a2db;
+}
+
+.announcement {
+  line-height: 1.5;
+  margin: 1rem;
+  padding: 0.8rem 1rem ;
+  border: 1px solid #2C394B;
+  background-color: #24272a;
+  border-radius: 4px;
+}
+
+.right-side {
+  flex-basis: auto;
+  flex-flow: column wrap;
+  justify-content: center;
+}
+
+/* Quote */
+
+.quote-container {
+  width: auto;
+  max-width: 285px;
+  padding: 2rem;
+  margin-bottom: 3.5rem;
+}
+
+.quote-text {
+  font: 500 1.5rem 'Work Sans', sans-serif;
+}
+
+.long-quote {
+  font: 500 1rem 'Work Sans', sans-serif;
+}
+
+.quote-author {
+  margin-top: 2rem;
+  font: 500 0.8rem 'Comfortaa', cursive;
+  color: darkgrey;
+  text-align: left;
+}
+
+.tweets {
+  width: 100rem;
+  margin: 3.5rem 0;
+  overflow: hidden;
+}
+
+/* Footer */
+
+.footer {
+  background: #202225;
+}
+
+/* Footer above the line */
+.foot-abt {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+  padding: 2rem;
+}
+
+/* Both the blocks in footer above the line */
+.abt-cntnt {
+  color: #cee7ed;
+  flex-basis: 30rem;
+}
+
+/*
+*  This construct of inline block + CSS in abt-desc is for non overflow of
+*  description compared to the title.
+*/
+
+.abt-clg {
+  display: block;
+}
+
+.abt-titles {
+  font: 700 1.5rem 'Montserrat', sans-serif;
+  display: block;
+}
+
+.abt-desc {
+  width:0;
+  min-width:100%;
+  line-height: 1.3em;
+}
+
+/* The Social Handles :  */
+
+.abt-handles {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+}
+
+.social-panel{
+  padding: 0.5rem;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+}
+
+.sp-images {
+  width: 3.5rem;
+  height: 3.5rem;
+  font-size: 3.5rem;
+  display: inline-block;
+  overflow: hidden;
+}
+
+.sp-links {
+  display: inline;
+  padding: 1rem 1rem 1rem 1rem;
+}
+
+.sp-links-img-var {
+  display: inline;
+  padding: 1rem;
+}
+
+.sp-links-img-var > a,
+.sp-links > a {
+  color: #e8f0f2;
+  text-decoration: none;
+}
+
+.sp-links-img-var > a:hover,
+.sp-links > a:hover {
+  color: #a2dbfa;
+}
+
+/* Tools */
+
+.tool-top {
+  padding-top: 8rem;
+}
+
+.tool-panel {
+  background-color: #39a2db;
+  width: 20rem;
+  margin: 1rem;
+  padding: 1.5rem 1rem;
+  flex-basis: auto;
+  text-align: center;
+  transition: 0.3s ease 0s, left 0.3s ease 0s;
+  position: relative;
+}
+
+.tool-panel:hover {
+  background-color: #a2dbfa;
+}
+
+.tool-img {
+  height: 10rem;
+  width: auto;
+}
+
+.tool-title {
+  font: 400 2rem 'Montserrat', sans-serif;
+}
+
+.tool-description {
+  padding: 0.5rem;
+}
