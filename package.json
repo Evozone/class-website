@@ -1,0 +1,24 @@
+{
+  "name": "classbwebsite",
+  "version": "1.0.0",
+  "description": "A class website with events and timeline",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Evozone/ClassBWebSite.git"
+  },
+  "keywords": [
+    "planner",
+    "timeline",
+    "college"
+  ],
+  "author": "Bhargav Modak",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Evozone/ClassBWebSite/issues"
+  },
+  "homepage": "https://github.com/Evozone/ClassBWebSite#readme"
+}
