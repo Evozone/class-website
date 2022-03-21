@@ -78,15 +78,29 @@
                 }
             }
         }
+
+        function Showcase(prop) {
+            return {
+                $template: '#showcase',
+                title: prop.title,
+                content: prop.content,
+                mounted() {
+                    console.log(`Showcase item ${this.title} is mounted!`);
+                }
+            }
+        }
+
+
         createApp({
             Navbar,
             CarouselItem,
             Announcement,
+            Showcase
         }).mount()
     </script>
 
     <template id="nav-template">
-        <nav class="navbar navbar-expand-lg navbar-dark lgtr fixed-top ">
+        <nav class="navbar navbar-expand-lg navbar-dark lgtr fixed-top">
             <div class="container-fluid">
                 <div class="brand-img me-3" v-if="width > 992">
                     <img class="brand-logo" src="images/brand-logo.svg" alt="Brand">
@@ -163,6 +177,17 @@
         </div>
     </template>
 
+    <template id="showcase">
+        <div class="card mb-3">
+            <img src="images/showcase-sample.jpg" class="card-img-top" alt="Image unavailable">
+            <div class="card-body">
+                <h5 class="card-title">{{title}}</h5>
+                <p class="card-text">{{content}}</p>
+                <a href="#" class="btn btn-primary">Read more...</a>
+            </div>
+        </div>
+    </template>
+
     <div class=" container pt-4 px-4">
         <div class="row">
             <div class="col-12 col-md-7">
@@ -184,16 +209,30 @@
                         v-scope="Announcement({ title: 'Lorem Ipsum Dolor',
                      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi molestie, libero sit amet mattis tincidunt, enim nisl pharetra leo, nec accumsan ex tellus id est. Cras egestas auctor elit. Aliquam aliquet porta tristique. Praesent semper ante ornare urna cursus, sed elementum neque pretium. Mauris non tincidunt quam. Praesent at varius ex. Morbi aliquet finibus orci non vestibulum. Suspendisse a malesuada urna, nec lacinia felis. Mauris non eros ut nisl hendrerit viverra id sed augue. ', id: 'three' })"
                         @vue:mounted="mounted"></div>
-
                 </div>
+
+                <div v-scope="Showcase({ title:'Smart India Hackathon',
+                content:'Team Chakra participates in SIH on Tuesday' })" @vue:mounted="mounted"></div>
+
+                <div v-scope="Showcase({ title:'Volleyball Selection in Terna',
+                content:'Volleyball Selection is scheduled on Wednesday on the Turf' })" @vue:mounted="mounted"></div>
+
+                <div v-scope="Showcase({ title:'Students Prepare for retest',
+                content:'With Retests scheduled from 21 March to 25 March, students gear up for the Internal Assessment 1 retest' })"
+                    @vue:mounted="mounted"></div>
+
             </div>
             <div class="col-12 col-md-4 text-center">
                 <iframe src="https://ptb.discord.com/widget?id=804986812425699339&theme=dark" width="350" height="500"
                     allowtransparency="true" frameborder="0"
                     sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+
+                <script src="https://apps.elfsight.com/p/platform.js" defer></script>
+                <div class="elfsight-app-984fb6bb-9082-4304-9ded-a2dae42f5bc9"></div>
             </div>
         </div>
     </div>
+
 
     <!-- Footer -->
     <footer id="id-footer">
