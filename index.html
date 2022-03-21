@@ -54,29 +54,49 @@
                 title: prop.captionTitle,
                 caption: prop.captionContent,
                 mounted() {
-                    console.log(`CaraouselItem is mounted!`);
+                    console.log(`CarouselItem is mounted!`);
                 }
             }
         }
 
+        function Announcement(prop) {
+            return {
+                $template: '#announcement',
+                title: prop.title,
+                description: prop.content,
+                id: prop.id,
+                collId: `flush-collapse-`,
+                flushId: `flush-heading-`,
+                updateCollId() {
+                    this.collId = `flush-collapse-${this.id}`;
+                },
+                updateFlushId() {
+                    this.flushId = `flush-heading-${this.id}`;
+                },
+                mounted() {
+                    console.log(`Announcement item ${this.title} is mounted!`);
+                }
+            }
+        }
         createApp({
             Navbar,
-            CarouselItem
+            CarouselItem,
+            Announcement,
         }).mount()
     </script>
 
     <template id="nav-template">
-        <nav class="navbar navbar-expand-lg navbar-dark lgtr fixed-top">
+        <nav class="navbar navbar-expand-lg navbar-dark lgtr fixed-top ">
             <div class="container-fluid">
-
-                <div class="brand-img me-3" v-if="width > 576">
+                <div class="brand-img me-3" v-if="width > 992">
                     <img class="brand-logo" src="images/brand-logo.svg" alt="Brand">
                 </div>
 
                 <a class="navbar-brand brand-name fs-1" href="/">Memengineers</a>
-                <a class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
-                    aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                    <div class="brand-img me-3" v-if="width < 576">
+                <a class="navbar-toggler px-0" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <div class="brand-img me-3" v-if="width < 992">
                         <img class="brand-logo" src="images/brand-logo.svg" alt="Brand">
                     </div>
                 </a>
@@ -127,7 +147,87 @@
         </button>
     </div>
 
+    <template id="announcement">
+        <div v-effect="updateCollId()"></div>
+        <h2 class="accordion-header" :id="flushId">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                :data-bs-target="`#${collId}`" aria-expanded="false" :aria-controls="collId">
+                {{title}}
+            </button>
+        </h2>
+        <div :id="collId" class="accordion-collapse collapse" :aria-labelledby="flushId"
+            data-bs-parent="#announcementAccordion">
+            <div class="accordion-body">
+                {{description}}
+            </div>
+        </div>
+    </template>
 
+    <div class=" container pt-4 px-4">
+        <div class="row">
+            <div class="col-12 col-md-7">
+                <div class="accordion accordion-flush mb-5" id="announcementAccordion">
+
+                    <!-- One module -->
+                    <div class="accordion-item"
+                        v-scope="Announcement({ title: '🚩Antarang 2k22🚩',
+                         content: '🙏Hola Ternites🙏 As you all know cultural festival of our college is to be held very soon you all might be excited for Antarang 2k22 🤩 Audition has been organize for interested candidates.', id: 'one' })"
+                        @vue:mounted="mounted"></div>
+
+                    <!-- One module -->
+                    <div class="accordion-item"
+                        v-scope="Announcement({ title: 'Girls Kabbadi Team',
+                     content: '🤼‍♂️🤼‍♂️\n Guyyyss!\n🏆SPORTEC🏆 is here; and our COMPUTER DEPT* is conducting  selections for the GIRLS KABADDI TEAM.\n\nInterested students from FE(FE selection will be taken on 21 march),SE,TE & BE from Computer dept. can come and give their best...👍🏻\nHere are the details. \n\nVenue:- College Turf\nDate:- 17-03-2022\nTime: 10 am sharp\nFor any queries contact:\nRutuja Thakur : 9967386123', id: 'two' })"
+                        @vue:mounted="mounted"></div>
+
+                    <div class="accordion-item"
+                        v-scope="Announcement({ title: 'Lorem Ipsum Dolor',
+                     content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi molestie, libero sit amet mattis tincidunt, enim nisl pharetra leo, nec accumsan ex tellus id est. Cras egestas auctor elit. Aliquam aliquet porta tristique. Praesent semper ante ornare urna cursus, sed elementum neque pretium. Mauris non tincidunt quam. Praesent at varius ex. Morbi aliquet finibus orci non vestibulum. Suspendisse a malesuada urna, nec lacinia felis. Mauris non eros ut nisl hendrerit viverra id sed augue. ', id: 'three' })"
+                        @vue:mounted="mounted"></div>
+
+                </div>
+            </div>
+            <div class="col-12 col-md-4 text-center">
+                <iframe src="https://ptb.discord.com/widget?id=804986812425699339&theme=dark" width="350" height="500"
+                    allowtransparency="true" frameborder="0"
+                    sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer id="id-footer">
+        <div class="footer mt-5">
+
+            <div class="foot-abt">
+
+                <!-- About College -->
+                <div class="abt-cntnt">
+                    <div class="abt-clg">
+                        <h3 class="abt-titles">About Terna Engineering College</h3>
+                        <p class="abt-desc">Terna Engineering College is part of the
+                            Terna Public Charitable Trust's Group of Institutions,
+                            whose mission is to provide an environment of academic
+                            excellence and to adopt appropriate teaching - learning
+                            processes to produce competent and skilled engineers
+                            ready to meet global challenges.
+                        </p>
+                        <br>
+                        <p class="abt-desc">
+                            Their vision has always been to deliver value added
+                            quality education to the aspiring students, meeting
+                            stringent requirements of the changing technology,
+                            industry, business and society as a whole.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        </div>
+    </footer>
+    <!-- Footer -->
 
 </body>
 

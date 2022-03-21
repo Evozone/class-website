@@ -16,10 +16,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 //Creating APIs
-const url = 'https://ptb.discord.com/api/guilds/804986812425699339/widget.json';
-https.get(url, (response) => {
-    console.log(response);
-})
+// const url = 'https://ptb.discord.com/api/guilds/804986812425699339/widget.json';
+// https.get(url, (response) => {
+//     console.log(response);
+// })
 
 app.get("/", (req, res) => {
     res.sendFile(__dirname + "/index.html");

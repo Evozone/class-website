@@ -6,6 +6,10 @@
 
 /* Body */
 
+/* * {
+  border: 1px solid red !important;
+} */
+
 body {
   margin: 0;
   font: 400 1rem 'Work Sans', sans-serif;
