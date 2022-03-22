@@ -37,16 +37,20 @@
 
   <script type="module">
     import { createApp } from 'https://unpkg.com/petite-vue?module';
+
     function Navbar() {
       return {
         $template: '#nav-template',
         focus: '/',
-        width: screen.width,
+        width: window.screen.width,
+        setFocusHome() {
+          this.focus = '/';
+        },
         setFocusTools() {
-          focus: '/tools';
+          this.focus = '/tools';
         },
         setFocusTimeline() {
-          focus: '/timeline';
+          this.focus = '/timeline';
         },
         mounted() {
           console.log(`Navbar is mounted!`);
@@ -96,25 +100,49 @@
       }
     }
 
+    function Tool(prop) {
+      return {
+        $template: '#tool-card',
+        title: prop.title,
+        desc: prop.desc,
+        imageLink: prop.imageSrc,
+        link: prop.link,
+        mounted() {
+          console.log(`Tool item ${this.title} is mounted!`);
+        }
+      }
+    }
+
+    function TimeCard(prop) {
+      return {
+        $template: '#time-card',
+        key: this.key,
+        mounted() {
+          console.log(`Time item ${this.key} is mounted!`);
+        }
+      }
+    }
 
     createApp({
       Navbar,
       CarouselItem,
       Announcement,
-      Showcase
+      Showcase,
+      Tool,
+      TimeCard
     }).mount()
   </script>
 
   <!-- Template for Navbar -->
   <template id="nav-template">
-    <nav class="navbar navbar-expand-lg navbar-dark lgtr fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark lgtr fixed-top" id="nav-scroll">
       <div class="container-fluid">
         <div class="brand-img me-3" v-if="width > 992">
           <img class="brand-logo" src="images/brand-logo.svg" alt="Brand">
         </div>
 
-        <a class="navbar-brand brand-name fs-1" href="/">Memengineers</a>
-        <a class="navbar-toggler px-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+        <a class="navbar-brand brand-name fs-1" href="index.html">Memengineers</a>
+        <a class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
           aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
           <div class="brand-img me-3" v-if="width < 992">
             <img class="brand-logo" src="images/brand-logo.svg" alt="Brand">
@@ -122,18 +150,17 @@
         </a>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav">
-            <a class="nav-link fs-3 me-2" :class="focus == '/' ? 'active' : 'none'" href="index.html">Home</a>
-            <a class="nav-link fs-3 me-2" :class="focus == '/tools' ? 'active' : 'none'" href="tools.html">Tools</a>
-            <a class="nav-link fs-3 me-2" :class="focus == '/timeline' ? 'active' : 'none'"
-              href="timeline.html">Timeline</a>
+            <a class="nav-link fs-3 me-2" :class="focus == '/' ? 'active' : ''" @click="setFocusHome"
+              href="javascript:void(0);">Home</a>
+            <a class="nav-link fs-3 me-2" :class="focus == '/tools' ? 'active' : ''" @click="setFocusTools"
+              href="javascript:void(0);">Tools</a>
+            <a class="nav-link fs-3 me-2" :class="focus == '/timeline' ? 'active' : ''" @click="setFocusTimeline"
+              href="javascript:void(0);">Timeline</a>
           </div>
         </div>
       </div>
     </nav>
   </template>
-
-  <div v-scope="Navbar()" @vue:mounted="mounted">
-  </div>
 
   <!-- Template for Carousel iTem  -->
   <template id="carousel-item">
@@ -144,31 +171,8 @@
     </div>
   </template>
 
-  <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
-    <div class="carousel-inner">
-      <div class="carousel-item active" v-scope="CarouselItem({ captionTitle : 'Happy Holi!',
-            captionContent : 'Terna students play Holi on Friday.'})" @vue:mounted="mounted"></div>
-
-      <div class="carousel-item" v-scope="CarouselItem({ captionTitle : 'Mini Project!',
-            captionContent : 'Students wonder how they will create their Mini Project.'})" @vue:mounted="mounted">
-      </div>
-
-      <div class="carousel-item" v-scope="CarouselItem({captionTitle : 'Death to Laziness!',
-                captionContent : 'Yes, everyone can overcome laziness!'})" @vue:mounted="mounted"></div>
-    </div>
-
-    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Next</span>
-    </button>
-  </div>
-
   <!-- Template for announcement -->
-  <template id="announcement">
+  <template id="announcement" :class="bg-dark">
     <div v-effect="updateCollId()"></div>
     <h2 class="accordion-header" :id="flushId">
       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="`#${collId}`"
@@ -178,7 +182,7 @@
     </h2>
     <div :id="collId" class="accordion-collapse collapse" :aria-labelledby="flushId"
       data-bs-parent="#announcementAccordion">
-      <div class="accordion-body">
+      <div class="accordion-body bg-dark text-light">
         {{description}}
       </div>
     </div>
@@ -186,62 +190,186 @@
 
   <!-- Template for showcase -->
   <template id="showcase">
-    <div class="card mb-3">
+    <div class="card mb-4 border-0 shadow">
       <img src="images/showcase-sample.jpg" class="card-img-top" alt="Image unavailable">
-      <div class="card-body">
-        <h5 class="card-title">{{title}}</h5>
-        <p class="card-text">{{content}}</p>
-        <a href="#" class="btn btn-primary">Read more...</a>
+      <div class="card-body bg-dark bg-gradient">
+        <h5 class="card-title text-white">{{title}}</h5>
+        <p class="card-text text-white-50">{{content}}</p>
+        <a href="#" class="btn btn-secondary bg-gradient">Read more...</a>
       </div>
     </div>
   </template>
 
-  <div class=" container pt-4 px-4">
-    <div class="row">
-      <div class="col-12 col-md-7">
-        <div class="accordion accordion-flush mb-5" id="announcementAccordion">
-
-          <!-- One module -->
-          <div class="accordion-item"
-            v-scope="Announcement({ title: '🚩Antarang 2k22🚩',
-                         content: '🙏Hola Ternites🙏 As you all know cultural festival of our college is to be held very soon you all might be excited for Antarang 2k22 🤩 Audition has been organize for interested candidates.', id: 'one' })"
-            @vue:mounted="mounted"></div>
-
-          <!-- One module -->
-          <div class="accordion-item"
-            v-scope="Announcement({ title: 'Girls Kabbadi Team',
-                     content: '🤼‍♂️🤼‍♂️\n Guyyyss!\n🏆SPORTEC🏆 is here; and our COMPUTER DEPT* is conducting  selections for the GIRLS KABADDI TEAM.\n\nInterested students from FE(FE selection will be taken on 21 march),SE,TE & BE from Computer dept. can come and give their best...👍🏻\nHere are the details. \n\nVenue:- College Turf\nDate:- 17-03-2022\nTime: 10 am sharp\nFor any queries contact:\nRutuja Thakur : 9967386123', id: 'two' })"
-            @vue:mounted="mounted"></div>
-
-          <div class="accordion-item"
-            v-scope="Announcement({ title: 'Lorem Ipsum Dolor',
-                     content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi molestie, libero sit amet mattis tincidunt, enim nisl pharetra leo, nec accumsan ex tellus id est. Cras egestas auctor elit. Aliquam aliquet porta tristique. Praesent semper ante ornare urna cursus, sed elementum neque pretium. Mauris non tincidunt quam. Praesent at varius ex. Morbi aliquet finibus orci non vestibulum. Suspendisse a malesuada urna, nec lacinia felis. Mauris non eros ut nisl hendrerit viverra id sed augue. ', id: 'three' })"
-            @vue:mounted="mounted"></div>
+  <template id="tool-card">
+    <div class="tool-panel card text-center p-2 m-2">
+      <img class="tool-img" :src="`${imageLink}`" alt="evozone">
+      <div class="tool-content">
+        <h3 class="tool-title">
+          {{title}}
+        </h3>
+        <div class="tool-desc">
+          {{desc}}
         </div>
-
-        <div v-scope="Showcase({ title:'Smart India Hackathon',
-                content:'Team Chakra participates in SIH on Tuesday' })" @vue:mounted="mounted"></div>
-
-        <div v-scope="Showcase({ title:'Volleyball Selection in Terna',
-                content:'Volleyball Selection is scheduled on Wednesday on the Turf' })" @vue:mounted="mounted"></div>
-
-        <div
-          v-scope="Showcase({ title:'Students Prepare for retest',
-                content:'With Retests scheduled from 21 March to 25 March, students gear up for the Internal Assessment 1 retest' })"
-          @vue:mounted="mounted"></div>
-
       </div>
-      <div class="col-12 col-md-4 text-center">
-        <iframe src="https://ptb.discord.com/widget?id=804986812425699339&theme=dark" width="350" height="500"
-          allowtransparency="true" frameborder="0"
-          sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+      <a :href="`${link}`" target="_blank"><span class="clickable-div"></span></a>
+    </div>
+  </template>
 
-        <a class="twitter-timeline" data-width="500" data-height="1800" data-theme="dark"
-          href="https://twitter.com/thebrahmnicboy/lists/1505913339830226950?ref_src=twsrc%5Etfw">A Twitter
-          List by thebrahmnicboy</a>
-        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+  <template id="time-card">
+    <div class="event-container">
+      <div class="card col-md-5 bg-light p-3 shadow-lg">
+        <h2>Analysis of Algorithms</h2>
+        <h3>Batch 2</h3>
+        <h4>Assignment 1</h4>
+        <p>Where : ERP</p>
+      </div>
+      <div class="timeline-trunk">
+        <button>
+
+        </button>
       </div>
     </div>
+
+  </template>
+
+  <div v-scope="Navbar()" @vue:mounted="mounted">
+    <section v-if="focus == '/'">
+      <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active" v-scope="CarouselItem({ captionTitle : 'Happy Holi!',
+            captionContent : 'Terna students play Holi on Friday.'})" @vue:mounted="mounted"></div>
+
+          <div class="carousel-item" v-scope="CarouselItem({ captionTitle : 'Mini Project!',
+            captionContent : 'Students wonder how they will create their Mini Project.'})" @vue:mounted="mounted">
+          </div>
+
+          <div class="carousel-item" v-scope="CarouselItem({captionTitle : 'Death to Laziness!',
+                captionContent : 'Yes, everyone can overcome laziness!'})" @vue:mounted="mounted"></div>
+        </div>
+
+        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+
+      <div class="container pt-4 px-4">
+        <div class="row gx-5">
+          <div class="col-12 col-md-7">
+            <div class="accordion accordion-flush mb-5" id="announcementAccordion">
+
+              <!-- One module -->
+              <div class="accordion-item"
+                v-scope="Announcement({ title: '🚩Antarang 2k22🚩',
+                         content: '🙏Hola Ternites🙏 As you all know cultural festival of our college is to be held very soon you all might be excited for Antarang 2k22 🤩 Audition has been organize for interested candidates.', id: 'one' })"
+                @vue:mounted="mounted"></div>
+
+              <!-- One module -->
+              <div class="accordion-item"
+                v-scope="Announcement({ title: 'Girls Kabbadi Team',
+                     content: '🤼‍♂️🤼‍♂️\n Guyyyss!\n🏆SPORTEC🏆 is here; and our COMPUTER DEPT* is conducting  selections for the GIRLS KABADDI TEAM.\n\nInterested students from FE(FE selection will be taken on 21 march),SE,TE & BE from Computer dept. can come and give their best...👍🏻\nHere are the details. \n\nVenue:- College Turf\nDate:- 17-03-2022\nTime: 10 am sharp\nFor any queries contact:\nRutuja Thakur : 9967386123', id: 'two' })"
+                @vue:mounted="mounted"></div>
+
+              <div class="accordion-item"
+                v-scope="Announcement({ title: 'Lorem Ipsum Dolor',
+                     content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi molestie, libero sit amet mattis tincidunt, enim nisl pharetra leo, nec accumsan ex tellus id est. Cras egestas auctor elit. Aliquam aliquet porta tristique. Praesent semper ante ornare urna cursus, sed elementum neque pretium. Mauris non tincidunt quam. Praesent at varius ex. Morbi aliquet finibus orci non vestibulum. Suspendisse a malesuada urna, nec lacinia felis. Mauris non eros ut nisl hendrerit viverra id sed augue. ', id: 'three' })"
+                @vue:mounted="mounted"></div>
+            </div>
+
+            <div v-scope="Showcase({ title:'Smart India Hackathon',
+                content:'Team Chakra participates in SIH on Tuesday' })" @vue:mounted="mounted"></div>
+
+            <div v-scope="Showcase({ title:'Volleyball Selection in Terna',
+                content:'Volleyball Selection is scheduled on Wednesday on the Turf' })" @vue:mounted="mounted"></div>
+
+            <div
+              v-scope="Showcase({ title:'Students Prepare for retest',
+                content:'With Retests scheduled from 21 March to 25 March, students gear up for the Internal Assessment 1 retest' })"
+              @vue:mounted="mounted"></div>
+
+          </div>
+          <div class="col-12 col-md-5 text-center">
+            <iframe class="mb-4" src="https://ptb.discord.com/widget?id=804986812425699339&theme=dark" width="350"
+              height="500" allowtransparency="true" frameborder="0"
+              sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+
+            <div>
+              <a class="twitter-timeline mt-4" data-width="100%" data-height="1800" data-theme="dark"
+                href="https://twitter.com/thebrahmnicboy/lists/1505913339830226950?ref_src=twsrc%5Etfw">A Twitter
+                List by @thebrahmnicboy</a>
+              <script src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+    <section v-if="focus == '/tools'">
+      <div class="container tool-top pt-1">
+        <div class="row gx-4">
+          <div v-scope="Tool({
+            title:'Excalidraw',
+            desc:'Excalidraw is a virtual collaborative whiteboard tool that lets you easily sketch diagrams that have a hand-drawn feel to them.',
+            link:'https://excalidraw.com/',
+            imageSrc:'images/excalidraw.svg' 
+          })" class="col-12 col-md-6 col-lg-4">
+          </div>
+
+          <div v-scope="Tool({
+            title:'Replit',
+            desc:'Replit is a simple yet powerful online IDE, Editor, Compiler, Interpreter, and REPL. Code, compile, run, and host in 50+ programming languages.',
+            link:'https://replit.com/~',
+            imageSrc:'images/replit.svg' 
+          })" class="col-12 col-md-6 col-lg-4">
+          </div>
+
+          <div v-scope="Tool({
+            title:'Github',
+            desc:'GitHub is a code hosting platform for version control and collaboration. It lets you and others work together on projects from anywhere.',
+            link:'https://github.com/',
+            imageSrc:'images/github.svg' 
+          })" class="col-12 col-md-6 col-lg-4">
+          </div>
+
+          <div v-scope="Tool({
+            title:'Udemy',
+            desc:'Udemy is an online learning and teaching marketplace with over 183000 courses and 40 million students. Learn programming, marketing, data science and more.',
+            link:'https://www.udemy.com/',
+            imageSrc:'images/udemy.svg' 
+          })" class="col-12 col-md-6 col-lg-4">
+          </div>
+
+          <div v-scope="Tool({
+            title:'Wolfram Alpha',
+            desc:'Wolfram Alpha is a unique engine for computing answers and providing knowledge. It works by using its vast store of expert-level knowledge and algorithms to automatically answer questions, do analysis and generate reports.',
+            link:'https://www.wolframalpha.com/',
+            imageSrc:'images/wolfram-alpha.svg' 
+          })" class="col-12 col-md-6 col-lg-4">
+          </div>
+
+          <div v-scope="Tool({
+            title:'Fireship.io',
+            desc:'Fireship.io is a gateway drug for developers who want to build awesome web & mobile apps.',
+            link:'https://www.geogebra.org/?lang=en',
+            imageSrc:'images/fireshipio.svg' 
+          })" class="col-12 col-md-6 col-lg-4">
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+    <section v-if="focus == '/timeline'">
+      <div class="container pt-3 tool-top">
+        <div v-scope="TimeCard()">
+
+        </div>
+      </div>
+    </section>
   </div>
 
   <!-- Footer -->
@@ -278,6 +406,7 @@
   </footer>
   <!-- Footer -->
 
+  <script src="app.js" defer></script>
 </body>
 
 </html>
