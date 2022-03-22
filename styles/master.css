@@ -6,17 +6,13 @@
 
 /* Body */
 
-/* * {
-  border: 1px solid red !important;
-} */
-
 body {
   margin: 0;
   font: 400 1rem 'Work Sans', sans-serif;
 }
 
 body::-webkit-scrollbar {
-  width: 10px;
+  width: 11px;
 }
 
 body::-webkit-scrollbar-track {
@@ -213,7 +209,49 @@ nav {
 
 /* Timeline */
 
+.trunk-container {
+  height: inherit;
+}
+
 .timeline-trunk {
-  width: 8px;
-  color: white;
+  width: 16px;
+  background-color: #45a7dc;
+  height: inherit;
+}
+
+/* Timeline Buttons */
+
+.date-btn {
+  border: 8px solid #3f85c7;
+}
+
+.date-btn:active {
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 0 0 5px rgba(255,255,255,0.25);
+}
+
+.btn-circle {
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  padding: 6px 0;
+  font-size: 12px;
+  line-height: 1.428571429;
+  border-radius: 15px;
+}
+.btn-circle.btn-lg {
+  width: 50px;
+  height: 50px;
+  padding: 10px 16px;
+  font-size: 18px;
+  line-height: 1.33;
+  border-radius: 25px;
+}
+.btn-circle.btn-xl {
+  width: 70px;
+  height: 70px;
+  padding: 10px 16px;
+  font-size: 24px;
+  line-height: 1.33;
+  border-radius: 35px;
 }
