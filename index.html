@@ -164,7 +164,7 @@
           console.log(`Time item ${this.key} is mounted!`);
         },
         updateFlowType() {
-          if (this.index % 2 == 1 || screenwidth < 660) {
+          if (this.index % 2 == 1 || window.innerWidth < 660) {
             this.flowType = 'flex-row-reverse';
           }
         },
