@@ -1,5 +1,6 @@
 // Hide navbar on scroll
 var prevScrollpos = window.pageYOffset;
+var screenwidth;
 
 window.onscroll = function () {
     var currentScrollPos = window.pageYOffset;
@@ -10,4 +11,3 @@ window.onscroll = function () {
     }
     prevScrollpos = currentScrollPos;
 }
-
