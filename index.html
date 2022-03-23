@@ -137,16 +137,7 @@
       return {
         events: [],
         keys: [],
-        currentView: + new Date(),
-        async getEvents() {
-          // Firestore
-          const q = query(collection(db, "Events"), orderBy('Date'));
-          const qSnap = await getDocs(q);
-          qSnap.forEach((doc) => {
-            this.events.push(doc.data());
-            this.keys.push(doc.id);
-          });
-        },
+        currentView: '23-03-2022',
         updateCurrView() {
           var selectDate = new Date(this.currentView);
           this.currentView = selectDate.toLocaleDateString();
@@ -158,6 +149,15 @@
           window.scrollTo({
             top: offsetPosition,
             behavior: "smooth"
+          });
+        },
+        async getEvents() {
+          // Firestore
+          const q = query(collection(db, "Events"), orderBy('Date'));
+          const qSnap = await getDocs(q);
+          qSnap.forEach((doc) => {
+            this.events.push(doc.data());
+            this.keys.push(doc.id);
           });
         }
       }
