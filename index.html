@@ -38,7 +38,7 @@
   <script type="module" defer>
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.9/firebase-app.js";
     import { getAuth } from "https://www.gstatic.com/firebasejs/9.6.9/firebase-auth.js";
-    import { getFirestore, collection, query, getDocs, where } from "https://www.gstatic.com/firebasejs/9.6.9/firebase-firestore.js";
+    import { getFirestore, collection, query, getDocs, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/9.6.9/firebase-firestore.js";
     import { createApp } from 'https://unpkg.com/petite-vue?module';
 
     const firebaseConfig = {
@@ -136,22 +136,25 @@
     function Timeline() {
       return {
         events: [],
+        keys: [],
         async getEvents() {
           // Firestore
-          const q = query(collection(db, "Events"));
+          const q = query(collection(db, "Events"), orderBy('Date'));
           const qSnap = await getDocs(q);
           qSnap.forEach((doc) => {
             this.events.push(doc.data());
+            this.keys.push(doc.id);
           });
+          console.log(this.keys);
         }
       }
     }
 
-    function TimeCard(prop, index) {
+    function TimeCard(prop, index, key) {
       return {
         $template: '#time-card',
         flowType: 'flex-row',
-        key: this.key,
+        key: key,
         index: index,
         subject: prop.Subject,
         batch: prop.Batch,
@@ -160,8 +163,12 @@
         location: prop.Location,
         date: prop.Date,
         day: '0',
+        month: '1',
+        datepicker: false,
         mounted() {
           console.log(`Time item ${this.key} is mounted!`);
+          var checked = JSON.parse(localStorage.getItem(key));
+          document.getElementById(key).checked = checked;
         },
         updateFlowType() {
           if (this.index % 2 == 1 || window.innerWidth < 660) {
@@ -169,11 +176,20 @@
           }
         },
         updateDate(prop) {
-          var date = new Date(this.date.seconds); // Thu Apr 09 2020 14:28:32 GMT+0100 (British Summer Time)
-          this.day = date.getDate(); // 9
+          var date = new Date(this.date.seconds * 1000); // Thu Apr 09 2020 14:28:32 GMT+0100 (British Summer Time)
+          this.day = date.getDate();
+          this.month = date.getMonth() + 1;
         },
         openDatePicker() {
           console.log('It was clicked.');
+          this.datepicker = true;
+        },
+        saveCheckbox() {
+          var checkbox = document.getElementById(key);
+          localStorage.setItem(key, checkbox.checked);
+        },
+        submit() {
+          this.datepicker = false;
         }
       }
     }
@@ -273,24 +289,36 @@
   </template>
 
   <template id="time-card">
-    <div class="event-container d-flex smb-3" v-effect="updateFlowType()" :class="`${flowType}`">
+    <div class="position-relative event-container d-flex smb-3" v-effect="updateFlowType()" :class="`${flowType}`">
+
       <div class="col-md-5 col-9 p-2">
-        <div class="card p-3 bg-light shadow-lg">
+        <div class="card p-3 shadow-lg" :class="'month-2'">
           <h2>{{subject}}</h2>
           <h3>Batch {{batch}} </h3>
           <h4>{{type}} {{number}}</h4>
           <p>Where : {{location}}</p>
-          <input type="checkbox" name="todo-checker">
+          <input class="form-check-input" type="checkbox" name="todo-checker" :id="`${key}`" @click="saveCheckbox">
         </div>
       </div>
+
       <div class="col-md-2 col-3 position-relative d-flex justify-content-center trunk-container">
-        <div class="timeline-trunk">
+        <div class="timeline-trunk" :class="`month-${month}`">
           <button
             class="position-absolute btn btn-light btn-xl btn-circle top-50 start-50 translate-middle date-btn shadow-lg"
-            @onclick="openDatePicker" :id="`${date.seconds}`">
+            @click.prevent="openDatePicker">
             <span class="position-absolute top-50 start-50 translate-middle">{{day}}</span>
           </button>
         </div>
+      </div>
+
+      <div v-if="datepicker" class="position-absolute w-auto form-control p-3 top-50 start-50 translate-middle">
+        <label for="jdate">
+          Enter the Date to jump to:
+          <br>
+          <input type="date" class="m-2" name="jumpdate" id="jdate">
+          <br>
+          <input type="button" class="btn btn-primary m-2" value="submit" @click.prevent="submit">
+        </label>
       </div>
     </div>
   </template>
@@ -429,7 +457,7 @@
     <section v-if="focus == '/timeline'">
       <div v-scope="Timeline()" class="container pt-3 px-0 tool-top" v-effect="getEvents()">
         <div v-for="(event,index) in events">
-          <div v-scope="TimeCard(event,index)" v-effect="updateDate()"></div>
+          <div v-scope="TimeCard(event,index, keys[index])" v-effect="updateDate()" @vue:mounted="mounted"></div>
         </div>
       </div>
     </section>

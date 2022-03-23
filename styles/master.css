@@ -134,50 +134,6 @@ nav {
   line-height: 1.3em;
 }
 
-/* The Social Handles :  */
-
-.abt-handles {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: flex-start;
-}
-
-.social-panel{
-  padding: 0.5rem;
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: space-around;
-}
-
-.sp-images {
-  width: 3.5rem;
-  height: 3.5rem;
-  font-size: 3.5rem;
-  display: inline-block;
-  overflow: hidden;
-}
-
-.sp-links {
-  display: inline;
-  padding: 1rem 1rem 1rem 1rem;
-}
-
-.sp-links-img-var {
-  display: inline;
-  padding: 1rem;
-}
-
-.sp-links-img-var > a,
-.sp-links > a {
-  color: #e8f0f2;
-  text-decoration: none;
-}
-
-.sp-links-img-var > a:hover,
-.sp-links > a:hover {
-  color: #a2dbfa;
-}
-
 /* Tools */
 
 .tool-top {
@@ -222,7 +178,7 @@ nav {
 /* Timeline Buttons */
 
 .date-btn {
-  border: 8px solid #3f85c7;
+  border: 8px solid #bfdba1;
 }
 
 .date-btn:active {
@@ -254,4 +210,53 @@ nav {
   font-size: 24px;
   line-height: 1.33;
   border-radius: 35px;
+}
+
+/* Month Colors */
+.month-1 {
+  background-color: #eed672;
+}
+
+.month-2 {
+  background-color: #f1b89d;
+}
+
+.month-3 {
+  background-color: #bfdba1;
+}
+
+.month-4 {
+  background-color: #ca7755;
+}
+
+.month-5 {
+  background-color: #fcf0d8;
+}
+
+.month-6 {
+  background-color: #5ecdbd;
+}
+
+.month-7 {
+  background-color: #d16b80;
+}
+
+.month-8 {
+  background-color: #92716c;
+}
+
+.month-9 {
+  background-color: #893942;
+}
+
+.month-10 {
+  background-color: #7f5084;
+}
+
+.month-11 {
+  background-color: #cdb380;
+}
+
+.month-12 {
+  background-color: #9e453f;
 }
