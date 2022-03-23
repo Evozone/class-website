@@ -59,7 +59,7 @@
     function Navbar() {
       return {
         $template: '#nav-template',
-        focus: '/timeline',
+        focus: '/',
         width: window.innerWidth,
         setFocusHome() {
           this.focus = '/';
@@ -137,6 +137,7 @@
       return {
         events: [],
         keys: [],
+        currentView: + new Date(),
         async getEvents() {
           // Firestore
           const q = query(collection(db, "Events"), orderBy('Date'));
@@ -145,7 +146,19 @@
             this.events.push(doc.data());
             this.keys.push(doc.id);
           });
-          console.log(this.keys);
+        },
+        updateCurrView() {
+          var selectDate = new Date(this.currentView);
+          this.currentView = selectDate.toLocaleDateString();
+          var element = document.getElementById(this.currentView);
+          var headerOffset = 130;
+          var elementPosition = element.getBoundingClientRect().top;
+          var offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth"
+          });
         }
       }
     }
@@ -164,7 +177,9 @@
         date: prop.Date,
         day: '0',
         month: '1',
+        humanDate: '2022-02-02',
         datepicker: false,
+        cardColor: 'text-dark bg-light',
         mounted() {
           console.log(`Time item ${this.key} is mounted!`);
           var checked = JSON.parse(localStorage.getItem(key));
@@ -179,6 +194,33 @@
           var date = new Date(this.date.seconds * 1000); // Thu Apr 09 2020 14:28:32 GMT+0100 (British Summer Time)
           this.day = date.getDate();
           this.month = date.getMonth() + 1;
+          this.humanDate = date.toLocaleDateString();
+          console.log(date);
+          switch (this.type) {
+            case 'Assignment':
+              this.cardColor = 'text-dark bg-warning';
+              break;
+
+            case 'Experiment':
+              this.cardColor = 'text-white bg-primary';
+              break;
+
+            case 'IAT':
+              this.cardColor = 'text-dark bg-info';
+              break;
+
+            case 'Practical/Viva':
+              this.cardColor = 'text-white bg-success';
+              break;
+
+            case 'University Exam':
+              this.cardColor = 'text-white bg-secondary';
+              break;
+
+            default:
+              this.cardColor = 'text-dark bg-light';
+              break;
+          }
         },
         openDatePicker() {
           console.log('It was clicked.');
@@ -237,7 +279,7 @@
 
   <!-- Template for Carousel iTem  -->
   <template id="carousel-item">
-    <img src="images/CaroselImg.jpg" class="d-block w-100" alt="This image cannot be displayed">
+    <img src="images/CaroselImg.jpg" class="d-block w-100 tool-top" alt="This image cannot be displayed">
     <div class="carousel-caption d-none d-md-block">
       <h2 class="fs-1">{{ title }}</h2>
       <p>{{ caption }}</p>
@@ -292,12 +334,15 @@
     <div class="position-relative event-container d-flex smb-3" v-effect="updateFlowType()" :class="`${flowType}`">
 
       <div class="col-md-5 col-9 p-2">
-        <div class="card p-3 shadow-lg" :class="'month-2'">
-          <h2>{{subject}}</h2>
-          <h3>Batch {{batch}} </h3>
-          <h4>{{type}} {{number}}</h4>
-          <p>Where : {{location}}</p>
-          <input class="form-check-input" type="checkbox" name="todo-checker" :id="`${key}`" @click="saveCheckbox">
+        <div class="card shadow-lg" :class="`${cardColor}`">
+          <div class="card-header p-3">Batch {{batch}}</div>
+          <div class="card-body p-3">
+            <h3>{{subject}}</h3>
+            <h5>{{type}} {{number}}</h5>
+            <hr>
+            <p>Submission to be done in {{location}}</p>
+            <input class="form-check-input" type="checkbox" name="todo-checker" :id="`${key}`" @click="saveCheckbox">
+          </div>
         </div>
       </div>
 
@@ -305,19 +350,22 @@
         <div class="timeline-trunk" :class="`month-${month}`">
           <button
             class="position-absolute btn btn-light btn-xl btn-circle top-50 start-50 translate-middle date-btn shadow-lg"
-            @click.prevent="openDatePicker">
+            @click.prevent="openDatePicker" :id="`${humanDate}`">
             <span class="position-absolute top-50 start-50 translate-middle">{{day}}</span>
           </button>
         </div>
       </div>
 
-      <div v-if="datepicker" class="position-absolute w-auto form-control p-3 top-50 start-50 translate-middle">
+      <div v-if="datepicker"
+        class="position-absolute w-auto form-control p-3 top-50 start-50 translate-middle shadow-lg"
+        :class="`month-${month}`">
         <label for="jdate">
-          Enter the Date to jump to:
+          <span>Jump to Date:</span>
           <br>
-          <input type="date" class="m-2" name="jumpdate" id="jdate">
+          <input type="date" class="m-2 rounded-2 border-0" name="jumpdate" id="jdate" v-model="currentView">
           <br>
-          <input type="button" class="btn btn-primary m-2" value="submit" @click.prevent="submit">
+          <input type="button" class="btn btn-primary m-2" value="submit"
+            @click.prevent="submit($event); updateCurrView($event)">
         </label>
       </div>
     </div>
