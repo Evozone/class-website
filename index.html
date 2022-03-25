@@ -236,6 +236,17 @@
       }
     }
 
+    function Footer(prop) {
+      return {
+        $template: '#footer-icon',
+        name: prop.name,
+        imageSrc: prop.img,
+        mounted() {
+          console.log(`Footer icon ${this.name} is mounted`);
+        }
+      }
+    }
+
     createApp({
       Navbar,
       CarouselItem,
@@ -244,6 +255,7 @@
       Tool,
       Timeline,
       TimeCard,
+      Footer
     }).mount()
 
   </script>
@@ -368,6 +380,12 @@
             @click.prevent="submit($event); updateCurrView($event)">
         </label>
       </div>
+    </div>
+  </template>
+
+  <template id="footer-icon">
+    <div class="bg-info">
+      <img :src="`${imageSrc}`" alt="`${name}`">
     </div>
   </template>
 
@@ -512,36 +530,35 @@
   </div>
 
   <!-- Footer -->
-  <footer id="id-footer">
-    <div class="footer mt-5">
-
-      <div class="foot-abt">
-
-        <!-- About College -->
-        <div class="abt-cntnt">
-          <div class="abt-clg">
-            <h3 class="abt-titles">About Terna Engineering College</h3>
-            <p class="abt-desc">Terna Engineering College is part of the
-              Terna Public Charitable Trust's Group of Institutions,
-              whose mission is to provide an environment of academic
-              excellence and to adopt appropriate teaching - learning
-              processes to produce competent and skilled engineers
-              ready to meet global challenges.
-            </p>
-            <br>
-            <p class="abt-desc">
-              Their vision has always been to deliver value added
-              quality education to the aspiring students, meeting
-              stringent requirements of the changing technology,
-              industry, business and society as a whole.
-            </p>
-          </div>
-        </div>
+  <footer id="id-footer" class="p-4 lgtr-black">
+    <div class="row">
+      <div class="text-white col-lg-6">
+        <h3 class="footer-header">About Terna Engineering College</h3>
+        <p>Terna Engineering College is part of the
+          Terna Public Charitable Trust's Group of Institutions,
+          whose mission is to provide an environment of academic
+          excellence and to adopt appropriate teaching - learning
+          processes to produce competent and skilled engineers
+          ready to meet global challenges.
+        </p>
+        <br>
+        <p class="abt-desc">
+          Their vision has always been to deliver value added
+          quality education to the aspiring students, meeting
+          stringent requirements of the changing technology,
+          industry, business and society as a whole.
+        </p>
       </div>
+      <div class="border-4 bg-danger col-lg-6">
+        <h3 class="footer-headers">Follow College Clubs at:</h3>
+        <div class="row">
+          <div class="col-md-4" v-scope="Footer({})"> </div>
+        </div>
+        <!-- Another Grid -->
 
+      </div>
     </div>
 
-    </div>
   </footer>
   <!-- Footer -->
 

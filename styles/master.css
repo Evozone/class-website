@@ -38,6 +38,10 @@ body::-webkit-scrollbar-thumb:hover {
   background-image: url(../images/large-triangles-light.svg);
 }
 
+.lgtr-black {
+  background-image: url(../images/large-triangles-black.svg);
+}
+
 /* Reusable stuff */
 
 .visible {
@@ -96,42 +100,8 @@ nav {
 
 /* Footer */
 
-.footer {
-  background: #202225;
-}
-
-/* Footer above the line */
-.foot-abt {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: space-around;
-  padding: 2rem;
-}
-
-/* Both the blocks in footer above the line */
-.abt-cntnt {
-  color: #cee7ed;
-  flex-basis: 30rem;
-}
-
-/*
-*  This construct of inline block + CSS in abt-desc is for non overflow of
-*  description compared to the title.
-*/
-
-.abt-clg {
-  display: block;
-}
-
-.abt-titles {
-  font: 700 1.5rem 'Montserrat', sans-serif;
-  display: block;
-}
-
-.abt-desc {
-  width:0;
-  min-width:100%;
-  line-height: 1.3em;
+.footer-header {
+  font-weight: 600;
 }
 
 /* Tools */
