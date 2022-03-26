@@ -102,12 +102,23 @@ nav {
 
 .footer-header {
   font-weight: 600;
+  margin-bottom: 2rem;
+}
+
+.footer-content {
+  color: #cee7ed;
 }
 
 /* Tools */
 
 .tool-top {
   margin-top: 108px;
+}
+
+@media (max-width: 768px) {
+  .tool-top {
+    margin-top: 85px;
+  }
 }
 
 .tool-panel {

@@ -240,7 +240,9 @@
       return {
         $template: '#footer-icon',
         name: prop.name,
-        imageSrc: prop.img,
+        imgSrc: prop.img,
+        link: prop.link,
+        className: 'col-xl-3 col-md-2 col-sm-4 col-6',
         mounted() {
           console.log(`Footer icon ${this.name} is mounted`);
         }
@@ -299,7 +301,7 @@
   </template>
 
   <!-- Template for announcement -->
-  <template id="announcement" :class="bg-dark">
+  <template id="announcement">
     <div v-effect="updateCollId()"></div>
     <h2 class="accordion-header" :id="flushId">
       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="`#${collId}`"
@@ -384,8 +386,11 @@
   </template>
 
   <template id="footer-icon">
-    <div class="bg-info">
-      <img :src="`${imageSrc}`" alt="`${name}`">
+    <div class="p-2 text-center">
+      <a :href="link"><i :class="imgSrc"></i></a>
+    </div>
+    <div class="p-2 text-center">
+      {{name}}
     </div>
   </template>
 
@@ -530,9 +535,9 @@
   </div>
 
   <!-- Footer -->
-  <footer id="id-footer" class="p-4 lgtr-black">
-    <div class="row">
-      <div class="text-white col-lg-6">
+  <footer id="id-footer" class="p-5 mt-3 lgtr-black">
+    <div class="footer-content row">
+      <div class="col-lg-6">
         <h3 class="footer-header">About Terna Engineering College</h3>
         <p>Terna Engineering College is part of the
           Terna Public Charitable Trust's Group of Institutions,
@@ -549,10 +554,27 @@
           industry, business and society as a whole.
         </p>
       </div>
-      <div class="border-4 bg-danger col-lg-6">
-        <h3 class="footer-headers">Follow College Clubs at:</h3>
-        <div class="row">
-          <div class="col-md-4" v-scope="Footer({})"> </div>
+      <div class="border-4 col-lg-6">
+        <h3 class="footer-header">Follow College Clubs at:</h3>
+        <div class="row g-3">
+          <div :class="className"
+            v-scope="Footer({img:'fa-brands fa-discord fa-3x',name:'Evozone', link:'https://discord.gg//ZSGjsDYy5n'})">
+          </div>
+          <div :class="className"
+            v-scope="Footer({img:'fa-brands fa-github fa-3x',name:'Evozone Github', link:'https://github.com/Evozone'})">
+          </div>
+          <div :class="className"
+            v-scope="Footer({img:'fa-brands fa-instagram fa-3x',name:'Resonance', link:'https://www.instagram.com/resorang_tec/'})">
+          </div>
+          <div :class="className"
+            v-scope="Footer({img:'fa-brands fa-instagram fa-3x',name:'E-cell Terna', link:'https://www.instagram.com/e_cell_terna/'})">
+          </div>
+          <div :class="className"
+            v-scope="Footer({img:'fa-brands fa-instagram fa-3x',name:'Terna Engineering College', link:'https://www.instagram.com/ternaengg/'})">
+          </div>
+          <div :class="className" v-scope="Footer({img:'fa-brands fa-discord fa-3x',name:'Resonance'})"> </div>
+          <div :class="className" v-scope="Footer({img:'fa-brands fa-discord fa-3x',name:'Resonance'})"> </div>
+          <div :class="className" v-scope="Footer({img:'fa-brands fa-discord fa-3x',name:'Resonance'})"> </div>
         </div>
         <!-- Another Grid -->
 
