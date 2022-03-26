@@ -48,6 +48,10 @@ body::-webkit-scrollbar-thumb:hover {
   visibility: visible;
 }
 
+.comfortaa {
+  font-family: 'Comfortaa', cursive;
+}
+
 .clickable-div {
   position:absolute;
   width:100%;
@@ -107,6 +111,18 @@ nav {
 
 .footer-content {
   color: #cee7ed;
+}
+
+.grid-item > a {
+  color: #cee7ed;
+}
+
+.grid-item > a:hover {
+  color: gray;
+}
+
+.grid-item > a > i:hover {
+  transform: scale(1.1);
 }
 
 /* Tools */

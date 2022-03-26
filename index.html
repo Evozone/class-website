@@ -63,9 +63,17 @@
         width: window.innerWidth,
         setFocusHome() {
           this.focus = '/';
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+          });
         },
         setFocusTools() {
           this.focus = '/tools';
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+          });
         },
         setFocusTimeline() {
           this.focus = '/timeline';
@@ -137,7 +145,7 @@
       return {
         events: [],
         keys: [],
-        currentView: '23-03-2022',
+        currentView: new Date().getTime(),
         updateCurrView() {
           var selectDate = new Date(this.currentView);
           this.currentView = selectDate.toLocaleDateString();
@@ -159,6 +167,10 @@
             this.events.push(doc.data());
             this.keys.push(doc.id);
           });
+
+          setTimeout(() => {
+            this.updateCurrView();
+          }, 500)
         }
       }
     }
@@ -371,14 +383,14 @@
       </div>
 
       <div v-if="datepicker"
-        class="position-absolute w-auto form-control p-3 top-50 start-50 translate-middle shadow-lg"
+        class="position-absolute w-auto form-control p-3 top-50 start-50 translate-middle shadow-lg border-1 border-dark"
         :class="`month-${month}`">
         <label for="jdate">
-          <span>Jump to Date:</span>
+          <span class="m-2 comfortaa fw-bolder">Jump to Date:</span>
           <br>
-          <input type="date" class="m-2 rounded-2 border-0" name="jumpdate" id="jdate" v-model="currentView">
+          <input type="date" class="m-2 rounded-2 border-0 p-1" name="jumpdate" id="jdate" v-model="currentView">
           <br>
-          <input type="button" class="btn btn-primary m-2" value="submit"
+          <input type="button" class="btn btn-primary m-2" value="Submit"
             @click.prevent="submit($event); updateCurrView($event)">
         </label>
       </div>
@@ -386,8 +398,8 @@
   </template>
 
   <template id="footer-icon">
-    <div class="p-2 text-center">
-      <a :href="link"><i :class="imgSrc"></i></a>
+    <div class="p-2 text-center grid-item">
+      <a :href="link" target="_blank"><i :class="imgSrc"></i></a>
     </div>
     <div class="p-2 text-center">
       {{name}}
@@ -459,6 +471,7 @@
               height="500" allowtransparency="true" frameborder="0"
               sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
 
+            <!-- Twitter timeline -->
             <div>
               <a class="twitter-timeline mt-4" data-width="100%" data-height="1800" data-theme="dark"
                 href="https://twitter.com/thebrahmnicboy/lists/1505913339830226950?ref_src=twsrc%5Etfw">A Twitter
@@ -470,8 +483,8 @@
         </div>
       </div>
     </section>
-    <section v-if="focus == '/tools'">
-      <div class="container tool-top pt-1">
+    <section v-if=" focus=='/tools'">
+      <div class=" container tool-top pt-1">
         <div class="row gx-4">
           <div v-scope="Tool({
             title:'Excalidraw',
@@ -534,10 +547,10 @@
     </section>
   </div>
 
-  <!-- Footer -->
-  <footer id="id-footer" class="p-5 mt-3 lgtr-black">
+  <!--Footer -->
+  <footer id="id-footer" class="position-relative p-5 mt-3 lgtr-black">
     <div class="footer-content row">
-      <div class="col-lg-6">
+      <div class="mb-2 col-lg-6">
         <h3 class="footer-header">About Terna Engineering College</h3>
         <p>Terna Engineering College is part of the
           Terna Public Charitable Trust's Group of Institutions,
@@ -554,8 +567,9 @@
           industry, business and society as a whole.
         </p>
       </div>
-      <div class="border-4 col-lg-6">
+      <div class="mb-2 col-lg-6">
         <h3 class="footer-header">Follow College Clubs at:</h3>
+        <!-- Another Grid -->
         <div class="row g-3">
           <div :class="className"
             v-scope="Footer({img:'fa-brands fa-discord fa-3x',name:'Evozone', link:'https://discord.gg//ZSGjsDYy5n'})">
@@ -564,7 +578,7 @@
             v-scope="Footer({img:'fa-brands fa-github fa-3x',name:'Evozone Github', link:'https://github.com/Evozone'})">
           </div>
           <div :class="className"
-            v-scope="Footer({img:'fa-brands fa-instagram fa-3x',name:'Resonance', link:'https://www.instagram.com/resorang_tec/'})">
+            v-scope="Footer({img:'fa-brands fa-instagram fa-3x',name:'Resorang', link:'https://www.instagram.com/resorang_tec/'})">
           </div>
           <div :class="className"
             v-scope="Footer({img:'fa-brands fa-instagram fa-3x',name:'E-cell Terna', link:'https://www.instagram.com/e_cell_terna/'})">
@@ -572,17 +586,22 @@
           <div :class="className"
             v-scope="Footer({img:'fa-brands fa-instagram fa-3x',name:'Terna Engineering College', link:'https://www.instagram.com/ternaengg/'})">
           </div>
-          <div :class="className" v-scope="Footer({img:'fa-brands fa-discord fa-3x',name:'Resonance'})"> </div>
-          <div :class="className" v-scope="Footer({img:'fa-brands fa-discord fa-3x',name:'Resonance'})"> </div>
-          <div :class="className" v-scope="Footer({img:'fa-brands fa-discord fa-3x',name:'Resonance'})"> </div>
+          <div :class="className"
+            v-scope="Footer({img:'fa-solid fa-globe fa-3x',name:'TEC Website', link:'https://ternaengg.ac.in/'})">
+          </div>
+          <div :class="className"
+            v-scope="Footer({img:'fa-brands fa-instagram fa-3x',name:'IEEE Terna', link:'https://www.instagram.com/ieeeterna/'})">
+          </div>
+          <div :class="className"
+            v-scope="Footer({img:'fa-brands fa-instagram fa-3x',name:'Resonance', link:'https://www.instagram.com/csi_terna/'})">
+          </div>
         </div>
-        <!-- Another Grid -->
-
       </div>
     </div>
-
+    <hr class="bg-secondary">
+    <h6 class="text-white position-absolute bottom-0 start-50 translate-middle-x">An Evozone Project, 2022</h6>
   </footer>
-  <!-- Footer -->
+  <!--Footer -->
 
   <script src="app.js" defer></script>
 </body>
