@@ -215,26 +215,29 @@
           this.month = date.getMonth() + 1;
           this.humanDate = date.toLocaleDateString();
           console.log(date);
-          switch (this.type) {
-            case 'Assignment':
+          switch (this.subject) {
+            case 'Microprocessor':
               this.cardColor = 'text-dark bg-warning';
               break;
 
-            case 'Experiment':
+            case 'Operating System':
               this.cardColor = 'text-white bg-primary';
               break;
 
-            case 'IAT':
+            case 'Analysis of Algorithms':
               this.cardColor = 'text-dark bg-info';
               break;
 
-            case 'Practical/Viva':
+            case 'Python':
               this.cardColor = 'text-white bg-success';
               break;
 
-            case 'University Exam':
+            case 'Applied Mathematics':
               this.cardColor = 'text-white bg-secondary';
               break;
+
+            case 'Data Structures':
+              this.cardColor = "text-white bg-dark";
 
             default:
               this.cardColor = 'text-dark bg-light';
