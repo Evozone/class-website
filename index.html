@@ -146,6 +146,7 @@
         events: [],
         keys: [],
         currentView: new Date().getTime(),
+        showDatePickers: true,
         updateCurrView() {
           var selectDate = new Date(this.currentView);
           this.currentView = selectDate.toLocaleDateString();
@@ -154,10 +155,16 @@
           var elementPosition = element.getBoundingClientRect().top;
           var offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
+          this.showDatePickers = false;
+
           window.scrollTo({
             top: offsetPosition,
             behavior: "smooth"
           });
+        },
+        resetDatePickers() {
+          this.showDatePickers = true;
+          console.log(this.showDatePickers);
         },
         async getEvents() {
           // Firestore
@@ -341,6 +348,7 @@
     </div>
   </template>
 
+  <!-- Template for Tools Card -->
   <template id="tool-card">
     <div class="tool-panel card text-center p-2 m-2">
       <img class="tool-img" :src="`${imageLink}`" alt="evozone">
@@ -356,6 +364,7 @@
     </div>
   </template>
 
+  <!-- Template for Time Card -->
   <template id="time-card">
     <div class="position-relative event-container d-flex smb-3" v-effect="updateFlowType()" :class="`${flowType}`">
 
@@ -372,21 +381,24 @@
         </div>
       </div>
 
+      <!-- The Date Buttons -->
       <div class="col-md-2 col-3 position-relative d-flex justify-content-center trunk-container">
         <div class="timeline-trunk" :class="`month-${month}`">
           <button
             class="position-absolute btn btn-light btn-xl btn-circle top-50 start-50 translate-middle date-btn shadow-lg"
-            @click.prevent="openDatePicker" :id="`${humanDate}`">
+            @click.prevent="openDatePicker($event), resetDatePickers($event)" :id="`${humanDate}`">
             <span class="position-absolute top-50 start-50 translate-middle">{{day}}</span>
           </button>
         </div>
       </div>
 
+      <!-- This is the actual panel -->
       <div v-if="datepicker"
         class="position-absolute w-auto form-control p-3 top-50 start-50 translate-middle shadow-lg border-1 border-dark"
         :class="`month-${month}`">
         <label for="jdate">
           <span class="m-2 comfortaa fw-bolder">Jump to Date:</span>
+          <i class="fa-solid fa-circle-xmark position-absolute x-mark" @click="submit"></i>
           <br>
           <input type="date" class="m-2 rounded-2 border-0 p-1" name="jumpdate" id="jdate" v-model="currentView">
           <br>
@@ -394,9 +406,11 @@
             @click.prevent="submit($event); updateCurrView($event)">
         </label>
       </div>
+
     </div>
   </template>
 
+  <!-- Template For Footer Icon -->
   <template id="footer-icon">
     <div class="p-2 text-center grid-item">
       <a :href="link" target="_blank"><i :class="imgSrc"></i></a>

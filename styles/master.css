@@ -209,6 +209,17 @@ nav {
   border-radius: 35px;
 }
 
+.x-mark {
+  top: 12px;
+  right: 12px;
+  cursor: pointer;
+  color: rgba(85, 85, 85, 0.863);
+}
+
+.x-mark:hover {
+  color: rgba(0, 0, 0, 0.863);
+}
+
 /* Month Colors */
 .month-1 {
   background-color: #eed672;
