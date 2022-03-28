@@ -5,14 +5,24 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+  <!-- Bootstrap Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"
+    defer></script>
+
   <!-- Stylesheets -->
   <link rel="stylesheet" href="styles/master.css">
-  <link rel="stylesheet" href="styles/minmaster.css">
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@500;700&family=Happy+Monkey&family=Montserrat:wght@400;700;800&family=Work+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@500;700&family=Work+Sans:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
 
   <!-- Fontawesome -->
   <script src="https://kit.fontawesome.com/180bb0a7e4.js" crossorigin="anonymous"></script>
@@ -25,227 +35,671 @@
 
 <body class="lgtr-dark">
 
-  <!-- The navigation pane -->
-  <nav class="navbar" id="navbar">
-    <!-- Memegineers Logo -->
-    <div class="brand-img" id="nav-btn">
-      <img class="brand-logo" src="images/brand-logo.svg" alt="Brand"></a>
+  <!-- This script module contains the code for Firebase and Petite vue -->
+  <script type="module" defer>
+    // Get firebase modules 
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.9/firebase-app.js";
+    import { getAuth } from "https://www.gstatic.com/firebasejs/9.6.9/firebase-auth.js";
+    import { getFirestore, collection, query, getDocs, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/9.6.9/firebase-firestore.js";
+    // Get petite vue
+    import { createApp } from 'https://unpkg.com/petite-vue?module';
+
+    // The configuration below is needed for the firebase-auth library to work
+    const firebaseConfig = {
+      apiKey: "AIzaSyAIp_Vt7iYIV4IULb6YEGBUUAX1n5rgii4",
+      authDomain: "class-timeline.firebaseapp.com",
+      projectId: "class-timeline",
+      storageBucket: "class-timeline.appspot.com",
+      messagingSenderId: "11519234421",
+      appId: "1:11519234421:web:913054831a17fca545033c",
+      measurementId: "G-DE6E5VJVX8"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Component for the Navigation Bar
+    function Navbar() {
+      return {
+        $template: '#nav-template',
+        focus: '/',
+        width: window.innerWidth,
+        // This function is used to set the focus to the home page
+        setFocusHome() {
+          this.focus = '/';
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+          });
+          // Save the focus to local storage
+          localStorage.setItem('focus', this.focus);
+        },
+        // This function is used to set the focus to the tools page
+        setFocusTools() {
+          this.focus = '/tools';
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+          });
+          // Save the focus to local storage
+          localStorage.setItem('focus', this.focus);
+        },
+        // This function is used to set the focus to the timeline page
+        setFocusTimeline() {
+          this.focus = '/timeline';
+          // Save the focus to local storage
+          localStorage.setItem('focus', this.focus);
+        },
+        // This function listens to the window's width and sets the width of the other components
+        mounted() {
+          window.addEventListener("resize", function () {
+            this.width = window.innerWidth;
+          })
+          // Retrieve and save focus to local Storage
+          if (localStorage.getItem("focus") !== null) {
+            this.focus = localStorage.getItem("focus");
+          }
+        },
+      }
+    }
+
+    // Component to hold the different Carousel items
+    function Carousel() {
+      return {
+        carousels: [],
+        keys: [],
+        async getCarousels() {
+          // Firestore
+          const q = query(collection(db, "Carousels"));
+          const qSnap = await getDocs(q);
+          qSnap.forEach((doc) => {
+            this.carousels.push(doc.data());
+            this.keys.push(doc.id);
+          });
+        }
+      }
+    }
+
+    // Component for the Hero Carousel panel
+    function CarouselItem(prop, index) {
+      return {
+        $template: '#carousel-item',
+        key: index,
+        title: prop.Title,
+        caption: prop.Content,
+        image: prop.Image,
+      }
+    }
+
+    // Component for holding all the announcements
+    function Announcements() {
+      return {
+        announcements: [],
+        keys: [],
+        async getAnns() {
+          // Firestore
+          const q = query(collection(db, "Announcements"));
+          const qSnap = await getDocs(q);
+          qSnap.forEach((doc) => {
+            this.announcements.push(doc.data());
+            this.keys.push(doc.id);
+          });
+        }
+      }
+    }
+
+    // Component indicating one announcement
+    function Announcement(prop, key) {
+      return {
+        $template: '#announcement',
+        title: prop.Header,
+        description: prop.Content,
+        id: key,
+        collId: `flush-collapse-`,
+        flushId: `flush-heading-`,
+        updateCollId() {
+          this.collId = `flush-collapse-${this.id}`;
+        },
+        updateFlushId() {
+          this.flushId = `flush-heading-${this.id}`;
+        },
+        mounted() {
+          console.log(`Announcement item ${this.title} is mounted!`);
+        }
+      }
+    }
+
+    // Component for the Showcase Panels
+    function Showcase(prop) {
+      return {
+        $template: '#showcase',
+        title: prop.title,
+        content: prop.content,
+        mounted() {
+          console.log(`Showcase item ${this.title} is mounted!`);
+        }
+      }
+    }
+
+    // Component for the Twitter Panel
+    function Twitter() {
+      return {
+        mounted() {
+          // On $nextTick load the twitter feed
+          this.$nextTick(() => {
+            // Load the twitter feed
+            twttr.widgets.load();
+          });
+        }
+      }
+    }
+
+    // Component for the Tools Panel
+    function Tool(prop) {
+      return {
+        $template: '#tool-card',
+        title: prop.title,
+        desc: prop.desc,
+        imageLink: prop.imageSrc,
+        link: prop.link,
+        mounted() {
+          console.log(`Tool item ${this.title} is mounted!`);
+        }
+      }
+    }
+
+    // Component for holding the Timeline
+    function Timeline() {
+      return {
+        events: [],
+        keys: [],
+        currentView: new Date().getTime(),
+        showDatePickers: true,
+        updateCurrView() {
+          var selectDate = new Date(this.currentView);
+          this.currentView = selectDate.toLocaleDateString();
+          var element = document.getElementById(this.currentView);
+          var headerOffset = 130;
+          var elementPosition = element.getBoundingClientRect().top;
+          var offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+          this.showDatePickers = false;
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth"
+          });
+        },
+        resetDatePickers() {
+          this.showDatePickers = true;
+          console.log(this.showDatePickers);
+        },
+        async getEvents() {
+          // Firestore
+          const q = query(collection(db, "Events"), orderBy('Date'));
+          const qSnap = await getDocs(q);
+          qSnap.forEach((doc) => {
+            this.events.push(doc.data());
+            this.keys.push(doc.id);
+          });
+
+          setTimeout(() => {
+            this.updateCurrView();
+          }, 500)
+        }
+      }
+    }
+
+    // Component for holding one event
+    function TimeCard(prop, index, key) {
+      return {
+        $template: '#time-card',
+        flowType: 'flex-row',
+        key: key,
+        index: index,
+        subject: prop.Subject,
+        batch: prop.Batch,
+        type: prop.Type,
+        number: prop.Number,
+        location: prop.Location,
+        date: prop.Date,
+        day: '0',
+        month: '1',
+        humanDate: '2022-02-02',
+        datepicker: false,
+        cardColor: 'text-dark bg-light',
+        mounted() {
+          console.log(`Time item ${this.key} is mounted!`);
+          var checked = JSON.parse(localStorage.getItem(key));
+          document.getElementById(key).checked = checked;
+        },
+        updateFlowType() {
+          if (this.index % 2 == 1 || window.innerWidth < 660) {
+            this.flowType = 'flex-row-reverse';
+          }
+        },
+        updateDate(prop) {
+          var date = new Date(this.date.seconds * 1000); // Thu Apr 09 2020 14:28:32 GMT+0100 (British Summer Time)
+          this.day = date.getDate();
+          this.month = date.getMonth() + 1;
+          this.humanDate = date.toLocaleDateString();
+          console.log(date);
+          switch (this.subject) {
+            case 'Microprocessor':
+              this.cardColor = 'text-dark bg-warning';
+              break;
+
+            case 'Operating System':
+              this.cardColor = 'text-white bg-primary';
+              break;
+
+            case 'Analysis of Algorithms':
+              this.cardColor = 'text-dark bg-info';
+              break;
+
+            case 'Python':
+              this.cardColor = 'text-white bg-success';
+              break;
+
+            case 'Applied Mathematics':
+              this.cardColor = 'text-white bg-secondary';
+              break;
+
+            case 'Data Structures':
+              this.cardColor = "text-white bg-dark";
+
+            default:
+              this.cardColor = 'text-dark bg-light';
+              break;
+          }
+        },
+        openDatePicker() {
+          console.log('It was clicked.');
+          this.datepicker = true;
+        },
+        saveCheckbox() {
+          var checkbox = document.getElementById(key);
+          localStorage.setItem(key, checkbox.checked);
+        },
+        submit() {
+          this.datepicker = false;
+        }
+      }
+    }
+
+    // Component for holding the About and Follow pages
+    function Footer(prop) {
+      return {
+        $template: '#footer-icon',
+        name: prop.name,
+        imgSrc: prop.img,
+        link: prop.link,
+        className: 'col-xl-3 col-md-2 col-sm-4 col-6',
+        mounted() {
+          console.log(`Footer icon ${this.name} is mounted`);
+        }
+      }
+    }
+
+    // Creating the Vue Instance
+    createApp({
+      Navbar,
+      Carousel,
+      CarouselItem,
+      Announcements,
+      Announcement,
+      Twitter,
+      Showcase,
+      Tool,
+      Timeline,
+      TimeCard,
+      Footer
+    }).mount()
+
+  </script>
+
+  <!-- Template for Navbar -->
+  <template id="nav-template">
+    <nav class="navbar navbar-expand-lg navbar-dark lgtr fixed-top" id="nav-scroll">
+      <div class="container-fluid">
+        <div class="brand-img me-3" v-if="width > 972">
+          <img class="brand-logo" src="images/brand-logo.svg" alt="Brand">
+        </div>
+
+        <a class="navbar-brand brand-name fs-1" href="index.html">Memengineers</a>
+        <a class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+          aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <div class="brand-img me-3" v-if="972 > width">
+            <img class="brand-logo" src="images/brand-logo.svg" alt="Brand">
+          </div>
+        </a>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav">
+            <a class="nav-link fs-3 me-2" :class="focus == '/' ? 'active' : ''" @click="setFocusHome"
+              href="javascript:void(0);">Home</a>
+            <a class="nav-link fs-3 me-2" :class="focus == '/tools' ? 'active' : ''" @click="setFocusTools"
+              href="javascript:void(0);">Tools</a>
+            <a class="nav-link fs-3 me-2" :class="focus == '/timeline' ? 'active' : ''" @click="setFocusTimeline"
+              href="javascript:void(0);">Timeline</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </template>
+
+  <!-- Template for Carousel Item  -->
+  <template id="carousel-item">
+    <img :src="image" class="d-block w-100 tool-top" alt="This image cannot be displayed">
+    <div class="carousel-caption d-none d-md-block">
+      <h2 class="fs-1">{{ title }}</h2>
+      <p>{{ caption }}</p>
     </div>
+  </template>
 
-    <div class="brand lgtr visible" id="brand-con">
-      <h1 class="brand-name">Memengineers</h1>
+  <!-- Template for announcement -->
+  <template id="announcement">
+    <div v-effect="updateCollId()"></div>
+    <h2 class="accordion-header" :id="flushId">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="`#${collId}`"
+        aria-expanded="false" :aria-controls="collId">
+        {{title}}
+      </button>
+    </h2>
+    <div :id="collId" class="accordion-collapse collapse" :aria-labelledby="flushId"
+      data-bs-parent="#announcementAccordion">
+      <div class="accordion-body">
+        {{description}}
+      </div>
     </div>
+  </template>
 
-    <div class="nav-link-container visible" id="nav-link-con">
-      <ul class="nav-links hide">
-        <li><a class="nav-link" href="index.html">Home</a>
-        <li><a class="nav-link" href="tools.html">Tools</a>
-        <li><a class="nav-link" href="timeline.html">Timeline</a>
-      </ul>
+  <!-- Template for showcase -->
+  <template id="showcase">
+    <div class="card mb-4 border-0 shadow">
+      <img src="images/showcase-sample.jpg" class="card-img-top" alt="Image unavailable">
+      <div class="card-body bg-dark bg-gradient">
+        <h5 class="card-title text-white">{{title}}</h5>
+        <p class="card-text text-white-50">{{content}}</p>
+        <a href="#" class="btn btn-secondary bg-gradient">Read more...</a>
+      </div>
     </div>
+  </template>
 
-  </nav>
-  <!-- The Navigation pane -->
-
-  <!-- The Hero -->
-  <section id="id-hero" class="hero">
-    <img class="hero-img" src="images/sample-img.jpg" alt="">
-    <div class="hero-text">
-      <h1 class="hero-title">Finally Ready!</h1>
+  <!-- Template for Tools Card -->
+  <template id="tool-card">
+    <div class="tool-panel card text-center p-2 m-2">
+      <img class="tool-img" :src="`${imageLink}`" alt="evozone">
+      <div class="tool-content">
+        <h3 class="tool-title">
+          {{title}}
+        </h3>
+        <div class="tool-desc">
+          {{desc}}
+        </div>
+      </div>
+      <a :href="`${link}`" target="_blank"><span class="clickable-div"></span></a>
     </div>
-  </section>
-  <!-- The Hero  -->
+  </template>
 
-  <!-- Content -->
-  <section id="id-content" class="content">
+  <!-- Template for Time Card -->
+  <template id="time-card">
+    <div class="position-relative event-container d-flex smb-3" v-effect="updateFlowType()" :class="`${flowType}`">
 
-    <!-- Left side -->
-    <div class="left-side">
-      <!-- Festival message -->
-      <div class="festival-container round-edges" id="festival-container">
-        <img src="images/christmas.svg" alt="Christmas">
-        <div class="fest-content">
-          <h2 class="fest-txt">Merry<br>Christmas!</h2>
+      <!-- The actual Timeline Card -->
+      <div class="col-md-5 col-9 p-2">
+        <div class="card shadow-lg" :class="`${cardColor}`">
+          <div class="card-header p-3">Batch {{batch}}</div>
+          <div class="card-body p-3">
+            <h3>{{subject}}</h3>
+            <h5>{{type}} {{number}}</h5>
+            <hr>
+            <p>Submission to be done in {{location}}</p>
+            <input class="form-check-input" type="checkbox" name="todo-checker" :id="`${key}`" @click="saveCheckbox">
+          </div>
         </div>
       </div>
 
-      <!-- Announcements -->
-      <div class="ann-container round-edges dark-mode" id="ann-container">
-        <div class="announcement">
-          <h2 class="strong-header">Announcements</h2>
-        </div>
-        <div class="announcement">
-          <h4 class="ann-header">📢 Semester-III Exams</h4>
-          <p>
-<ol>
-            Dear Students please note:
-
-<li>  The students have to join respective block as per their Seat no and update WhatsApp profile name as “<b>RollNo_LastName_FirstName</b>”.</li>
-<li>  All have to join Google meet link as per instructions which will share in respective Block WhatsApp group before the exam.</li>
-<li>  Examination link will become active 5 minutes prior to the scheduled time; you are expected to start attempting the questions at scheduled examination time. The link will automatically get deactivated at the end of the scheduled time.</li>
-<li>  The block wise supervisors shall verify the identity of the student appearing for the examination by seeing their <b>College Id/Hall ticket/Adhar card/PAN card</b>.</li>
-<li>  Students have to write answers of subjective questions as well as correct option for the MCQs on A4 size paper and upload the complete answer book as one pdf file with name “<b>SeatNo_SubjectName.pdf</b>” using the upload link given in the google form.</li>
-<li>  A4 size paper can be ruled or unruled, but size should be A4.</li>
-<li>  Students have to write the semester and subject name along with his/her examination seat number, duly signed by him/her and page number in typical format <b>(current page number /total pages) i.e., 2/7 or 3/10 (2 and 3 indicates current page number and 7 or 10 indicated total number of pages respectively on which answers are written on each and every page</b>.</li>
-<li>  If students face any difficulty in uploading answer paper on the given link within the allocated time, he/she can send the PDF on the specified email address within the time with the permission of block supervisor.</li>
-<li>  At the end of the examination the students have to notify supervisor that they submitted PDF successfully by posting details “<b>Rollno_Seatno_Last Name_FirstName</b>“ in chat box of google meet.</li>
-<li>  Duration of the examination is <b>2hrs & 30 min for 80 marks</b>. You will get additional <b>15min</b> to scan and upload the answer paper.</li>
-<li>  Join Google meet <b>Before 15 Min</b> for Verification.</p></li>
-          <p></p>
-        </div>
-</ol>
-        <!-- <div class="announcement">
-          <h4 class="ann-header">Announcement</h4>
-        </div> -->
-      </div>
-    </div>
-
-    <!-- Right side -->
-    <div class="right-side">
-      <!-- Quote container -->
-      <div class="quote-container round-edges dark-mode" id="quote-container">
-        <div class="quote-text">
-          <i class="fas fa-quote-left quote-icon"> </i>
-          <span id="quote"></span>
-        </div>
-        <div class="quote-author">
-          <span id="author"></span>
+      <!-- The Date Buttons -->
+      <div class="col-md-2 col-3 position-relative d-flex justify-content-center trunk-container">
+        <div class="timeline-trunk" :class="`month-${month}`">
+          <button
+            class="position-absolute btn btn-light btn-xl btn-circle top-50 start-50 translate-middle date-btn shadow-lg"
+            @click.prevent="openDatePicker($event), resetDatePickers($event)" :id="`${humanDate}`">
+            <span class="position-absolute top-50 start-50 translate-middle">{{day}}</span>
+          </button>
         </div>
       </div>
-      <!-- Discord Container -->
-      <div class="discord-container resizer">
-        <iframe class="round-edges" src="https://discord.com/widget?id=804986812425699339&theme=dark" width="350" height="500" style="border-radius: 5px;" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+
+      <!-- This is the actual panel -->
+      <div v-if="datepicker"
+        class="position-absolute w-auto form-control p-3 top-50 start-50 translate-middle shadow-lg border-1 border-dark"
+        :class="`month-${month}`">
+        <label for="jdate">
+          <span class="m-2 comfortaa fw-bolder">Jump to Date:</span>
+          <i class="fa-solid fa-circle-xmark position-absolute x-mark" @click="submit"></i>
+          <br>
+          <input type="date" class="m-2 rounded-2 border-0 p-1" name="jumpdate" id="jdate" v-model="currentView">
+          <br>
+          <input type="button" class="btn btn-primary m-2" value="Submit"
+            @click.prevent="submit($event); updateCurrView($event)">
+        </label>
       </div>
+
     </div>
+  </template>
 
-    <!-- Tweet Wall -->
-    <div class="tweets">
-      <iframe allowfullscreen id="wallsio-iframe" src="https://my.walls.io/w4cau?nobackground=1&amp;show_header=0" style="border:0;height:800px;width:100%" loading="lazy" title="My social wall"></iframe>
+  <!-- Template For Footer Icon -->
+  <template id="footer-icon">
+    <div class="p-2 text-center grid-item">
+      <a :href="link" target="_blank"><i :class="imgSrc"></i></a>
     </div>
+    <div class="p-2 text-center">
+      {{name}}
+    </div>
+  </template>
 
-  </section>
-  <!-- Content -->
+  <!-- Start of the page -->
+  <div v-scope="Navbar()" @vue:mounted="mounted">
+    <!-- Render Main page -->
+    <section v-if="focus == '/'">
+      <!-- Hero Of the Page -->
+      <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" v-scope="Carousel()"
+        @vue:mounted="getCarousels">
 
-  <!-- Footer -->
-  <footer id="id-footer">
-    <div class="footer">
-
-      <div class="foot-abt">
-
-        <!-- About College -->
-        <div class="abt-cntnt">
-          <div class="abt-clg">
-            <h3 class="abt-titles">About Terna Engineering College</h3>
-            <p class = "abt-desc">Terna Engineering College is part of the
-              Terna Public Charitable Trust's Group of Institutions,
-              whose mission is to provide an environment of academic
-              excellence and to adopt appropriate teaching - learning
-              processes to produce competent and skilled engineers
-              ready to meet global challenges.
-            </p>
-            <br>
-            <p class = "abt-desc">
-              Their vision has always been to deliver value added
-              quality education to the aspiring students, meeting
-              stringent requirements of the changing technology,
-              industry, business and society as a whole.
-            </p>
+        <!-- Carousel Panels -->
+        <div class="carousel-inner">
+          <div class="carousel-item" v-for="(car,index) in carousels" :class="{ active: index==0 }">
+            <div v-scope="CarouselItem(car,index)"></div>
           </div>
         </div>
 
-        <!-- Social Handles -->
-        <div class="abt-cntnt">
-          <!-- Title -->
-          <h3 class="abt-titles">Follow college pages</h3>
+        <!-- Carousel Buttons -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
 
-          <!-- Content -->
-          <div class="abt-handles">
+      </div>
 
-            <!-- Panel 1 -->
-            <div class="social-panel">
-              <img class ="sp-images" src="images/evozone-logo.svg" alt="">
-              <div class="sp-links">
-                <a href="https://discord.gg//ZSGjsDYy5n" target="_blank">Evozone</a>
+      <!-- Rest of the Content, in a Grid flow -->
+      <div class="container pt-4 px-4">
+        <!-- Grid Layout for the rest of the page -->
+        <div class="row gx-5">
+
+          <!-- Left Column -->
+          <div class="col-12 col-md-7">
+            <!-- Announcements -->
+
+            <div v-scope="Announcements()" class="card text-dark mb-5" @vue:mounted="getAnns">
+              <h3 class=" footer-header m-3">📢 Announcements</h3>
+              <div class="accordion accordion-flush" id="announcementAccordion" v-for="(ann,index) in announcements">
+                <div class="accordion-item" v-scope="Announcement(ann, keys[index])" @vue:mounted="mounted"></div>
               </div>
             </div>
 
-            <!-- Panel 1.5 -->
-            <div class="social-panel">
-              <span class="sp-images">
-                <i class="fab fa-github"></i>
-              </span>
-              <div class="sp-links">
-                <a href="https://github.com/Evozone" target="_blank">Evozone</a>
-              </div>
-            </div>
+            <!-- Showcases :  -->
+            <div v-scope="Showcase({ title:'Smart India Hackathon',
+                content:'Team Chakra participates in SIH on Tuesday' })" @vue:mounted="mounted"></div>
 
-            <!-- Panel 2 -->
-            <div class="social-panel">
-              <span class="sp-images">
-                <i class="fab fa-instagram"></i>
-              </span>
-              <div class="sp-links">
-                <a href="https://www.instagram.com/resorang_tec/" target="_blank">Resorang</a>
-              </div>
-            </div>
+            <div v-scope="Showcase({ title:'Volleyball Selection in Terna',
+                content:'Volleyball Selection is scheduled on Wednesday on the Turf' })" @vue:mounted="mounted"></div>
 
-            <!-- Panel 3 -->
-            <div class="social-panel">
-              <span class="sp-images">
-                <i class="fab fa-instagram"></i>
-              </span>
-              <div class="sp-links">
-                <a href="https://www.instagram.com/e_cell_terna/" target="_blank">E-cell Terna</a>
-              </div>
-            </div>
+            <div
+              v-scope="Showcase({ title:'Students Prepare for retest',
+                content:'With Retests scheduled from 21 March to 25 March, students gear up for the Internal Assessment 1 retest' })"
+              @vue:mounted="mounted"></div>
 
-            <!-- Panel 4 -->
-            <div class="social-panel">
-              <span class="sp-images">
-                <i class="fab fa-linkedin"></i>
-              </span>
-              <div class="sp-links">
-                <a href="https://www.linkedin.com/in/e-cell-terna-16358b194/" target="_blank">E-cell Terna</a>
-              </div>
-            </div>
+            <!-- Showcase End -->
+          </div>
 
-            <!-- Panel 5 -->
-            <div class="social-panel">
-              <img class ="sp-images" src="images/ieee.jpg" alt="">
-              <div class="sp-links-img-var">
-                <a href="https://www.instagram.com/ieeeterna/" target="_blank">IEEE Terna</a>
-              </div>
-            </div>
+          <!-- Right Column -->
+          <div class="col-12 col-md-5 text-center">
+            <!-- Discord Widget -->
+            <iframe class="mb-4" src="https://ptb.discord.com/widget?id=804986812425699339&theme=dark" width="320"
+              height="500" allowtransparency="true" frameborder="0"
+              sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
 
-            <!-- Panel 6 -->
-            <div class="social-panel">
-              <img class ="sp-images" src="images/terna.svg" alt="">
-              <div class="sp-links-img-var">
-                <a href="https://ternaengg.ac.in/" target="_blank">TEC Website</a>
-              </div>
-            </div>
-
-            <!-- Panel 7 -->
-            <div class="social-panel">
-              <span class="sp-images">
-                <i class="fab fa-instagram"></i>
-              </span>
-              <div class="sp-links">
-                <a href="https://www.instagram.com/ternaengg/" target="_blank">Terna Engg College</a>
-              </div>
+            <!-- Twitter timeline -->
+            <div v-scope="Twitter()" @vue:mounted="mounted">
+              <a class="twitter-timeline mt-4" data-width="100%" data-height="1400" data-theme="dark"
+                href="https://twitter.com/thebrahmnicboy/lists/1505913339830226950?ref_src=twsrc%5Etfw"></a>
+              <script src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
             </div>
 
           </div>
 
         </div>
+      </div>
+    </section>
+    <!-- Render Tools Page -->
+    <section v-if=" focus=='/tools'">
+      <div class=" container tool-top pt-1">
+        <div class="row gx-4">
+          <div v-scope="Tool({
+            title:'Excalidraw',
+            desc:'Excalidraw is a virtual collaborative whiteboard tool that lets you easily sketch diagrams that have a hand-drawn feel to them.',
+            link:'https://excalidraw.com/',
+            imageSrc:'images/excalidraw.svg' 
+          })" class="col-12 col-md-6 col-lg-4">
+          </div>
 
+          <div v-scope="Tool({
+            title:'Replit',
+            desc:'Replit is a simple yet powerful online IDE, Editor, Compiler, Interpreter, and REPL. Code, compile, run, and host in 50+ programming languages.',
+            link:'https://replit.com/~',
+            imageSrc:'images/replit.svg' 
+          })" class="col-12 col-md-6 col-lg-4">
+          </div>
+
+          <div v-scope="Tool({
+            title:'Github',
+            desc:'GitHub is a code hosting platform for version control and collaboration. It lets you and others work together on projects from anywhere.',
+            link:'https://github.com/',
+            imageSrc:'images/github.svg' 
+          })" class="col-12 col-md-6 col-lg-4">
+          </div>
+
+          <div v-scope="Tool({
+            title:'Udemy',
+            desc:'Udemy is an online learning and teaching marketplace with over 183000 courses and 40 million students. Learn programming, marketing, data science and more.',
+            link:'https://www.udemy.com/',
+            imageSrc:'images/udemy.svg' 
+          })" class="col-12 col-md-6 col-lg-4">
+          </div>
+
+          <div v-scope="Tool({
+            title:'Wolfram Alpha',
+            desc:'Wolfram Alpha is a unique engine for computing answers and providing knowledge. It works by using its vast store of expert-level knowledge and algorithms to automatically answer questions, do analysis and generate reports.',
+            link:'https://www.wolframalpha.com/',
+            imageSrc:'images/wolfram-alpha.svg' 
+          })" class="col-12 col-md-6 col-lg-4">
+          </div>
+
+          <div v-scope="Tool({
+            title:'Fireship.io',
+            desc:'Fireship.io is a gateway drug for developers who want to build awesome web & mobile apps.',
+            link:'https://www.geogebra.org/?lang=en',
+            imageSrc:'images/fireshipio.svg' 
+          })" class="col-12 col-md-6 col-lg-4">
+          </div>
+
+        </div>
       </div>
 
+    </section>
+    <!-- Render Timeline Page -->
+    <section v-if="focus == '/timeline'">
+      <div v-scope="Timeline()" class="container pt-3 px-0 tool-top" @vue:mounted="getEvents">
+        <div v-for="(event,index) in events">
+          <div v-scope="TimeCard(event,index, keys[index])" v-effect="updateDate()" @vue:mounted="mounted"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!--Footer -->
+  <footer id="id-footer" class="position-relative p-5 mt-3 lgtr-black">
+    <div class="footer-content row">
+      <div class="mb-2 col-lg-6">
+        <h3 class="footer-header">About Terna Engineering College</h3>
+        <p>Terna Engineering College is part of the
+          Terna Public Charitable Trust's Group of Institutions,
+          whose mission is to provide an environment of academic
+          excellence and to adopt appropriate teaching - learning
+          processes to produce competent and skilled engineers
+          ready to meet global challenges.
+        </p>
+        <br>
+        <p class="abt-desc">
+          Their vision has always been to deliver value added
+          quality education to the aspiring students, meeting
+          stringent requirements of the changing technology,
+          industry, business and society as a whole.
+        </p>
+      </div>
+      <div class="mb-2 col-lg-6">
+        <h3 class="footer-header">Follow College Clubs at:</h3>
+        <!-- Another Grid -->
+        <div class="row g-3">
+          <div :class="className"
+            v-scope="Footer({img:'fa-brands fa-discord fa-3x',name:'Evozone', link:'https://discord.gg//ZSGjsDYy5n'})">
+          </div>
+          <div :class="className"
+            v-scope="Footer({img:'fa-brands fa-github fa-3x',name:'Evozone Github', link:'https://github.com/Evozone'})">
+          </div>
+          <div :class="className"
+            v-scope="Footer({img:'fa-brands fa-instagram fa-3x',name:'Resorang', link:'https://www.instagram.com/resorang_tec/'})">
+          </div>
+          <div :class="className"
+            v-scope="Footer({img:'fa-brands fa-instagram fa-3x',name:'E-cell Terna', link:'https://www.instagram.com/e_cell_terna/'})">
+          </div>
+          <div :class="className"
+            v-scope="Footer({img:'fa-brands fa-instagram fa-3x',name:'Terna Engineering College', link:'https://www.instagram.com/ternaengg/'})">
+          </div>
+          <div :class="className"
+            v-scope="Footer({img:'fa-solid fa-globe fa-3x',name:'TEC Website', link:'https://ternaengg.ac.in/'})">
+          </div>
+          <div :class="className"
+            v-scope="Footer({img:'fa-brands fa-instagram fa-3x',name:'IEEE Terna', link:'https://www.instagram.com/ieeeterna/'})">
+          </div>
+          <div :class="className"
+            v-scope="Footer({img:'fa-brands fa-instagram fa-3x',name:'CSI Terna', link:'https://www.instagram.com/csi_terna/'})">
+          </div>
+        </div>
+      </div>
     </div>
+    <hr class="bg-secondary">
+    <h6 class="text-white position-absolute bottom-0 start-50 translate-middle-x">An Evozone Project, 2022</h6>
   </footer>
-  <!-- Footer -->
+  <!--Footer -->
 
-  <script src="index.js" charset="utf-8"> </script>
+  <script src="app.js" defer></script>
 </body>
 
 </html>
