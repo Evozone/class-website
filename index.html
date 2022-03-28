@@ -73,6 +73,8 @@
             top: 0,
             behavior: "smooth"
           });
+          // Save the focus to local storage
+          localStorage.setItem('focus', this.focus);
         },
         // This function is used to set the focus to the tools page
         setFocusTools() {
@@ -81,16 +83,24 @@
             top: 0,
             behavior: "smooth"
           });
+          // Save the focus to local storage
+          localStorage.setItem('focus', this.focus);
         },
         // This function is used to set the focus to the timeline page
         setFocusTimeline() {
           this.focus = '/timeline';
+          // Save the focus to local storage
+          localStorage.setItem('focus', this.focus);
         },
         // This function listens to the window's width and sets the width of the other components
         mounted() {
           window.addEventListener("resize", function () {
             this.width = window.innerWidth;
           })
+          // Retrieve and save focus to local Storage
+          if (localStorage.getItem("focus") !== null) {
+            this.focus = localStorage.getItem("focus");
+          }
         },
       }
     }
@@ -437,6 +447,7 @@
   <template id="time-card">
     <div class="position-relative event-container d-flex smb-3" v-effect="updateFlowType()" :class="`${flowType}`">
 
+      <!-- The actual Timeline Card -->
       <div class="col-md-5 col-9 p-2">
         <div class="card shadow-lg" :class="`${cardColor}`">
           <div class="card-header p-3">Batch {{batch}}</div>
