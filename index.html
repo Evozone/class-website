@@ -35,12 +35,16 @@
 
 <body class="lgtr-dark">
 
+  <!-- This script module contains the code for Firebase and Petite vue -->
   <script type="module" defer>
+    // Get firebase modules 
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.9/firebase-app.js";
     import { getAuth } from "https://www.gstatic.com/firebasejs/9.6.9/firebase-auth.js";
     import { getFirestore, collection, query, getDocs, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/9.6.9/firebase-firestore.js";
+    // Get petite vue
     import { createApp } from 'https://unpkg.com/petite-vue?module';
 
+    // The configuration below is needed for the firebase-auth library to work
     const firebaseConfig = {
       apiKey: "AIzaSyAIp_Vt7iYIV4IULb6YEGBUUAX1n5rgii4",
       authDomain: "class-timeline.firebaseapp.com",
@@ -56,11 +60,13 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
+    // Component for the Navigation Bar
     function Navbar() {
       return {
         $template: '#nav-template',
         focus: '/',
         width: window.innerWidth,
+        // This function is used to set the focus to the home page
         setFocusHome() {
           this.focus = '/';
           window.scrollTo({
@@ -68,6 +74,7 @@
             behavior: "smooth"
           });
         },
+        // This function is used to set the focus to the tools page
         setFocusTools() {
           this.focus = '/tools';
           window.scrollTo({
@@ -75,9 +82,11 @@
             behavior: "smooth"
           });
         },
+        // This function is used to set the focus to the timeline page
         setFocusTimeline() {
           this.focus = '/timeline';
         },
+        // This function listens to the window's width and sets the width of the other components
         mounted() {
           window.addEventListener("resize", function () {
             this.width = window.innerWidth;
@@ -86,17 +95,35 @@
       }
     }
 
-    function CarouselItem(prop) {
+    // Component to hold the different Carousel items
+    function Carousel() {
       return {
-        $template: '#carousel-item',
-        title: prop.captionTitle,
-        caption: prop.captionContent,
-        mounted() {
-          console.log(`CarouselItem is mounted!`);
+        carousels: [],
+        keys: [],
+        async getCarousels() {
+          // Firestore
+          const q = query(collection(db, "Carousels"));
+          const qSnap = await getDocs(q);
+          qSnap.forEach((doc) => {
+            this.carousels.push(doc.data());
+            this.keys.push(doc.id);
+          });
         }
       }
     }
 
+    // Component for the Hero Carousel panel
+    function CarouselItem(prop, index) {
+      return {
+        $template: '#carousel-item',
+        key: index,
+        title: prop.Title,
+        caption: prop.Content,
+        image: prop.Image,
+      }
+    }
+
+    // Component for holding all the announcements
     function Announcements() {
       return {
         announcements: [],
@@ -113,6 +140,7 @@
       }
     }
 
+    // Component indicating one announcement
     function Announcement(prop, key) {
       return {
         $template: '#announcement',
@@ -133,6 +161,7 @@
       }
     }
 
+    // Component for the Showcase Panels
     function Showcase(prop) {
       return {
         $template: '#showcase',
@@ -144,6 +173,20 @@
       }
     }
 
+    // Component for the Twitter Panel
+    function Twitter() {
+      return {
+        mounted() {
+          // On $nextTick load the twitter feed
+          this.$nextTick(() => {
+            // Load the twitter feed
+            twttr.widgets.load();
+          });
+        }
+      }
+    }
+
+    // Component for the Tools Panel
     function Tool(prop) {
       return {
         $template: '#tool-card',
@@ -157,6 +200,7 @@
       }
     }
 
+    // Component for holding the Timeline
     function Timeline() {
       return {
         events: [],
@@ -198,6 +242,7 @@
       }
     }
 
+    // Component for holding one event
     function TimeCard(prop, index, key) {
       return {
         $template: '#time-card',
@@ -274,6 +319,7 @@
       }
     }
 
+    // Component for holding the About and Follow pages
     function Footer(prop) {
       return {
         $template: '#footer-icon',
@@ -287,11 +333,14 @@
       }
     }
 
+    // Creating the Vue Instance
     createApp({
       Navbar,
+      Carousel,
       CarouselItem,
       Announcements,
       Announcement,
+      Twitter,
       Showcase,
       Tool,
       Timeline,
@@ -330,9 +379,9 @@
     </nav>
   </template>
 
-  <!-- Template for Carousel iTem  -->
+  <!-- Template for Carousel Item  -->
   <template id="carousel-item">
-    <img src="images/Avalon.jpg" class="d-block w-100 tool-top" alt="This image cannot be displayed">
+    <img :src="image" class="d-block w-100 tool-top" alt="This image cannot be displayed">
     <div class="carousel-caption d-none d-md-block">
       <h2 class="fs-1">{{ title }}</h2>
       <p>{{ caption }}</p>
@@ -440,22 +489,22 @@
     </div>
   </template>
 
+  <!-- Start of the page -->
   <div v-scope="Navbar()" @vue:mounted="mounted">
+    <!-- Render Main page -->
     <section v-if="focus == '/'">
       <!-- Hero Of the Page -->
-      <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+      <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" v-scope="Carousel()"
+        @vue:mounted="getCarousels">
+
+        <!-- Carousel Panels -->
         <div class="carousel-inner">
-          <div class="carousel-item active" v-scope="CarouselItem({ captionTitle : 'Avalon Techfest',
-            captionContent : 'Avalon Techfest is coming to Terna!'})" @vue:mounted="mounted"></div>
-
-          <div class="carousel-item" v-scope="CarouselItem({ captionTitle : 'Avalon Techfest',
-            captionContent : 'Students wonder how the event will go...'})" @vue:mounted="mounted">
+          <div class="carousel-item" v-for="(car,index) in carousels" :class="{ active: index==0 }">
+            <div v-scope="CarouselItem(car,index)"></div>
           </div>
-
-          <div class="carousel-item" v-scope="CarouselItem({captionTitle : 'Avalon Techfest',
-                captionContent : 'Yes, everyone can overcome laziness!'})" @vue:mounted="mounted"></div>
         </div>
 
+        <!-- Carousel Buttons -->
         <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
           <span class="carousel-control-prev-icon" aria-hidden="true"></span>
           <span class="visually-hidden">Previous</span>
@@ -464,22 +513,24 @@
           <span class="carousel-control-next-icon" aria-hidden="true"></span>
           <span class="visually-hidden">Next</span>
         </button>
+
       </div>
 
       <!-- Rest of the Content, in a Grid flow -->
       <div class="container pt-4 px-4">
+        <!-- Grid Layout for the rest of the page -->
         <div class="row gx-5">
 
           <!-- Left Column -->
           <div class="col-12 col-md-7">
             <!-- Announcements -->
-            <div v-scope="Announcements()" class="card text-dark mb-5" v-effect="getAnns()">
-              <h3 class="footer-header m-3">📢 Announcements</h3>
+
+            <div v-scope="Announcements()" class="card text-dark mb-5" @vue:mounted="getAnns">
+              <h3 class=" footer-header m-3">📢 Announcements</h3>
               <div class="accordion accordion-flush" id="announcementAccordion" v-for="(ann,index) in announcements">
                 <div class="accordion-item" v-scope="Announcement(ann, keys[index])" @vue:mounted="mounted"></div>
               </div>
             </div>
-
 
             <!-- Showcases :  -->
             <div v-scope="Showcase({ title:'Smart India Hackathon',
@@ -498,15 +549,15 @@
 
           <!-- Right Column -->
           <div class="col-12 col-md-5 text-center">
-            <iframe class="mb-4" src="https://ptb.discord.com/widget?id=804986812425699339&theme=dark" width="350"
+            <!-- Discord Widget -->
+            <iframe class="mb-4" src="https://ptb.discord.com/widget?id=804986812425699339&theme=dark" width="320"
               height="500" allowtransparency="true" frameborder="0"
               sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
 
             <!-- Twitter timeline -->
-            <div>
-              <a class="twitter-timeline mt-4" data-width="100%" data-height="1800" data-theme="dark"
-                href="https://twitter.com/thebrahmnicboy/lists/1505913339830226950?ref_src=twsrc%5Etfw">A Twitter
-                List by @thebrahmnicboy</a>
+            <div v-scope="Twitter()" @vue:mounted="mounted">
+              <a class="twitter-timeline mt-4" data-width="100%" data-height="1400" data-theme="dark"
+                href="https://twitter.com/thebrahmnicboy/lists/1505913339830226950?ref_src=twsrc%5Etfw"></a>
               <script src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
             </div>
 
@@ -515,6 +566,7 @@
         </div>
       </div>
     </section>
+    <!-- Render Tools Page -->
     <section v-if=" focus=='/tools'">
       <div class=" container tool-top pt-1">
         <div class="row gx-4">
@@ -570,8 +622,9 @@
       </div>
 
     </section>
+    <!-- Render Timeline Page -->
     <section v-if="focus == '/timeline'">
-      <div v-scope="Timeline()" class="container pt-3 px-0 tool-top" v-effect="getEvents()">
+      <div v-scope="Timeline()" class="container pt-3 px-0 tool-top" @vue:mounted="getEvents">
         <div v-for="(event,index) in events">
           <div v-scope="TimeCard(event,index, keys[index])" v-effect="updateDate()" @vue:mounted="mounted"></div>
         </div>
