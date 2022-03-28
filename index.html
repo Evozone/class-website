@@ -97,12 +97,28 @@
       }
     }
 
-    function Announcement(prop) {
+    function Announcements() {
+      return {
+        announcements: [],
+        keys: [],
+        async getAnns() {
+          // Firestore
+          const q = query(collection(db, "Announcements"));
+          const qSnap = await getDocs(q);
+          qSnap.forEach((doc) => {
+            this.announcements.push(doc.data());
+            this.keys.push(doc.id);
+          });
+        }
+      }
+    }
+
+    function Announcement(prop, key) {
       return {
         $template: '#announcement',
-        title: prop.title,
-        description: prop.content,
-        id: prop.id,
+        title: prop.Header,
+        description: prop.Content,
+        id: key,
         collId: `flush-collapse-`,
         flushId: `flush-heading-`,
         updateCollId() {
@@ -274,6 +290,7 @@
     createApp({
       Navbar,
       CarouselItem,
+      Announcements,
       Announcement,
       Showcase,
       Tool,
@@ -333,7 +350,7 @@
     </h2>
     <div :id="collId" class="accordion-collapse collapse" :aria-labelledby="flushId"
       data-bs-parent="#announcementAccordion">
-      <div class="accordion-body bg-dark text-light">
+      <div class="accordion-body">
         {{description}}
       </div>
     </div>
@@ -425,6 +442,7 @@
 
   <div v-scope="Navbar()" @vue:mounted="mounted">
     <section v-if="focus == '/'">
+      <!-- Hero Of the Page -->
       <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
           <div class="carousel-item active" v-scope="CarouselItem({ captionTitle : 'Happy Holi!',
@@ -448,29 +466,22 @@
         </button>
       </div>
 
+      <!-- Rest of the Content, in a Grid flow -->
       <div class="container pt-4 px-4">
         <div class="row gx-5">
+
+          <!-- Left Column -->
           <div class="col-12 col-md-7">
-            <div class="accordion accordion-flush mb-5" id="announcementAccordion">
-
-              <!-- One module -->
-              <div class="accordion-item"
-                v-scope="Announcement({ title: '🚩Antarang 2k22🚩',
-                         content: '🙏Hola Ternites🙏 As you all know cultural festival of our college is to be held very soon you all might be excited for Antarang 2k22 🤩 Audition has been organize for interested candidates.', id: 'one' })"
-                @vue:mounted="mounted"></div>
-
-              <!-- One module -->
-              <div class="accordion-item"
-                v-scope="Announcement({ title: 'Girls Kabbadi Team',
-                     content: '🤼‍♂️🤼‍♂️\n Guyyyss!\n🏆SPORTEC🏆 is here; and our COMPUTER DEPT* is conducting  selections for the GIRLS KABADDI TEAM.\n\nInterested students from FE(FE selection will be taken on 21 march),SE,TE & BE from Computer dept. can come and give their best...👍🏻\nHere are the details. \n\nVenue:- College Turf\nDate:- 17-03-2022\nTime: 10 am sharp\nFor any queries contact:\nRutuja Thakur : 9967386123', id: 'two' })"
-                @vue:mounted="mounted"></div>
-
-              <div class="accordion-item"
-                v-scope="Announcement({ title: 'Lorem Ipsum Dolor',
-                     content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi molestie, libero sit amet mattis tincidunt, enim nisl pharetra leo, nec accumsan ex tellus id est. Cras egestas auctor elit. Aliquam aliquet porta tristique. Praesent semper ante ornare urna cursus, sed elementum neque pretium. Mauris non tincidunt quam. Praesent at varius ex. Morbi aliquet finibus orci non vestibulum. Suspendisse a malesuada urna, nec lacinia felis. Mauris non eros ut nisl hendrerit viverra id sed augue. ', id: 'three' })"
-                @vue:mounted="mounted"></div>
+            <!-- Announcements -->
+            <div v-scope="Announcements()" class="card text-dark mb-5" v-effect="getAnns()">
+              <h3 class="footer-header m-3">📢 Announcements</h3>
+              <div class="accordion accordion-flush" id="announcementAccordion" v-for="(ann,index) in announcements">
+                <div class="accordion-item" v-scope="Announcement(ann, keys[index])" @vue:mounted="mounted"></div>
+              </div>
             </div>
 
+
+            <!-- Showcases :  -->
             <div v-scope="Showcase({ title:'Smart India Hackathon',
                 content:'Team Chakra participates in SIH on Tuesday' })" @vue:mounted="mounted"></div>
 
@@ -482,7 +493,10 @@
                 content:'With Retests scheduled from 21 March to 25 March, students gear up for the Internal Assessment 1 retest' })"
               @vue:mounted="mounted"></div>
 
+            <!-- Showcase End -->
           </div>
+
+          <!-- Right Column -->
           <div class="col-12 col-md-5 text-center">
             <iframe class="mb-4" src="https://ptb.discord.com/widget?id=804986812425699339&theme=dark" width="350"
               height="500" allowtransparency="true" frameborder="0"
@@ -497,6 +511,7 @@
             </div>
 
           </div>
+
         </div>
       </div>
     </section>
