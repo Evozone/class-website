@@ -6,6 +6,28 @@
 
 /* Body */
 
+/* If theme is dark, color variables */
+html[data-theme="dark"] {
+  --cards: #044745;
+  --card-shadow: rgba(0, 0, 0, 0.2);
+  --card-text: #cee7ed;
+  --card-hover: #043D3A;
+  --card-hover-text: #cee7ed;
+  --footer-text: #cee7ed;
+  --footer-icon-hover: gray;
+}
+
+/* If the theme is light, color variables */
+html[data-theme="light"] {
+  --cards: #83E3FA;
+  --card-shadow: rgba(0, 0, 0, 0.25);
+  --card-text: #000;
+  --card-hover: #4BD1FA;
+  --card-hover-text: #000;
+  --footer-text: dark-gray;
+  --footer-icon-hover: black;
+}
+
 body {
   margin: 0;
   font: 400 1rem 'Work Sans', sans-serif;
@@ -32,14 +54,20 @@ body::-webkit-scrollbar-thumb:hover {
 /* Large Triangle Background */
 .lgtr-dark {
   background-image: url(../images/large-triangles.svg);
+  background-attachment: fixed;
 }
 
 .lgtr {
   background-image: url(../images/large-triangles-light.svg);
+  background-attachment: fixed;
 }
 
 .lgtr-black {
   background-image: url(../images/large-triangles-black.svg);
+}
+
+.lgtr-white {
+  background-image: url(../images/large-triangles-white.svg);
 }
 
 /* Reusable stuff */
@@ -53,10 +81,10 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 .clickable-div {
-  position:absolute;
-  width:100%;
-  height:100%;
-  top:0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
   left: 0;
 
   z-index: 1;
@@ -81,11 +109,11 @@ nav {
   border-radius: 3rem;
   box-shadow: 0 4px 5px 3px rgba(0, 0, 0, 0.25);
   height: width;
-  width: min(15vw,4.5rem);
+  width: min(15vw, 4.5rem);
 }
 
 .brand-logo {
-  width:100%;
+  width: 100%;
 }
 
 .brand-name {
@@ -99,7 +127,15 @@ nav {
 
 .brand-img:active {
   box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.25);
-  box-shadow: 0 0 0 5px rgba(255,255,255,0.25);
+  box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.25);
+}
+
+/* Toggler icon for Dark/Light mode */
+
+.toggle-icon {
+  margin: 1.5rem;
+  cursor: pointer;
+  transition: transform .5s ease-in-out;
 }
 
 /* Hero Carousel */
@@ -123,25 +159,30 @@ nav {
 }
 
 .footer-content {
-  color: #cee7ed;
+  color: var(--footer-text);
 }
 
-.grid-item > a {
-  color: #cee7ed;
+.grid-item>a {
+  color: var(--footer-text);
 }
 
-.grid-item > a:hover {
-  color: gray;
+.grid-item>a:hover {
+  color: var(--footer-icon-hover);
 }
 
-.grid-item > a > i:hover {
+.grid-item>a>i:hover {
   transform: scale(1.1);
+}
+
+.footer-trademark,
+.footer-bg {
+  color: var(--footer-text);
 }
 
 /* Tools */
 
 .tool-top {
-  margin-top: 80px;
+  margin-top: 85px;
 }
 
 @media (max-width: 768px) {
@@ -151,12 +192,16 @@ nav {
 }
 
 .tool-panel {
-  background-color: #39a2db;
+  color: var(--card-text);
+  background-color: var(--cards);
+  box-shadow: 0 4px 5px 3px var(--card-shadow);
   transition: 0.3s ease 0s, left 0.3s ease 0s;
+
 }
 
 .tool-panel:hover {
-  background-color: #a2dbfa;
+  color: var(--card-hover-text);
+  background-color: var(--card-hover);
 }
 
 .tool-img {
@@ -165,7 +210,7 @@ nav {
 }
 
 .tool-title {
-  font: 400 2rem 'Montserrat', sans-serif;
+  font: 400 2rem 'Work Sans', sans-serif;
   margin-top: 32px;
 }
 
@@ -185,15 +230,22 @@ nav {
   height: inherit;
 }
 
+/* Style the timeline checkboxes */
+.timeline-checkboxes {
+  width: 1.5rem;
+  height: 1.5rem;
+  transition: 0.3s ease 0s;
+}
+
 /* Timeline Buttons */
 
 .date-btn {
-  border: 8px solid #40a2d7;
+  border: 8px solid;
 }
 
 .date-btn:active {
   box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.25);
-  box-shadow: 0 0 0 5px rgba(255,255,255,0.25);
+  box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.25);
 }
 
 .btn-circle {
@@ -205,6 +257,7 @@ nav {
   line-height: 1.428571429;
   border-radius: 15px;
 }
+
 .btn-circle.btn-lg {
   width: 50px;
   height: 50px;
@@ -213,6 +266,7 @@ nav {
   line-height: 1.33;
   border-radius: 25px;
 }
+
 .btn-circle.btn-xl {
   width: 70px;
   height: 70px;
@@ -280,4 +334,54 @@ nav {
 
 .month-12 {
   background-color: #9e453f;
+}
+
+/* Borders of date buttons for each month */
+
+.date-btn-1 {
+  border-color: #eed672;
+}
+
+.date-btn-2 {
+  border-color: #f1b89d;
+}
+
+.date-btn-3 {
+  border-color: #bfdba1;
+}
+
+.date-btn-4 {
+  border-color: #ca7755;
+}
+
+.date-btn-5 {
+  border-color: #fcf0d8;
+}
+
+.date-btn-6 {
+  border-color: #5ecdbd;
+}
+
+.date-btn-7 {
+  border-color: #d16b80;
+}
+
+.date-btn-8 {
+  border-color: #92716c;
+}
+
+.date-btn-9 {
+  border-color: #893942;
+}
+
+.date-btn-10 {
+  border-color: #7f5084;
+}
+
+.date-btn-11 {
+  border-color: #cdb380;
+}
+
+.date-btn-12 {
+  border-color: #9e453f;
 }

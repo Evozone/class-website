@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en" dir="ltr" data-theme="dark">
 
 <head>
+  <!-- Meta Data -->
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="color-scheme" content="light dark">
 
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -33,7 +35,7 @@
   <title>Class B | Home</title>
 </head>
 
-<body class="lgtr-dark">
+<body>
 
   <!-- This script module contains the code for Firebase and Petite vue -->
   <script type="module" defer>
@@ -41,6 +43,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.9/firebase-app.js";
     import { getAuth } from "https://www.gstatic.com/firebasejs/9.6.9/firebase-auth.js";
     import { getFirestore, collection, query, getDocs, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/9.6.9/firebase-firestore.js";
+
     // Get petite vue
     import { createApp } from 'https://unpkg.com/petite-vue?module';
 
@@ -215,12 +218,40 @@
       return {
         events: [],
         keys: [],
+        dates: [],
         currentView: new Date().getTime(),
         showDatePickers: true,
         updateCurrView() {
+          // currentview is the date currently being viewed. At the start of the page, it is the current date.
           var selectDate = new Date(this.currentView);
+          // This line converts the date to a string in the format YYYY-MM-DD
           this.currentView = selectDate.toLocaleDateString();
+
+          // this.currentView contains id of the date currently being viewed.
+          // If it is present on the page, it can be retrieved from the page directly.
           var element = document.getElementById(this.currentView);
+          // If the element is not present on the page, then the closest element is retrieved.
+          if (element === null) {
+            var timestamp = selectDate.getTime();
+            var id = `${timestamp}`,
+              max = Number.MAX_VALUE;
+            // Traverse through the dates array to find the closest date to timestamp
+            for (var i = 0; i < this.dates.length; i++) {
+              var date = this.dates[i];
+              var diff = Math.abs(date - timestamp);
+              if (diff < max) {
+                max = diff;
+                id = date;
+              }
+            }
+
+            // Set the current view to the closest date
+            selectDate = new Date(id);
+            this.currentView = selectDate.toLocaleDateString();
+            element = document.getElementById(this.currentView);
+          }
+
+          // Scroll to the date currently being viewed
           var headerOffset = 130;
           var elementPosition = element.getBoundingClientRect().top;
           var offsetPosition = elementPosition + window.pageYOffset - headerOffset;
@@ -238,14 +269,18 @@
         },
         async getEvents() {
           // Firestore
+          // Get the events from the database and sort them by date
           const q = query(collection(db, "Events"), orderBy('Date'));
           const qSnap = await getDocs(q);
+
+          // Add the events to the events array
           qSnap.forEach((doc) => {
             this.events.push(doc.data());
             this.keys.push(doc.id);
+            this.dates.push(doc.data().Date.seconds * 1000);
           });
 
-          setTimeout(() => {
+          setTimeout(() => { // Wait for the events to load
             this.updateCurrView();
           }, 500)
         }
@@ -253,7 +288,7 @@
     }
 
     // Component for holding one event
-    function TimeCard(prop, index, key) {
+    function TimeCard(prop, index, key, prevEvent) {
       return {
         $template: '#time-card',
         flowType: 'flex-row',
@@ -267,25 +302,18 @@
         date: prop.Date,
         day: '0',
         month: '1',
-        humanDate: '2022-02-02',
+        humanDate: '02/02/2022',
+        prevEvent: prevEvent,
         datepicker: false,
         cardColor: 'text-dark bg-light',
         mounted() {
-          console.log(`Time item ${this.key} is mounted!`);
           var checked = JSON.parse(localStorage.getItem(key));
           document.getElementById(key).checked = checked;
-        },
-        updateFlowType() {
-          if (this.index % 2 == 1 || window.innerWidth < 660) {
-            this.flowType = 'flex-row-reverse';
-          }
-        },
-        updateDate(prop) {
+
           var date = new Date(this.date.seconds * 1000); // Thu Apr 09 2020 14:28:32 GMT+0100 (British Summer Time)
           this.day = date.getDate();
           this.month = date.getMonth() + 1;
           this.humanDate = date.toLocaleDateString();
-          console.log(date);
           switch (this.subject) {
             case 'Microprocessor':
               this.cardColor = 'text-dark bg-warning';
@@ -313,6 +341,27 @@
             default:
               this.cardColor = 'text-dark bg-light';
               break;
+          }
+        },
+        updateFlowType() {
+          if (this.index % 2 == 1 || window.innerWidth < 660) {
+            this.flowType = 'flex-row-reverse';
+          }
+        },
+        isDateNotRepeated() {
+          // If this is the first event, then it is not repeated
+          if (this.prevEvent === undefined) {
+            return true;
+          }
+
+          // Convert the previous event's date to a string in the format DD/MM/YYYY
+          var prevDate = new Date(this.prevEvent.Date.seconds * 1000).toLocaleDateString();
+
+          // The current event's date is this.humanDate. Compare the dates.
+          if (prevDate === this.humanDate) {
+            return false;
+          } else {
+            return true;
           }
         },
         openDatePicker() {
@@ -362,30 +411,39 @@
 
   <!-- Template for Navbar -->
   <template id="nav-template">
-    <nav class="navbar navbar-expand-lg navbar-dark lgtr fixed-top" id="nav-scroll">
-      <div class="container-fluid">
-        <div class="brand-img me-3" v-if="width > 972">
+    <!-- TODO: Test the behavior of navbar if container fluid is in nav element instead of a nested div element  -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top container-fluid" id="nav-scroll">
+      <!-- Navbar Logo -->
+      <div class="brand-img me-3" v-if="width > 972">
+        <img class="brand-logo" src="images/brand-logo.svg" alt="Brand">
+      </div>
+
+      <!-- Navbar Name -->
+      <a class="navbar-brand brand-name fs-1" href="index.html">Memengineers</a>
+
+      <!-- This Toggler only appears for small screens -->
+      <a class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+        aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <div class="brand-img me-3" v-if="972 > width">
           <img class="brand-logo" src="images/brand-logo.svg" alt="Brand">
         </div>
+      </a>
 
-        <a class="navbar-brand brand-name fs-1" href="index.html">Memengineers</a>
-        <a class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
-          aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-          <div class="brand-img me-3" v-if="972 > width">
-            <img class="brand-logo" src="images/brand-logo.svg" alt="Brand">
-          </div>
-        </a>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-          <div class="navbar-nav">
-            <a class="nav-link fs-3 me-2" :class="focus == '/' ? 'active' : ''" @click="setFocusHome"
-              href="javascript:void(0);">Home</a>
-            <a class="nav-link fs-3 me-2" :class="focus == '/tools' ? 'active' : ''" @click="setFocusTools"
-              href="javascript:void(0);">Tools</a>
-            <a class="nav-link fs-3 me-2" :class="focus == '/timeline' ? 'active' : ''" @click="setFocusTimeline"
-              href="javascript:void(0);">Timeline</a>
-          </div>
+      <!-- Navbar Page links -->
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-link fs-3 me-2" :class="focus == '/' ? 'active' : ''" @click="setFocusHome"
+            href="javascript:void(0);">Home</a>
+          <a class="nav-link fs-3 me-2" :class="focus == '/tools' ? 'active' : ''" @click="setFocusTools"
+            href="javascript:void(0);">Tools</a>
+          <a class="nav-link fs-3 me-2" :class="focus == '/timeline' ? 'active' : ''" @click="setFocusTimeline"
+            href="javascript:void(0);">Timeline</a>
         </div>
+
+        <!-- Add a toggler for dark mode using checkbox and Icon from Font Awesome -->
+        <i class="fas fa-2x toggle-icon"></i>
       </div>
+
     </nav>
   </template>
 
@@ -456,7 +514,8 @@
             <h5>{{type}} {{number}}</h5>
             <hr>
             <p>Submission to be done in {{location}}</p>
-            <input class="form-check-input" type="checkbox" name="todo-checker" :id="`${key}`" @click="saveCheckbox">
+            <input class="form-check-input timeline-checkboxes" type="checkbox" name="todo-checker" :id="`${key}`"
+              @click="saveCheckbox">
           </div>
         </div>
       </div>
@@ -464,9 +523,10 @@
       <!-- The Date Buttons -->
       <div class="col-md-2 col-3 position-relative d-flex justify-content-center trunk-container">
         <div class="timeline-trunk" :class="`month-${month}`">
-          <button
+          <button v-if="isDateNotRepeated()"
             class="position-absolute btn btn-light btn-xl btn-circle top-50 start-50 translate-middle date-btn shadow-lg"
-            @click.prevent="openDatePicker($event), resetDatePickers($event)" :id="`${humanDate}`">
+            @click.prevent="openDatePicker($event), resetDatePickers($event)" :id="`${humanDate}`"
+            :class="`date-btn-${month}`">
             <span class="position-absolute top-50 start-50 translate-middle">{{day}}</span>
           </button>
         </div>
@@ -637,14 +697,14 @@
     <section v-if="focus == '/timeline'">
       <div v-scope="Timeline()" class="container pt-3 px-0 tool-top" @vue:mounted="getEvents">
         <div v-for="(event,index) in events">
-          <div v-scope="TimeCard(event,index, keys[index])" v-effect="updateDate()" @vue:mounted="mounted"></div>
+          <div v-scope="TimeCard(event,index, keys[index], events[index - 1])" @vue:mounted="mounted"></div>
         </div>
       </div>
     </section>
   </div>
 
   <!--Footer -->
-  <footer id="id-footer" class="position-relative p-5 mt-3 lgtr-black">
+  <footer id="id-footer" class="position-relative p-5 mt-3">
     <div class="footer-content row">
       <div class="mb-2 col-lg-6">
         <h3 class="footer-header">About Terna Engineering College</h3>
@@ -694,8 +754,8 @@
         </div>
       </div>
     </div>
-    <hr class="bg-secondary">
-    <h6 class="text-white position-absolute bottom-0 start-50 translate-middle-x">An Evozone Project, 2022</h6>
+    <hr class="footer-bg">
+    <h6 class="footer-trademark position-absolute bottom-0 start-50 translate-middle-x">An Evozone Project, 2022</h6>
 
   </footer>
   <!--Footer -->
