@@ -653,7 +653,7 @@
   <template id="sign-in">
     <div class="sign-in-container container">
       <!-- A button to expand sign in form -->
-      <button v-if="!userPresent" class="btn btn-outline-info btn-block mb-2" @click="expandSignInForm">Sign In &nbsp;<i
+      <button v-if="!userPresent" class="btn btn-outline-info btn-block" @click="expandSignInForm">Sign In &nbsp;<i
           :class="arrow"></i>
       </button>
 
@@ -890,7 +890,8 @@
     <!-- Sign in section -->
     <div v-scope="SignIn()" @vue:mounted="mounted"></div>
 
-    <h6 class="footer-trademark position-absolute bottom-0 start-50 translate-middle-x">An Evozone Project, 2022</h6>
+    <h6 class="footer-trademark position-absolute bottom-0 start-50 translate-middle-x mt-3">An Evozone Project, 2022
+    </h6>
 
   </footer>
   <!--Footer -->
