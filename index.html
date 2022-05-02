@@ -41,7 +41,7 @@
   <script type="module" defer>
     // Get firebase modules 
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.9/firebase-app.js";
-    import { getAuth } from "https://www.gstatic.com/firebasejs/9.6.9/firebase-auth.js";
+    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/9.6.9/firebase-auth.js";
     import { getFirestore, collection, query, getDocs, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/9.6.9/firebase-firestore.js";
 
     // Get petite vue
@@ -392,6 +392,94 @@
       }
     }
 
+    // Component for the sign in page
+    function SignIn() {
+      return {
+        $template: '#sign-in',
+        showForm: false,
+        arrow: 'fa-solid fa-arrow-down',
+        username: '',
+        password: '',
+        error: '',
+        userPresent: false,
+        admin: {
+          name: 'Admin'
+        },
+        expandSignInForm() {
+          this.showForm = !this.showForm;
+          if (this.showForm) {
+            this.arrow = 'fa-solid fa-arrow-up';
+          } else {
+            this.arrow = 'fa-solid fa-arrow-down';
+          }
+
+          if (this.showForm) {
+            setTimeout(() => {
+              // Scroll so that the sign in form is in view
+              var element = document.getElementById('sign-in-form');
+              var headerOffset = 130;
+              var elementPosition = element.getBoundingClientRect().top;
+              var offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+              window.scrollTo({
+                top: offsetPosition,
+                behavior: "smooth"
+              });
+            }, 50);
+          }
+        },
+        sendLoginDetails() {
+          // Set the user's details in the app
+          signInWithEmailAndPassword(auth, this.username, this.password).then((userCredential) => {
+            // Signed in successfully
+            const user = userCredential.user;
+
+            // Admin name is first part of the email
+            this.admin.name = user.email.split('@')[0];
+            this.userPresent = true;
+
+          }).catch((error) => {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            this.error = errorMessage;
+            console.log(errorCode);
+            console.log(errorMessage);
+          });
+        },
+        signOutUser() {
+          signOut(auth).then(() => {
+            // Sign out successful
+            console.log('Signed out successfully');
+          }).catch((error) => {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            console.log(errorCode);
+            console.log(errorMessage);
+          });
+
+          this.userPresent = false;
+          this.showForm = false;
+        },
+        mounted() {
+
+          // Check if the user is signed in
+          auth.onAuthStateChanged((user) => {
+            if (user) {
+              // User is signed in
+              this.userPresent = true;
+              // Admin name is first part of the email
+              this.admin.name = user.email.split('@')[0];
+            } else {
+              // No user is signed in
+              this.userPresent = false;
+            }
+          });
+        }
+      }
+    }
+
     // Creating the Vue Instance
     createApp({
       Navbar,
@@ -404,7 +492,8 @@
       Tool,
       Timeline,
       TimeCard,
-      Footer
+      Footer,
+      SignIn
     }).mount()
 
   </script>
@@ -558,6 +647,48 @@
     <div class="p-2 text-center">
       {{name}}
     </div>
+  </template>
+
+  <!-- Template for Sign in Section -->
+  <template id="sign-in">
+    <div class="sign-in-container container">
+      <!-- A button to expand sign in form -->
+      <button v-if="!userPresent" class="btn btn-outline-info btn-block" @click="expandSignInForm">Sign In &nbsp;<i
+          :class="arrow"></i>
+      </button>
+
+      <!-- A message that shows which user is present -->
+      <div v-if="userPresent" class="text-center">
+        <h4 class="comfortaa footer-content opacity-50">Welcome, {{admin.name}}</h3>
+          <button class="btn btn-outline-danger btn-block" @click="signOutUser">Sign Out</button>
+      </div>
+
+      <!-- The expandable form -->
+      <div v-if="showForm && !userPresent" class="sign-in-form" id="sign-in-form">
+
+        <!-- The form with properly padded fields and buttons -->
+        <form @submit.prevent="SignIn">
+          <div class="form-group py-3">
+            <label for="username" class="footer-content">Username</label>
+            <input type="text" class="form-control my-2" id="username" v-model="username" placeholder="Enter username">
+            <!-- Add password with quick viewer -->
+            <label for="password" class="footer-content">Password</label>
+            <input type="password" class="form-control my-2" id="password" v-model="password"
+              placeholder="Enter password">
+
+            <!-- The submit button -->
+            <button type="submit" class="btn btn-primary btn-block my-2 border-0 shadow" @click="sendLoginDetails">Sign
+              In</button>
+
+          </div>
+        </form>
+
+        <!-- The error message -->
+        <div v-if="error" class="alert alert-danger" role="alert">
+          {{error}}
+        </div>
+
+      </div>
   </template>
 
   <!-- Start of the page -->
@@ -755,6 +886,10 @@
       </div>
     </div>
     <hr class="footer-bg">
+
+    <!-- Sign in section -->
+    <div v-scope="SignIn()" @vue:mounted="mounted"></div>
+
     <h6 class="footer-trademark position-absolute bottom-0 start-50 translate-middle-x">An Evozone Project, 2022</h6>
 
   </footer>

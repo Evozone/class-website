@@ -138,6 +138,13 @@ nav {
   transition: transform .5s ease-in-out;
 }
 
+/* Remove side margins for small screens */
+@media screen and (max-width: 768px) {
+  .toggle-icon {
+    margin: 1rem 0;
+  }
+}
+
 /* Hero Carousel */
 
 #heroCarousel .carousel-item:before {
