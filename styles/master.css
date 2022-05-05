@@ -157,6 +157,19 @@ nav {
   height: 100%;
 }
 
+.ann-container,
+.ann-accord-header {
+  background-color: #e8f0f2;
+}
+
+.add-ann-plus {
+  cursor: pointer;
+  color: lightsteelblue;
+}
+
+.add-ann-plus:hover {
+  color: lightblue;
+}
 
 /* Footer */
 
@@ -184,6 +197,17 @@ nav {
 .footer-trademark,
 .footer-bg {
   color: var(--footer-text);
+}
+
+.frgt-pass {
+  font: 300 .8rem 'Verdana', sans-serif;
+  color: var(--footer-text);
+  text-decoration: none;
+}
+
+.frgt-pass:hover {
+  color: var(--footer-icon-hover);
+  text-decoration: underline;
 }
 
 /* Tools */
@@ -248,6 +272,8 @@ nav {
 
 .date-btn {
   border: 8px solid;
+  z-index: 1;
+  box-shadow: 0 0px 0px 3px rgba(0, 0, 0, 1);
 }
 
 .date-btn:active {
@@ -281,6 +307,11 @@ nav {
   font-size: 24px;
   line-height: 1.33;
   border-radius: 35px;
+}
+
+.datepicker {
+  z-index: 4;
+  box-shadow: 0 4px 5px 3px rgba(0, 0, 0, 0.25);
 }
 
 .x-mark {

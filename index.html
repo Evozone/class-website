@@ -41,8 +41,8 @@
   <script type="module" defer>
     // Get firebase modules 
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.9/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/9.6.9/firebase-auth.js";
-    import { getFirestore, collection, query, getDocs, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/9.6.9/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/9.6.9/firebase-auth.js";
+    import { getFirestore, collection, query, addDoc, getDocs, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/9.6.9/firebase-firestore.js";
 
     // Get petite vue
     import { createApp } from 'https://unpkg.com/petite-vue?module';
@@ -141,6 +141,10 @@
       return {
         announcements: [],
         keys: [],
+        isUserLoggedIn: false,
+        showAnnAdder: false,
+        newAnnHeader: "",
+        newAnnContent: "",
         async getAnns() {
           // Firestore
           const q = query(collection(db, "Announcements"));
@@ -148,6 +152,36 @@
           qSnap.forEach((doc) => {
             this.announcements.push(doc.data());
             this.keys.push(doc.id);
+          });
+        },
+        // Toggle the showAnnAdder property
+        toggleAnnForm() {
+          this.showAnnAdder = !this.showAnnAdder;
+        },
+        // This function is used to add an announcement to the database
+        async sendAnnToDatabase() {
+          // Firestore  
+          const docRef = await addDoc(collection(db, "Announcements"), {
+            Header: this.newAnnHeader,
+            Content: this.newAnnContent,
+          });
+          // Log the announcement to the console
+          console.log("Announcement added: " + docRef.id);
+          // Reset the form
+          this.newAnnHeader = "";
+          this.newAnnContent = "";
+          this.toggleAnnForm();
+
+          // Reload the page
+          window.location.reload();
+        },
+        mounted() {
+          // If a user is logged in, log user
+          auth.onAuthStateChanged((user) => {
+            if (user) {
+              console.log(user);
+              this.isUserLoggedIn = true;
+            }
           });
         }
       }
@@ -220,7 +254,7 @@
         keys: [],
         dates: [],
         currentView: new Date().getTime(),
-        showDatePickers: true,
+        showDatePicker: false,
         updateCurrView() {
           // currentview is the date currently being viewed. At the start of the page, it is the current date.
           var selectDate = new Date(this.currentView);
@@ -263,9 +297,11 @@
             behavior: "smooth"
           });
         },
-        resetDatePickers() {
-          this.showDatePickers = true;
-          console.log(this.showDatePickers);
+        openDatePicker() {
+          this.showDatePicker = true;
+        },
+        submit() {
+          this.showDatePicker = false;
         },
         async getEvents() {
           // Firestore
@@ -304,7 +340,6 @@
         month: '1',
         humanDate: '02/02/2022',
         prevEvent: prevEvent,
-        datepicker: false,
         cardColor: 'text-dark bg-light',
         mounted() {
           var checked = JSON.parse(localStorage.getItem(key));
@@ -364,17 +399,10 @@
             return true;
           }
         },
-        openDatePicker() {
-          console.log('It was clicked.');
-          this.datepicker = true;
-        },
         saveCheckbox() {
           var checkbox = document.getElementById(key);
           localStorage.setItem(key, checkbox.checked);
         },
-        submit() {
-          this.datepicker = false;
-        }
       }
     }
 
@@ -402,6 +430,7 @@
         password: '',
         error: '',
         userPresent: false,
+        forgotPasswordEmailSent: false,
         admin: {
           name: 'Admin'
         },
@@ -461,18 +490,33 @@
 
           this.userPresent = false;
           this.showForm = false;
+
+          // Reload the page to clear the user's details
+          window.location.reload();
+        },
+        forgotPassword() {
+          // Send an email to the user with a link to reset their password
+          sendPasswordResetEmail(auth, this.username).then(() => {
+            // Email sent
+            this.forgotPasswordEmailSent = true;
+          }).catch((error) => {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            console.log(errorCode);
+            console.log(errorMessage);
+          });
         },
         mounted() {
-
           // Check if the user is signed in
           auth.onAuthStateChanged((user) => {
             if (user) {
               // User is signed in
               this.userPresent = true;
-              // Admin name is first part of the email
+              // Get the user's name from the email
               this.admin.name = user.email.split('@')[0];
             } else {
-              // No user is signed in
+              // User is not signed in
               this.userPresent = false;
             }
           });
@@ -549,8 +593,8 @@
   <template id="announcement">
     <div v-effect="updateCollId()"></div>
     <h2 class="accordion-header" :id="flushId">
-      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="`#${collId}`"
-        aria-expanded="false" :aria-controls="collId">
+      <button class="accordion-button collapsed ann-accord-header" type="button" data-bs-toggle="collapse"
+        :data-bs-target="`#${collId}`" aria-expanded="false" :aria-controls="collId">
         {{title}}
       </button>
     </h2>
@@ -592,7 +636,7 @@
 
   <!-- Template for Time Card -->
   <template id="time-card">
-    <div class="position-relative event-container d-flex smb-3" v-effect="updateFlowType()" :class="`${flowType}`">
+    <div class="position-relative event-container d-flex smb-3" v-effect="updateFlowType()" :class="flowType">
 
       <!-- The actual Timeline Card -->
       <div class="col-md-5 col-9 p-2">
@@ -614,29 +658,14 @@
         <div class="timeline-trunk" :class="`month-${month}`">
           <button v-if="isDateNotRepeated()"
             class="position-absolute btn btn-light btn-xl btn-circle top-50 start-50 translate-middle date-btn shadow-lg"
-            @click.prevent="openDatePicker($event), resetDatePickers($event)" :id="`${humanDate}`"
-            :class="`date-btn-${month}`">
+            @click.prevent="openDatePicker($event)" :id="`${humanDate}`" :class="`date-btn-${month}`">
             <span class="position-absolute top-50 start-50 translate-middle">{{day}}</span>
           </button>
         </div>
       </div>
 
-      <!-- This is the actual panel -->
-      <div v-if="datepicker"
-        class="position-absolute w-auto form-control p-3 top-50 start-50 translate-middle shadow-lg border-1 border-dark"
-        :class="`month-${month}`">
-        <label for="jdate">
-          <span class="m-2 comfortaa fw-bolder">Jump to Date:</span>
-          <i class="fa-solid fa-circle-xmark position-absolute x-mark" @click="submit"></i>
-          <br>
-          <input type="date" class="m-2 rounded-2 border-0 p-1" name="jumpdate" id="jdate" v-model="currentView">
-          <br>
-          <input type="button" class="btn btn-primary m-2" value="Submit"
-            @click.prevent="submit($event); updateCurrView($event)">
-        </label>
-      </div>
-
     </div>
+
   </template>
 
   <!-- Template For Footer Icon -->
@@ -669,12 +698,24 @@
         <!-- The form with properly padded fields and buttons -->
         <form @submit.prevent="SignIn">
           <div class="form-group py-3">
+
+            <!-- Username input -->
             <label for="username" class="footer-content">Username</label>
             <input type="text" class="form-control my-2" id="username" v-model="username" placeholder="Enter username">
+
             <!-- Add password with quick viewer -->
             <label for="password" class="footer-content">Password</label>
             <input type="password" class="form-control my-2" id="password" v-model="password"
               placeholder="Enter password">
+
+            <!-- Forgot Password -->
+            <!-- Call forgotPassword link -->
+            <a href="#" class="d-block my-3 frgt-pass" @click.prevent="forgotPassword">Forgot
+              Password?</a>
+            <!-- Confirm that email was sent -->
+            <div v-if="forgotPasswordEmailSent" class="alert alert-danger" role="alert">
+              <p class="m-0">An email has been sent to {{username}}</p>
+            </div>
 
             <!-- The submit button -->
             <button type="submit" class="btn btn-primary btn-block my-2 border-0 shadow" @click="sendLoginDetails">Sign
@@ -727,11 +768,43 @@
           <div class="col-12 col-md-7">
             <!-- Announcements -->
 
-            <div v-scope="Announcements()" class="card text-dark mb-5" @vue:mounted="getAnns">
+            <div v-scope="Announcements()" class="card ann-container text-dark mb-5"
+              @vue:mounted="getAnns(), mounted()">
               <h3 class=" footer-header m-3">📢 Announcements</h3>
               <div class="accordion accordion-flush" id="announcementAccordion" v-for="(ann,index) in announcements">
                 <div class="accordion-item" v-scope="Announcement(ann, keys[index])" @vue:mounted="mounted"></div>
               </div>
+
+              <!-- Add section to add an announcement to the database if admin present -->
+              <div v-if="isUserLoggedIn && !showAnnAdder" class="text-center my-3">
+                <!-- Add a plus symbol button -->
+                <i class="add-ann-plus fa-solid fa-circle-plus fa-2x" @click="toggleAnnForm"></i>
+              </div>
+
+              <!-- A div to show a form to add a new announcement -->
+              <div v-if="showAnnAdder" class="p-3">
+                <hr>
+                <!-- The form to add a new announcement -->
+                <form @submit.prevent="sendAnnToDatabase">
+
+                  <div class="form-group">
+                    <label for="new-ann-title" class="my-2">Title</label>
+                    <input type="text" class="form-control" id="new-ann-title" v-model="newAnnHeader"
+                      placeholder="Enter title">
+                    <label for="new-ann-content" class="my-2">Content</label>
+                    <textarea class="form-control" id="new-ann-content" v-model="newAnnContent"
+                      placeholder="Enter content" rows="3"></textarea>
+
+                  </div>
+                  <button type="submit" class="btn btn-primary btn-block my-3 border-0 shadow">Add New
+                    Announcement</button>
+
+                  <!-- Cancel button -->
+                  <button class="btn btn-danger btn-block my-3 border-0 shadow" @click="toggleAnnForm">Cancel</button>
+
+                </form>
+              </div>
+
             </div>
 
             <!-- Showcases :  -->
@@ -827,9 +900,26 @@
     <!-- Render Timeline Page -->
     <section v-if="focus == '/timeline'">
       <div v-scope="Timeline()" class="container pt-3 px-0 tool-top" @vue:mounted="getEvents">
+
         <div v-for="(event,index) in events">
           <div v-scope="TimeCard(event,index, keys[index], events[index - 1])" @vue:mounted="mounted"></div>
         </div>
+
+        <!-- This is the actual datepicker -->
+        <!-- Display in center of viewport -->
+        <div v-if="showDatePicker"
+          class="position-fixed w-auto form-control p-3 top-50 start-50 translate-middle datepicker border-0">
+          <label for="jdate">
+            <span class="m-2 comfortaa fw-bolder">Jump to Date:</span>
+            <i class="fa-solid fa-circle-xmark position-absolute x-mark" @click="submit"></i>
+            <br>
+            <input type="date" class="m-2 rounded-2 border-0 p-1" name="jumpdate" id="jdate" v-model="currentView">
+            <br>
+            <input type="button" class="btn btn-primary m-2" value="Submit"
+              @click.prevent="submit($event); updateCurrView($event)">
+          </label>
+        </div>
+
       </div>
     </section>
   </div>
@@ -888,9 +978,9 @@
     <hr class="footer-bg">
 
     <!-- Sign in section -->
-    <div v-scope="SignIn()" @vue:mounted="mounted"></div>
+    <div v-scope="SignIn()" class="py-3" @vue:mounted="mounted"></div>
 
-    <h6 class="footer-trademark position-absolute bottom-0 start-50 translate-middle-x mt-3">An Evozone Project, 2022
+    <h6 class="footer-trademark position-absolute bottom-0 start-50 translate-middle-x mt-4">An Evozone Project, 2022
     </h6>
 
   </footer>
