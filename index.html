@@ -43,6 +43,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.9/firebase-app.js";
     import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/9.6.9/firebase-auth.js";
     import { getFirestore, collection, query, addDoc, getDocs, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/9.6.9/firebase-firestore.js";
+    import { getStorage, ref, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.9/firebase-storage.js";
 
     // Get petite vue
     import { createApp } from 'https://unpkg.com/petite-vue?module';
@@ -113,6 +114,11 @@
       return {
         carousels: [],
         keys: [],
+        isUserLoggedIn: false,
+        showCarouselAdder: false,
+        newCarouselTitle: "",
+        newCarouselDescription: "",
+        newCarouselImage: {},
         async getCarousels() {
           // Firestore
           const q = query(collection(db, "Carousels"));
@@ -121,6 +127,11 @@
             this.carousels.push(doc.data());
             this.keys.push(doc.id);
           });
+
+          // Check if user is logged in
+          if (auth.currentUser) {
+            this.isUserLoggedIn = true;
+          }
         }
       }
     }
@@ -132,7 +143,17 @@
         key: index,
         title: prop.Title,
         caption: prop.Content,
-        image: prop.Image,
+        imageReference: prop.Reference,
+        imageURL: '',
+        // This function gets the image url from the storage
+        async getImageURL() {
+          const storage = getStorage(app);
+          const imageRef = ref(storage, prop.Reference);
+          // get URL where image is stored
+          getDownloadURL(imageRef).then((url) => {
+            this.imageURL = url;
+          });
+        }
       }
     }
 
@@ -179,7 +200,6 @@
           // If a user is logged in, log user
           auth.onAuthStateChanged((user) => {
             if (user) {
-              console.log(user);
               this.isUserLoggedIn = true;
             }
           });
@@ -582,8 +602,8 @@
 
   <!-- Template for Carousel Item  -->
   <template id="carousel-item">
-    <img :src="image" class="d-block w-100 tool-top" alt="This image cannot be displayed">
-    <div class="carousel-caption d-none d-md-block">
+    <img :src="imageURL" class="d-block w-100 tool-top" alt="This image cannot be displayed">
+    <div class="carousel-caption d-block">
       <h2 class="fs-1">{{ title }}</h2>
       <p>{{ caption }}</p>
     </div>
@@ -739,11 +759,10 @@
       <!-- Hero Of the Page -->
       <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" v-scope="Carousel()"
         @vue:mounted="getCarousels">
-
         <!-- Carousel Panels -->
         <div class="carousel-inner">
           <div class="carousel-item" v-for="(car,index) in carousels" :class="{ active: index==0 }">
-            <div v-scope="CarouselItem(car,index)"></div>
+            <div v-scope="CarouselItem(car,index)" @vue:mounted="getImageURL"></div>
           </div>
         </div>
 
