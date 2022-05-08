@@ -161,17 +161,20 @@
     function Announcements() {
       return {
         announcements: [],
+        annsInDatabase: [],
         keys: [],
         isUserLoggedIn: false,
         showAnnAdder: false,
         newAnnHeader: "",
         newAnnContent: "",
+        confirmPush: false,
         async getAnns() {
           // Firestore
           const q = query(collection(db, "Announcements"));
           const qSnap = await getDocs(q);
           qSnap.forEach((doc) => {
             this.announcements.push(doc.data());
+            this.annsInDatabase.push(doc.data());
             this.keys.push(doc.id);
           });
         },
@@ -179,22 +182,58 @@
         toggleAnnForm() {
           this.showAnnAdder = !this.showAnnAdder;
         },
-        // This function is used to add an announcement to the database
-        async sendAnnToDatabase() {
-          // Firestore  
-          const docRef = await addDoc(collection(db, "Announcements"), {
+        // This function is used to preview the announcement
+        previewNewAnnouncement() {
+          // Create a new announcement object
+          const newAnn = {
             Header: this.newAnnHeader,
             Content: this.newAnnContent,
-          });
-          // Log the announcement to the console
-          console.log("Announcement added: " + docRef.id);
+          }
+          // Push the new announcement to the announcements array
+          this.announcements.push(newAnn);
           // Reset the form
           this.newAnnHeader = "";
           this.newAnnContent = "";
+          // Toggle the showAnnAdder property
           this.toggleAnnForm();
 
-          // Reload the page
-          window.location.reload();
+          // Show the confirm push modal
+          this.confirmPush = true;
+        },
+        cancelAnnChanges() {
+          // Log the arrays 'announcements' and 'annsInDatabase'
+          console.log(this.announcements);
+          console.log(this.annsInDatabase);
+
+          // Set announcements empty
+          this.announcements = [];
+
+          // Set the announcements to the annsInDatabase
+          this.annsInDatabase.forEach((ann) => {
+            this.announcements.push(ann);
+          });
+
+          // Reset the confirm push modal
+          this.confirmPush = false;
+        },
+        // This function is used to add an announcement to the database
+        async sendAnnToDatabase() {
+          // For each announcement in the announcements array push it to the database
+          this.announcements.forEach(async (ann) => {
+            // If the announcement is not in the database
+            if (!this.annsInDatabase.some(ann1 => ann1.Header == ann.Header)) {
+              // Create a new announcement object
+              const newAnn = {
+                Header: ann.Header,
+                Content: ann.Content,
+              }
+              // Push the new announcement to the database
+              const docRef = await addDoc(collection(db, "Announcements"), newAnn);
+            }
+          });
+
+          // Reset the confirm push modal
+          this.confirmPush = false;
         },
         mounted() {
           // If a user is logged in, log user
@@ -795,16 +834,27 @@
               </div>
 
               <!-- Add section to add an announcement to the database if admin present -->
-              <div v-if="isUserLoggedIn && !showAnnAdder" class="text-center my-3">
+              <div v-if="isUserLoggedIn && !showAnnAdder" class="d-flex justify-content-around my-3">
+
+                <!-- Add a Save Changes button based on confirmPush -->
+                <div v-if="confirmPush" class="d-inline">
+                  <button class="btn btn-success" @click="sendAnnToDatabase">Save Changes</button>
+                </div>
+
                 <!-- Add a plus symbol button -->
-                <i class="add-ann-plus fa-solid fa-circle-plus fa-2x" @click="toggleAnnForm"></i>
+                <i class=" add-ann-plus fa-solid fa-circle-plus fa-2x" @click="toggleAnnForm"></i>
+
+                <!-- Add a Save Changes button based on confirmPush -->
+                <div v-if="confirmPush" class="d-inline">
+                  <button class="btn btn-danger" @click="cancelAnnChanges">Cancel Changes</button>
+                </div>
               </div>
 
               <!-- A div to show a form to add a new announcement -->
               <div v-if="showAnnAdder" class="p-3">
                 <hr>
                 <!-- The form to add a new announcement -->
-                <form @submit.prevent="sendAnnToDatabase">
+                <form @submit.prevent="previewNewAnnouncement">
 
                   <div class="form-group">
                     <label for="new-ann-title" class="my-2">Title</label>
@@ -815,7 +865,7 @@
                       placeholder="Enter content" rows="3"></textarea>
 
                   </div>
-                  <button type="submit" class="btn btn-primary btn-block my-3 border-0 shadow">Add New
+                  <button type="submit" class="btn btn-primary btn-block my-3 border-0 shadow">Preview
                     Announcement</button>
 
                   <!-- Cancel button -->
@@ -844,7 +894,7 @@
           <!-- Right Column -->
           <div class="col-12 col-md-5 text-center">
             <!-- Discord Widget -->
-            <iframe class="mb-4" src="https://ptb.discord.com/widget?id=804986812425699339&theme=dark" width="320"
+            <iframe class="mb-4" src="https://discord.com/widget?id=804986812425699339&theme=dark" width="320"
               height="500" allowtransparency="true" frameborder="0"
               sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
 
