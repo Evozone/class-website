@@ -167,6 +167,12 @@
             console.log(error);
           });
         },
+        isUserLoggedIn() {
+          return auth.currentUser !== null;
+        },
+        uploadImage() {
+
+        }
       }
     }
 
@@ -730,7 +736,14 @@
                 <label for="carousel-content">Content</label>
                 <textarea class="form-control my-2" id="carousel-content" v-model="carousel.content"></textarea>
 
-                <img :src="carousel.image" :alt="`Carousel ${carouselIndex} image`" width="450">
+                <label for="carousel-image">Image</label>
+                <img :src="carousel.image" :alt="`Carousel ${carouselIndex} image`" id="carousel-image"
+                  class="img-fluid my-2">
+
+                <!-- Button to upload new image -->
+                <button type="button" class="btn btn-sm btn-primary my-2" @click="uploadImage">Upload Image
+                  <i class="fa-solid fa-cloud-arrow-up"></i>
+                </button>
               </div>
             </form>
 
@@ -746,9 +759,10 @@
 
   <!-- Template for Carousel Item  -->
   <template id="carousel-item">
-    <!-- Add a pencil symbol button -->
-    <i class="carousel-edit-sym fa-solid fa-pen-to-square fa-2x" @click="updateModalCaller(key)"></i>
-
+    <!-- Add a pencil symbol button if user is logged in-->
+    <div v-if="isUserLoggedIn">
+      <i class="carousel-edit-sym fa-solid fa-pen-to-square fa-2x" @click="updateModalCaller(key)"></i>
+    </div>
     <img :src="imageURL" class="d-block w-100 tool-top" alt="This image cannot be displayed">
     <div class="carousel-caption d-block">
       <h2 class="fs-1">{{ title }}</h2>
