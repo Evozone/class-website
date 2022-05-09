@@ -41,8 +41,25 @@
   <script type="module" defer>
     // Get firebase modules 
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.9/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/9.6.9/firebase-auth.js";
-    import { getFirestore, collection, query, addDoc, getDocs, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/9.6.9/firebase-firestore.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signInWithEmailAndPassword,
+      signOut,
+      sendPasswordResetEmail
+    } from "https://www.gstatic.com/firebasejs/9.6.9/firebase-auth.js";
+    import {
+      getFirestore,
+      collection,
+      query,
+      addDoc,
+      doc,
+      getDoc,
+      getDocs,
+      where,
+      orderBy,
+      limit
+    } from "https://www.gstatic.com/firebasejs/9.6.9/firebase-firestore.js";
     import { getStorage, ref, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.9/firebase-storage.js";
 
     // Get petite vue
@@ -109,6 +126,50 @@
       }
     }
 
+    // Component for a Modal
+    function Modal(index) {
+      return {
+        $template: '#modal-template',
+        carouselIndex: index,
+        carousel: {
+          title: '',
+          content: '',
+          image: '',
+        },
+        // This function is used to show the modal
+        async mounted() {
+          // Get the data from Firebase Firestore. The collection is Carousels and the index is the Document ID (stringify the index)
+          const docRef = doc(db, "Carousels", "" + this.carouselIndex);
+          const docSnap = await getDoc(docRef);
+
+          if (docSnap.exists()) {
+            this.carousel.title = docSnap.data().Title;
+            this.carousel.content = docSnap.data().Content;
+            this.getImageURL(docSnap.data().Reference);
+          } else {
+            this.carousel.title = "No Title";
+            this.carousel.content = "No Content";
+          }
+
+          var myModal = new bootstrap.Modal(document.getElementById("modal-id"), {
+            keyboard: false
+          });
+          myModal.show();
+        },
+        // This function gets the image url from the storage
+        async getImageURL(reference) {
+          const storage = getStorage(app);
+          const imageRef = ref(storage, reference);
+          // get URL where image is stored
+          getDownloadURL(imageRef).then((url) => {
+            this.carousel.image = url;
+          }).catch((error) => {
+            console.log(error);
+          });
+        },
+      }
+    }
+
     // Component to hold the different Carousel items
     function Carousel() {
       return {
@@ -116,9 +177,7 @@
         keys: [],
         isUserLoggedIn: false,
         showCarouselAdder: false,
-        newCarouselTitle: "",
-        newCarouselDescription: "",
-        newCarouselImage: {},
+        modalCaller: -1,
         async getCarousels() {
           // Firestore
           const q = query(collection(db, "Carousels"));
@@ -132,6 +191,16 @@
           if (auth.currentUser) {
             this.isUserLoggedIn = true;
           }
+        },
+        async updateModalCaller(index) {
+          // Set the modal caller to -1 for a short burst to reset the modal
+          this.modalCaller = -1;
+          setTimeout(() => {
+            this.modalCaller = index;
+          }, 100);
+          // Set the modal caller to the index of the carousel
+
+          console.log(index);
         }
       }
     }
@@ -153,7 +222,7 @@
           getDownloadURL(imageRef).then((url) => {
             this.imageURL = url;
           });
-        }
+        },
       }
     }
 
@@ -586,6 +655,7 @@
     // Creating the Vue Instance
     createApp({
       Navbar,
+      Modal,
       Carousel,
       CarouselItem,
       Announcements,
@@ -639,8 +709,46 @@
     </nav>
   </template>
 
+  <!-- Template for Modal -->
+  <template id="modal-template">
+    <div class="modal fade" id="modal-id" tabindex="-1" role="dialog" aria-labelledby="modal-title" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modal-title">Change the contents of Carousel {{ carouselIndex }} </h5>
+            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <!-- Form to update the Title, Content and Image of Carousel -->
+            <form>
+              <div class="form-group">
+                <label for="carousel-title">Title</label>
+                <input type="text" class="form-control my-2" id="carousel-title" v-model="carousel.title">
+
+                <label for="carousel-content">Content</label>
+                <textarea class="form-control my-2" id="carousel-content" v-model="carousel.content"></textarea>
+
+                <img :src="carousel.image" :alt="`Carousel ${carouselIndex} image`" width="450">
+              </div>
+            </form>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+
   <!-- Template for Carousel Item  -->
   <template id="carousel-item">
+    <!-- Add a pencil symbol button -->
+    <i class="carousel-edit-sym fa-solid fa-pen-to-square fa-2x" @click="updateModalCaller(key)"></i>
+
     <img :src="imageURL" class="d-block w-100 tool-top" alt="This image cannot be displayed">
     <div class="carousel-caption d-block">
       <h2 class="fs-1">{{ title }}</h2>
@@ -667,7 +775,9 @@
 
   <!-- Template for showcase -->
   <template id="showcase">
-    <div class="card mb-4 border-0 shadow">
+    <div class="card mb-4 border-0 shadow position-relative">
+      <!-- Add a pencil symbol button -->
+      <i class="showcase-edit-sym fa-solid fa-pen-to-square fa-2x" @click=""></i>
       <img src="images/showcase-sample.jpg" class="card-img-top" alt="Image unavailable">
       <div class="card-body bg-dark bg-gradient">
         <h5 class="card-title text-white">{{title}}</h5>
@@ -795,18 +905,24 @@
   <div v-scope="Navbar()" @vue:mounted="mounted">
     <!-- Render Main page -->
     <section v-if="focus == '/'">
+
       <!-- Hero Of the Page -->
       <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" v-scope="Carousel()"
         @vue:mounted="getCarousels">
+
         <!-- Carousel Panels -->
         <div class="carousel-inner">
           <div class="carousel-item" v-for="(car,index) in carousels" :class="{ active: index==0 }">
             <div v-scope="CarouselItem(car,index)" @vue:mounted="getImageURL"></div>
           </div>
+
+          <!-- Mount Modal if modalCaller is not -1 -->
+          <div v-if="modalCaller != -1" v-scope="Modal(modalCaller)" @vue:mounted="mounted">
+          </div>
         </div>
 
         <!-- Carousel Buttons -->
-        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+        <button class=" carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
           <span class="carousel-control-prev-icon" aria-hidden="true"></span>
           <span class="visually-hidden">Previous</span>
         </button>
@@ -824,10 +940,11 @@
 
           <!-- Left Column -->
           <div class="col-12 col-md-7">
-            <!-- Announcements -->
 
+            <!-- Announcements -->
             <div v-scope="Announcements()" class="card ann-container text-dark mb-5"
               @vue:mounted="getAnns(), mounted()">
+
               <h3 class=" footer-header m-3">📢 Announcements</h3>
               <div class="accordion accordion-flush" id="announcementAccordion" v-for="(ann,index) in announcements">
                 <div class="accordion-item" v-scope="Announcement(ann, keys[index])" @vue:mounted="mounted"></div>
@@ -878,15 +995,18 @@
 
             <!-- Showcases :  -->
             <div v-scope="Showcase({ title:'Smart India Hackathon',
-                content:'Team Chakra participates in SIH on Tuesday' })" @vue:mounted="mounted"></div>
+              content:'Team Chakra participates in SIH on Tuesday' })" @vue:mounted="mounted">
+            </div>
 
             <div v-scope="Showcase({ title:'Volleyball Selection in Terna',
-                content:'Volleyball Selection is scheduled on Wednesday on the Turf' })" @vue:mounted="mounted"></div>
+                content:'Volleyball Selection is scheduled on Wednesday on the Turf' })" @vue:mounted="mounted">
+            </div>
 
             <div
               v-scope="Showcase({ title:'Students Prepare for retest',
                 content:'With Retests scheduled from 21 March to 25 March, students gear up for the Internal Assessment 1 retest' })"
-              @vue:mounted="mounted"></div>
+              @vue:mounted="mounted">
+            </div>
 
             <!-- Showcase End -->
           </div>
@@ -909,6 +1029,7 @@
 
         </div>
       </div>
+
     </section>
     <!-- Render Tools Page -->
     <section v-if=" focus=='/tools'">

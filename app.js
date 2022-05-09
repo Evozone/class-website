@@ -37,7 +37,7 @@ if (prefersDarkTheme.matches && currentTheme == "dark") {
     // Change toggle-icon class to fa-sun
     document.querySelector(".toggle-icon").classList.add("fa-sun");
     // Change color of toggle-icon to black
-    document.querySelector(".toggle-icon").style.color = "black";
+    document.querySelector(".toggle-icon").style.color = "white";
 } else {
     // Change CSS
     document.documentElement.setAttribute("data-theme", "light");
@@ -105,6 +105,8 @@ toggleIcon.addEventListener("click", () => {
         // Change toggle-icon class to fa-sun
         document.querySelector(".toggle-icon").classList.remove("fa-moon");
         document.querySelector(".toggle-icon").classList.add("fa-sun");
+
+
     }
     // Set theme as theme
     theme = document.documentElement.getAttribute("data-theme");
