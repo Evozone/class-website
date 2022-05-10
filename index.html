@@ -134,6 +134,7 @@
       return {
         $template: '#modal-template',
         carouselIndex: index,
+        myModal: {},
         carousel: {
           title: '',
           content: '',
@@ -156,10 +157,10 @@
             this.carousel.content = "No Content";
           }
 
-          var myModal = new bootstrap.Modal(document.getElementById("modal-id"), {
+          this.myModal = new bootstrap.Modal(document.getElementById("modal-id"), {
             keyboard: false
           });
-          myModal.show();
+          this.myModal.show();
         },
         // This function gets the image url from the storage
         async getImageURL(reference) {
@@ -197,12 +198,8 @@
             Content: this.carousel.content,
             Reference: this.carousel.ref,
           });
-
           // Close the modal
-          var myModal = new bootstrap.Modal(document.getElementById("modal-id"), {
-            keyboard: false
-          });
-          myModal.hide();
+          this.myModal.hide();
         }
       }
     }
