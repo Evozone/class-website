@@ -55,12 +55,14 @@
       addDoc,
       doc,
       getDoc,
+      updateDoc,
       getDocs,
+      deleteDoc,
       where,
       orderBy,
       limit
     } from "https://www.gstatic.com/firebasejs/9.6.9/firebase-firestore.js";
-    import { getStorage, ref, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.9/firebase-storage.js";
+    import { getStorage, ref, getDownloadURL, uploadBytes } from "https://www.gstatic.com/firebasejs/9.6.9/firebase-storage.js";
 
     // Get petite vue
     import { createApp } from 'https://unpkg.com/petite-vue?module';
@@ -80,6 +82,7 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
+    const storage = getStorage(app);
 
     // Component for the Navigation Bar
     function Navbar() {
@@ -135,6 +138,7 @@
           title: '',
           content: '',
           image: '',
+          ref: '',
         },
         // This function is used to show the modal
         async mounted() {
@@ -145,7 +149,8 @@
           if (docSnap.exists()) {
             this.carousel.title = docSnap.data().Title;
             this.carousel.content = docSnap.data().Content;
-            this.getImageURL(docSnap.data().Reference);
+            this.carousel.ref = docSnap.data().Reference;
+            this.getImageURL(this.carousel.ref);
           } else {
             this.carousel.title = "No Title";
             this.carousel.content = "No Content";
@@ -167,11 +172,37 @@
             console.log(error);
           });
         },
-        isUserLoggedIn() {
-          return auth.currentUser !== null;
-        },
-        uploadImage() {
+        fileChanged(e) {
+          // Get the file
+          const file = e.target.files[0];
+          // Get the file name
+          const fileName = file.name;
 
+          // Set up firebase storage
+          const storageRef = ref(storage, `/Carousel_Pictures/${fileName}`);
+
+          // Upload the file
+          uploadBytes(storageRef, file).then((snapshot) => {
+            this.carousel.ref = snapshot.ref.fullPath;
+            this.getImageURL(this.carousel.ref);
+          });
+        },
+        async updateCarousel() {
+          // Get the data from Firebase Firestore. The collection is Carousels and the index is the Document ID (stringify the index)
+          const docRef = doc(db, "Carousels", "" + this.carouselIndex);
+
+          // Update the data in Firebase Firestore
+          await updateDoc(docRef, {
+            Title: this.carousel.title,
+            Content: this.carousel.content,
+            Reference: this.carousel.ref,
+          });
+
+          // Close the modal
+          var myModal = new bootstrap.Modal(document.getElementById("modal-id"), {
+            keyboard: false
+          });
+          myModal.hide();
         }
       }
     }
@@ -181,7 +212,6 @@
       return {
         carousels: [],
         keys: [],
-        isUserLoggedIn: false,
         showCarouselAdder: false,
         modalCaller: -1,
         async getCarousels() {
@@ -192,11 +222,6 @@
             this.carousels.push(doc.data());
             this.keys.push(doc.id);
           });
-
-          // Check if user is logged in
-          if (auth.currentUser) {
-            this.isUserLoggedIn = true;
-          }
         },
         async updateModalCaller(index) {
           // Set the modal caller to -1 for a short burst to reset the modal
@@ -220,15 +245,27 @@
         caption: prop.Content,
         imageReference: prop.Reference,
         imageURL: '',
+        isUserLoggedIn: false,
         // This function gets the image url from the storage
         async getImageURL() {
-          const storage = getStorage(app);
           const imageRef = ref(storage, prop.Reference);
           // get URL where image is stored
           getDownloadURL(imageRef).then((url) => {
             this.imageURL = url;
           });
         },
+        mounted() {
+          auth.onAuthStateChanged((user) => {
+            if (user) {
+              this.isUserLoggedIn = true;
+            } else {
+              this.isUserLoggedIn = false;
+            }
+          });
+
+          // Get the image url
+          this.getImageURL();
+        }
       }
     }
 
@@ -311,10 +348,11 @@
           this.confirmPush = false;
         },
         mounted() {
-          // If a user is logged in, log user
           auth.onAuthStateChanged((user) => {
             if (user) {
               this.isUserLoggedIn = true;
+            } else {
+              this.isUserLoggedIn = false;
             }
           });
         }
@@ -342,14 +380,178 @@
       }
     }
 
-    // Component for the Showcase Panels
-    function Showcase(prop) {
+    // Component for the Showcase Container
+    function Showcases() {
       return {
-        $template: '#showcase',
-        title: prop.title,
-        content: prop.content,
+        showcases: [],
+        showcasesInDatabase: [],
+        keys: [],
+        isUserLoggedIn: false,
+        showShowcaseAdder: false,
+        newShowcaseTitle: "",
+        newShowcaseContent: "",
+        newShowcaseReference: "",
+        newShowcaseURL: "",
+        confirmPush: false,
+        flag: true,
+        async getShowCaseItems() {
+          // Firestore
+          const q = query(collection(db, "Showcases"));
+          const qSnap = await getDocs(q);
+          qSnap.forEach((doc) => {
+            this.showcases.push(doc.data());
+            this.showcasesInDatabase.push(doc.data());
+            this.keys.push(doc.id);
+          });
+        },
+        // Toggle the showShowcaseAdder property
+        toggleShowcaseForm() {
+          this.showShowcaseAdder = !this.showShowcaseAdder;
+
+          // If the showShowcaseAdder is true, reset the form
+          if (this.showShowcaseAdder) {
+            this.newShowcaseTitle = "";
+            this.newShowcaseContent = "";
+            this.newShowcaseReference = "";
+            this.newShowcaseURL = "";
+          }
+        },
+        // This function is used to preview the showcase
+        previewNewShowcase() {
+          // Create a new showcase object
+          const newShowcase = {
+            Title: this.newShowcaseTitle,
+            Content: this.newShowcaseContent,
+            Reference: this.newShowcaseReference,
+            Link: this.newShowcaseURL,
+          }
+          // Push the new showcase to the showcase array
+          this.showcases.push(newShowcase);
+          // Reset the form
+          this.newShowcaseTitle = "";
+          this.newShowcaseContent = "";
+          this.newShowcaseReference = "";
+          this.newShowcaseURL = "";
+
+          // Toggle the showShowcaseAdder property
+          this.toggleShowcaseForm();
+
+          // Show the confirm push modal
+          this.confirmPush = true;
+        },
+        async sendShowcaseToDatabase() {
+          // For each showcase in the showcases array push it to the database
+          this.showcases.forEach(async (showcase) => {
+            // If the showcase is not in the database
+            if (!this.showcasesInDatabase.some(showcase1 => showcase1.Title == showcase.Title)) {
+              // Create a new showcase object
+              const newShowcase = {
+                Title: showcase.Title,
+                Content: showcase.Content,
+                Reference: showcase.Reference,
+                Link: showcase.Link,
+              }
+              // Push the new showcase to the database
+              const docRef = await addDoc(collection(db, "Showcases"), newShowcase);
+            }
+          });
+
+          // Reset the confirm push modal
+          this.confirmPush = false;
+        },
+        cancelShowcaseChanges() {
+          // Set showcases empty
+          this.showcases = [];
+
+          // Set the showcases to the showcasesInDatabase
+          this.showcasesInDatabase.forEach((showcase) => {
+            this.showcases.push(showcase);
+          });
+          // Reset the confirm push modal
+          this.confirmPush = false;
+        },
+        fileChanged(e) {
+          // Get the file
+          const file = e.target.files[0];
+          // Get the file name
+          const fileName = file.name;
+
+          // Set up firebase storage
+          const storageRef = ref(storage, `/Showcase_Images/${fileName}`);
+
+          // Upload the file
+          uploadBytes(storageRef, file).then((snapshot) => {
+            this.newShowcaseReference = snapshot.ref.fullPath;
+          });
+        },
+        mounted() {
+          auth.onAuthStateChanged((user) => {
+            if (user) {
+              this.isUserLoggedIn = true;
+            } else {
+              this.isUserLoggedIn = false;
+            }
+          });
+        }
+      }
+    }
+
+    // Component for the Showcase Panels
+    function ShowcaseItem(prop, id) {
+      return {
+        $template: '#showcase-item',
+        title: prop.Title,
+        content: prop.Content,
+        reference: prop.Reference,
+        url: prop.Link,
+        deleteButton: false,
+        docId: id,
+        imageURL: "",
+        removeShowcaseItem() {
+          // Set the Title to "Do you want to delete this showcase?"
+          this.title = "Do you want to delete this showcase?";
+
+          // Set the content to "This will delete the showcase from the database and the showcase page."
+          this.content = "This will delete the showcase from the database and the showcase page.";
+
+          // Set the deleteButton to true
+          this.deleteButton = true;
+        },
+        async confirmDelete() {
+          // Set the deleteButton to false
+          this.deleteButton = false;
+          // Remove showcase from the database
+          console.log(this.docId);
+          await deleteDoc(doc(db, "Showcases", this.docId));
+
+          // Reload the page
+          location.reload();
+        },
+        cancelDelete() {
+          // Set the deleteButton to false
+          this.deleteButton = false;
+
+          // Set the Title to the original title
+          this.title = prop.Title;
+
+          // Set the content to the original content
+          this.content = prop.Content;
+        },
+        getImageURL() {
+          const storage = getStorage(app);
+          const imageRef = ref(storage, prop.Reference);
+          // get URL where image is stored
+          getDownloadURL(imageRef).then((url) => {
+            this.imageURL = url;
+          }).catch((err) => {
+            console.log(err);
+          });
+        },
         mounted() {
           console.log(`Showcase item ${this.title} is mounted!`);
+
+          // Get the image url
+          this.getImageURL();
         }
       }
     }
@@ -667,7 +869,8 @@
       Announcements,
       Announcement,
       Twitter,
-      Showcase,
+      Showcases,
+      ShowcaseItem,
       Tool,
       Timeline,
       TimeCard,
@@ -740,17 +943,16 @@
                 <img :src="carousel.image" :alt="`Carousel ${carouselIndex} image`" id="carousel-image"
                   class="img-fluid my-2">
 
-                <!-- Button to upload new image -->
-                <button type="button" class="btn btn-sm btn-primary my-2" @click="uploadImage">Upload Image
-                  <i class="fa-solid fa-cloud-arrow-up"></i>
-                </button>
+                <!-- Input file -->
+                <input type="file" class="form-control-file" id="new-showcase-image" @change="fileChanged"
+                  accept="image/png, image/jpeg, image/webp">
               </div>
             </form>
 
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
+            <button type="button" class="btn btn-primary" @click="updateCarousel">Save Changes</button>
           </div>
         </div>
       </div>
@@ -788,15 +990,21 @@
   </template>
 
   <!-- Template for showcase -->
-  <template id="showcase">
+  <template id="showcase-item">
     <div class="card mb-4 border-0 shadow position-relative">
-      <!-- Add a pencil symbol button -->
-      <i class="showcase-edit-sym fa-solid fa-pen-to-square fa-2x" @click=""></i>
-      <img src="images/showcase-sample.jpg" class="card-img-top" alt="Image unavailable">
+      <img :src="imageURL" class="card-img-top img-fluid" alt="Image unavailable">
       <div class="card-body bg-dark bg-gradient">
+        <!-- Add a pencil symbol button -->
+        <i v-if="isUserLoggedIn" class=" showcase-edit-sym fa-solid fa-xmark fa-2x" @click="removeShowcaseItem()"></i>
         <h5 class="card-title text-white">{{title}}</h5>
         <p class="card-text text-white-50">{{content}}</p>
-        <a href="#" class="btn btn-secondary bg-gradient">Read more...</a>
+        <a v-if="!deleteButton" :href="url" target="_blank" class="btn btn-secondary bg-gradient">Read more...</a>
+        <!-- Secret button to confirm deletion -->
+        <div v-if="deleteButton">
+          <button type="button" class="btn btn-danger bg-gradient" @click="confirmDelete">Delete</button>
+          <button type="button" class="btn btn-secondary bg-gradient" @click="cancelDelete">Cancel</button>
+        </div>
+
       </div>
     </div>
   </template>
@@ -927,7 +1135,7 @@
         <!-- Carousel Panels -->
         <div class="carousel-inner">
           <div class="carousel-item" v-for="(car,index) in carousels" :class="{ active: index==0 }">
-            <div v-scope="CarouselItem(car,index)" @vue:mounted="getImageURL"></div>
+            <div v-scope="CarouselItem(car,index)" @vue:mounted="mounted"></div>
           </div>
 
           <!-- Mount Modal if modalCaller is not -1 -->
@@ -1006,27 +1214,81 @@
               </div>
 
             </div>
+            <!-- Announcements End -->
 
             <!-- Showcases :  -->
-            <div v-scope="Showcase({ title:'Smart India Hackathon',
-              content:'Team Chakra participates in SIH on Tuesday' })" @vue:mounted="mounted">
-            </div>
+            <div v-scope="Showcases()" @vue:mounted="getShowCaseItems(), mounted()">
+              <!-- For showcase items in showcase array, mount the ShowcaseItem component -->
+              <div v-for="(showcase,index) in showcases">
+                <div v-scope="ShowcaseItem(showcase, keys[index])" @vue:mounted="mounted"></div>
+              </div>
 
-            <div v-scope="Showcase({ title:'Volleyball Selection in Terna',
-                content:'Volleyball Selection is scheduled on Wednesday on the Turf' })" @vue:mounted="mounted">
-            </div>
+              <!-- Add section to add a showcase to the database if admin present -->
+              <div v-if="isUserLoggedIn && !showShowcaseAdder" class="d-flex justify-content-around my-3">
 
-            <div
-              v-scope="Showcase({ title:'Students Prepare for retest',
-                content:'With Retests scheduled from 21 March to 25 March, students gear up for the Internal Assessment 1 retest' })"
-              @vue:mounted="mounted">
-            </div>
+                <!-- Add a Save Changes button based on confirmPush -->
+                <div v-if="confirmPush" class="d-inline">
+                  <button class="btn btn-success" @click="sendShowcaseToDatabase">Save Changes</button>
+                </div>
 
+                <!-- Add a plus symbol button -->
+                <i class="add-showcase-plus fa-solid fa-circle-plus fa-2x" @click="toggleShowcaseForm"></i>
+
+                <!-- Add a Save Changes button based on confirmPush -->
+                <div v-if="confirmPush" class="d-inline">
+                  <button class="btn btn-danger" @click="cancelShowcaseChanges">Cancel Changes</button>
+                </div>
+
+              </div>
+
+              <!-- A div to show a form to add a new showcase -->
+              <div v-if="showShowcaseAdder" class="p-3 mb-3 bg-dark bg-gradient text-white rounded-2">
+
+                <h5>Add a new Showcase Item</h5>
+                <hr>
+
+                <!-- The form to add a new showcase -->
+                <form @submit.prevent="previewNewShowcase">
+                  <div class="form-group">
+
+                    <!-- For New Showcase Title -->
+                    <label for="new-showcase-title" class="my-2">Title</label>
+                    <input type="text" class="form-control" id="new-showcase-title" v-model="newShowcaseTitle"
+                      placeholder="Enter title">
+
+                    <!-- For New Showcase Content -->
+                    <label for="new-showcase-content" class="my-2">Content</label>
+                    <textarea class="form-control" id="new-showcase-content" v-model="newShowcaseContent"
+                      placeholder="Enter content" rows="3"></textarea>
+
+                    <!-- For New Showcase Image -->
+                    <label for="new-showcase-image" class="my-2 d-block">Image</label>
+                    <input type="file" class="form-control-file" id="new-showcase-image" @change="fileChanged"
+                      accept="image/png, image/jpeg, image/webp">
+
+                    <!-- For New Showcase URL -->
+                    <label for="new-showcase-url" class="my-2 d-block">URL</label>
+                    <input type="text" class="form-control" id="new-showcase-url" v-model="newShowcaseURL"
+                      placeholder="Enter url">
+
+                    <button type="submit" class="btn btn-primary btn-block my-3 border-0 shadow">Preview
+                      New Showcase</button>
+
+                    <!-- Cancel button -->
+                    <button class="btn btn-danger btn-block my-3 border-0 shadow"
+                      @click="toggleShowcaseForm">Cancel</button>
+
+                  </div>
+                </form>
+              </div>
+            </div>
             <!-- Showcase End -->
+
           </div>
 
           <!-- Right Column -->
           <div class="col-12 col-md-5 text-center">
+
             <!-- Discord Widget -->
             <iframe class="mb-4" src="https://discord.com/widget?id=804986812425699339&theme=dark" width="320"
               height="500" allowtransparency="true" frameborder="0"

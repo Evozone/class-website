@@ -12,9 +12,11 @@ html[data-theme="dark"] {
   --card-shadow: rgba(0, 0, 0, 0.2);
   --card-text: #cee7ed;
   --card-hover: #043D3A;
-  --card-hover-text: #cee7ed;
+  --card-hover-text: #a1eec7;
   --footer-text: #cee7ed;
   --footer-icon-hover: gray;
+  --add-showcase-plus: gray;
+  --add-showcase-plus-hover: darkgray;
 }
 
 /* If the theme is light, color variables */
@@ -23,9 +25,11 @@ html[data-theme="light"] {
   --card-shadow: rgba(0, 0, 0, 0.25);
   --card-text: #000;
   --card-hover: #4BD1FA;
-  --card-hover-text: #000;
-  --footer-text: dark-gray;
+  --card-hover-text: rgb(2, 67, 131);
+  --footer-text: #062830;
   --footer-icon-hover: black;
+  --add-showcase-plus: lightgray;
+  --add-showcase-plus-hover: white;
 }
 
 body {
@@ -174,6 +178,7 @@ nav {
   padding: 1rem;
   cursor: pointer;
   color: lightgray;
+  text-shadow: 2px 2px 4px #3f3f3f4b;
   z-index: 2;
 }
 
@@ -199,14 +204,51 @@ nav {
 .showcase-edit-sym {
   cursor: pointer;
   color: lightgray;
+  text-shadow: 2px 2px 4px #3f3f3f4b;
   z-index: 2;
   position: absolute;
   right: 10px;
   top: 10px;
 }
 
+@keyframes shake {
+
+  10%,
+  90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+
+  20%,
+  80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%,
+  50%,
+  70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%,
+  60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+
 .showcase-edit-sym:hover {
   color: #fff;
+
+  /* Start the shake animation and make the animation last for 0.5 seconds */
+  animation: shake 0.5s;
+}
+
+.add-showcase-plus {
+  cursor: pointer;
+  color: var(--add-showcase-plus);
+}
+
+.add-showcase-plus:hover {
+  color: var(--add-showcase-plus-hover);
 }
 
 /* Footer */
