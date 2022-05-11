@@ -351,7 +351,7 @@ nav {
 /* Timeline Buttons */
 
 .date-btn {
-  border: 8px solid;
+  border: 8px solid lightsteelblue;
   z-index: 1;
   box-shadow: 0 0px 0px 3px rgba(0, 0, 0, 1);
 }
