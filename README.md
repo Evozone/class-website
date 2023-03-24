@@ -37,12 +37,20 @@ This is a Mini Project for Semester 4 (currently pursuing) of Year 2 of Computer
 - Bootstrap, [a free and open-source CSS framework directed at responsive, mobile-first front-end web development.](https://getbootstrap.com/)
 
 
-## Project Maintainer 🛠
+## Contributing
+
+Please refer to the `Contributing.md` file for information on how to contribute to this project.
+
+## Project Status 🛠
+
+This project is not currently being actively maintained.
+
+## Original Maintainer
 
 <div align="center">
 <table>
     <tbody>
-        <td align="center"><a href="https://github.com/vishal-codes"><img alt="github profile" src="https://avatars.githubusercontent.com/u/82528318?v=4" width="130px;"><br><sub><b> Bhargav Modak </b></sub></a><br><a title="Code"> Web Developer </a><br><a href="https://twitter.com/thebrahmnicboy" target="_blank"><img src="https://img.shields.io/badge/twitter-%2300acee.svg?&style=for-the-badge&logo=twitter&logoColor=white&alt=twitter" /></a></td>  
+        <td align="center"><a href="https://github.com/TheBrahmnicBoy"><img alt="github profile" src="https://avatars.githubusercontent.com/u/82528318?v=4" width="130px;"><br><sub><b> Bhargav Modak </b></sub></a><br><a title="Code"> Web Developer </a><br><a href="https://twitter.com/thebrahmnicboy" target="_blank"><img src="https://img.shields.io/badge/twitter-%2300acee.svg?&style=for-the-badge&logo=twitter&logoColor=white&alt=twitter" /></a></td>  
     </tbody>
 </table>
 </div>
