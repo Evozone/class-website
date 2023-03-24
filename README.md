@@ -2,7 +2,7 @@
 
 ## Description
 
-This is a Mini Project for Semester 4 (currently pursuing) of Year 2 of Computer Engineering. 
+This was a Mini Project for Semester 4 of Year 2 of Computer Engineering. 
 <br> Class B Website is specifically a website designed for the members of our class, and the features are tailored for their specific usage.
 
 ## Abstract
@@ -39,7 +39,7 @@ This is a Mini Project for Semester 4 (currently pursuing) of Year 2 of Computer
 
 ## Contributing
 
-Please refer to the `Contributing.md` file for information on how to contribute to this project.
+This project is currently not being maintained. 
 
 ## Project Status 🛠
 
