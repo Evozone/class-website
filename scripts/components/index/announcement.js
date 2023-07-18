@@ -46,9 +46,6 @@ export function Announcements() {
             this.confirmPush = true;
         },
         cancelAnnChanges() {
-            // Log the arrays 'announcements' and 'annsInDatabase'
-            console.log(this.announcements);
-            console.log(this.annsInDatabase);
 
             // Set announcements empty
             this.announcements = [];
@@ -107,8 +104,5 @@ export function Announcement(prop, key) {
         updateFlushId() {
             this.flushId = `flush-heading-${this.id}`;
         },
-        mounted() {
-            console.log(`Announcement item ${this.title} is mounted!`);
-        }
     }
 }

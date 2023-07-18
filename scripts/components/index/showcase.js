@@ -170,8 +170,6 @@ export function ShowcaseItem(prop, id) {
             });
         },
         mounted() {
-            console.log(`Showcase item ${this.title} is mounted!`);
-
             // Get the image url
             this.getImageURL();
         }

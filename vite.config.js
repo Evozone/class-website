@@ -11,5 +11,6 @@ export default defineConfig({
                 timeline: resolve(__dirname, 'timeline.html'),
             },
         },
-    }
+    },
+    base: '/class-website/',
 })
