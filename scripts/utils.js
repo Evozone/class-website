@@ -1,5 +1,5 @@
 // Hide navbar on scroll
-var prevScrollpos = window.pageYOffset;
+var prevScrollpos = window.scrollY;
 var screenwidth;
 
 // Constants for body, navbar and footer
@@ -9,7 +9,7 @@ const pageFooter = document.getElementById("id-footer");
 
 // When the user scrolls down 20px from the top of the document, show th navbar
 window.onscroll = function () {
-    var currentScrollPos = window.pageYOffset;
+    var currentScrollPos = window.scrollY;
     if (prevScrollpos > currentScrollPos) {
         pageNavbar.classList.remove('nav-hidden');
     } else {
@@ -105,8 +105,6 @@ toggleIcon.addEventListener("click", () => {
         // Change toggle-icon class to fa-sun
         document.querySelector(".toggle-icon").classList.remove("fa-moon");
         document.querySelector(".toggle-icon").classList.add("fa-sun");
-
-
     }
     // Set theme as theme
     theme = document.documentElement.getAttribute("data-theme");
