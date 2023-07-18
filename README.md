@@ -1,11 +1,22 @@
-# Class B Website
+# A Class Website
 
-## Description
+This was a `mini-project` designed and developed as part of the Semester 4 course for Year 2 of Computer Engineering. 
+<br> Class Website was specifically a website designed for the students of the second year class (B) of 2022, Computer Branch, and the features are tailored for their specific usage.
 
-This was a Mini Project for Semester 4 of Year 2 of Computer Engineering. 
-<br> Class B Website is specifically a website designed for the members of our class, and the features are tailored for their specific usage.
+<details>
+  <summary>List of Contents</summary>
+  
+- [A Class Website](#a-class-website)
+  - [Why this project?](#why-this-project)
+  - [Features](#features)
+  - [Tech Stack](#tech-stack)
+  - [Contributing](#contributing)
+  - [Project Status 🛠](#project-status-)
+  - [Original Maintainer](#original-maintainer)
+  
+</details>
 
-## Abstract
+## Why this project?
 
 - The COVID-19 pandemic hindered effective flow of information.
 
@@ -23,7 +34,7 @@ This was a Mini Project for Semester 4 of Year 2 of Computer Engineering.
 
 - Discord Widget for Voice Chat
 
-- Tweets Wall from Tech community
+- ~~Tweets Wall from Tech community~~ (since deprecated as Twitter API is now paid)
 
 - Useful Websites and Tools
 
@@ -31,10 +42,12 @@ This was a Mini Project for Semester 4 of Year 2 of Computer Engineering.
 
 ## Tech Stack
 
-- HTML 5, CSS 3, Javascript
+- HTML 5, CSS 3, ES6 Javascript
 - Petite Vue, [an alternative distribution of Vue optimized for progressive enhancement.](https://www.npmjs.com/package/petite-vue)
 - Firebase, [a platform developed by Google for creating mobile and web applications.](https://firebase.google.com/)
 - Bootstrap, [a free and open-source CSS framework directed at responsive, mobile-first front-end web development.](https://getbootstrap.com/)
+- NPM, [a package manager for the JavaScript programming language.](https://www.npmjs.com/)
+- Vite, [a build tool that aims to provide a faster and leaner development experience for modern web projects.](https://vitejs.dev/)
 
 
 ## Contributing
