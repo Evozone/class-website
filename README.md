@@ -1,5 +1,7 @@
 # A Class Website
 
+[![Frontend CI/CD](https://github.com/Evozone/class-website/actions/workflows/static.yml/badge.svg)](https://github.com/Evozone/class-website/actions/workflows/static.yml)
+
 This was a `mini-project` designed and developed as part of the Semester 4 course for Year 2 of Computer Engineering. 
 <br> Class Website was specifically a website designed for the students of the second year class (B) of 2022, Computer Branch, and the features are tailored for their specific usage.
 
