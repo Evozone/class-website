@@ -57,21 +57,21 @@ body::-webkit-scrollbar-thumb:hover {
 
 /* Large Triangle Background */
 .lgtr-dark {
-  background-image: url(../public/images/large-triangles.svg);
+  background-image: url(/images/large-triangles.svg);
   background-attachment: fixed;
 }
 
 .lgtr {
-  background-image: url(../public/images/large-triangles-light.svg);
+  background-image: url(/images/large-triangles-light.svg);
   background-attachment: fixed;
 }
 
 .lgtr-black {
-  background-image: url(../public/images/large-triangles-black.svg);
+  background-image: url(/images/large-triangles-black.svg);
 }
 
 .lgtr-white {
-  background-image: url(../public/images/large-triangles-white.svg);
+  background-image: url(/images/large-triangles-white.svg);
 }
 
 /* Reusable stuff */

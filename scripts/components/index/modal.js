@@ -1,6 +1,6 @@
 // Firebase
 import { db, storage } from '../../firebase.js';
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc, getDoc } from "firebase/firestore";
 import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 
 // Component for a Modal
@@ -38,7 +38,6 @@ export default function Modal(index) {
         },
         // This function gets the image url from the storage
         async getImageURL(reference) {
-            const storage = getStorage(app);
             const imageRef = ref(storage, reference);
             // get URL where image is stored
             getDownloadURL(imageRef).then((url) => {
